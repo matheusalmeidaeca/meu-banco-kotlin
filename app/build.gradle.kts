@@ -12,8 +12,8 @@ android {
         applicationId = "com.meubanco.nativo"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1"
+        versionCode = 2
+        versionName = "0.2"
     }
 
     // Chave fixa no repositório: assim cada APK novo atualiza o anterior sem perder os dados.

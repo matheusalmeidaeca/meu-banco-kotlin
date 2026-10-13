@@ -2,6 +2,7 @@ package com.meubanco.nativo
 
 import android.content.Context
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import org.json.JSONObject
@@ -20,6 +21,27 @@ class Store(context: Context) {
     var state by mutableStateOf<JSONObject?>(null)
         private set
 
+    /** Contador que sobe a cada alteração, para as telas recomporem. */
+    var rev by mutableIntStateOf(0)
+        private set
+
+    /** Estado atual; ler por aqui faz a tela atualizar quando algo muda. */
+    fun current(): JSONObject? {
+        val r = rev
+        return if (r >= 0) state else null
+    }
+
+    /** Altera o estado no lugar e grava no arquivo (equivale a persist() do app HTML). */
+    fun update(block: (JSONObject) -> Unit) {
+        val s = state ?: return
+        block(s)
+        try {
+            file.writeText(s.toString())
+        } catch (e: Exception) {
+        }
+        rev++
+    }
+
     init {
         state = try {
             if (file.exists()) JSONObject(file.readText()) else null
@@ -35,6 +57,7 @@ class Store(context: Context) {
             if (!obj.has("cash") && !obj.has("account")) return false
             file.writeText(obj.toString())
             state = obj
+            rev++
             true
         } catch (e: Exception) {
             false

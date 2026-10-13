@@ -185,7 +185,7 @@ fun AppRoot(store: Store) {
                     "historico" -> Placeholder("Extrato & histórico", "etapa 4")
                     "carteira" -> Placeholder("Carteira de investimentos", "etapa 5")
                     "gastos" -> Placeholder("Gastos", "etapa 3")
-                    "ponto" -> Placeholder("Ponto", "etapa 2")
+                    "ponto" -> PontoPanel(store)
                     "config" -> ConfigPanel(store, onImport, onExport)
                 }
                 Spacer(Modifier.height(24.dp))
@@ -218,7 +218,7 @@ fun ContaPanel(store: Store, onImport: () -> Unit, goTo: (String) -> Unit) {
                 fontSize = 13.sp,
             )
             Spacer(Modifier.height(14.dp))
-            PrimaryButton("⬆ Importar backup", onImport)
+            PrimaryButton("⬆ Importar backup", onClick = onImport)
         }
         return
     }
@@ -299,9 +299,9 @@ fun ConfigPanel(store: Store, onImport: () -> Unit, onExport: () -> Unit) {
             fontSize = 13.sp,
         )
         Spacer(Modifier.height(14.dp))
-        PrimaryButton("⬆ Importar backup", onImport)
+        PrimaryButton("⬆ Importar backup", onClick = onImport)
         Spacer(Modifier.height(8.dp))
-        GhostButton("⬇ Exportar backup agora", onExport)
+        GhostButton("⬇ Exportar backup agora", onClick = onExport)
     }
 }
 
@@ -350,30 +350,28 @@ fun QuickAction(icon: String, label: String, onClick: () -> Unit) {
 }
 
 @Composable
-fun PrimaryButton(text: String, onClick: () -> Unit) {
+fun PrimaryButton(text: String, modifier: Modifier = Modifier.fillMaxWidth(), onClick: () -> Unit) {
     val p = LocalPalette.current
     Box(
-        Modifier
-            .fillMaxWidth()
+        modifier
             .clip(RoundedCornerShape(12.dp))
             .background(p.brand)
             .clickable { onClick() }
-            .padding(vertical = 14.dp),
+            .padding(vertical = 14.dp, horizontal = 8.dp),
         contentAlignment = Alignment.Center,
-    ) { Text(text, color = p.brandInk, fontSize = 15.sp, fontWeight = FontWeight.Bold) }
+    ) { Text(text, color = p.brandInk, fontSize = 15.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center) }
 }
 
 @Composable
-fun GhostButton(text: String, onClick: () -> Unit) {
+fun GhostButton(text: String, modifier: Modifier = Modifier.fillMaxWidth(), onClick: () -> Unit) {
     val p = LocalPalette.current
     val shape = RoundedCornerShape(12.dp)
     Box(
-        Modifier
-            .fillMaxWidth()
+        modifier
             .clip(shape)
             .border(1.dp, p.border, shape)
             .clickable { onClick() }
-            .padding(vertical = 14.dp),
+            .padding(vertical = 14.dp, horizontal = 8.dp),
         contentAlignment = Alignment.Center,
-    ) { Text(text, color = p.text, fontSize = 15.sp, fontWeight = FontWeight.SemiBold) }
+    ) { Text(text, color = p.text, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center) }
 }
