@@ -10,7 +10,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,14 +23,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,15 +44,25 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 class MainActivity : ComponentActivity() {
+    private var store: Store? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val store = Store(applicationContext)
-        setContent { AppRoot(store) }
+        val s = Store(applicationContext)
+        store = s
+        setContent { AppRoot(s) }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Voltou para o app (talvez em outro dia): avança a simulação até hoje.
+        store?.syncNow()
     }
 }
 
@@ -70,9 +80,12 @@ val ALL_TABS = listOf(
 @Composable
 fun AppRoot(store: Store) {
     val ctx = LocalContext.current
-    val p = LocalPalette.current
+    val st = store.current()
+    val light = st?.optJSONObject("settings")?.optString("theme", "dark") == "light"
+    val p = if (light) LightPalette else DarkPalette
     var tab by rememberSaveable { mutableStateOf("conta") }
     var menuOpen by remember { mutableStateOf(false) }
+    var unlocked by rememberSaveable { mutableStateOf(false) }
 
     val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
         if (uri != null) {
@@ -97,221 +110,140 @@ fun AppRoot(store: Store) {
             } catch (e: Exception) {
                 false
             }
+            if (ok) store.markBackup()
             Toast.makeText(ctx, if (ok) "Backup exportado!" else "Não foi possível exportar.", Toast.LENGTH_LONG).show()
         }
     }
     val onImport: () -> Unit = { importLauncher.launch(arrayOf("*/*")) }
     val onExport: () -> Unit = { exportLauncher.launch("backup-carteira.json") }
 
-    val st = store.state
+    // Aviso quando a simulação avançou vários dias de uma vez.
+    LaunchedEffect(store.lastSyncDays) {
+        if (store.lastSyncDays > 1) {
+            Toast.makeText(ctx, "Atualizei ${store.lastSyncDays} dia(s): salário, gastos e fatura já foram processados.", Toast.LENGTH_LONG).show()
+        }
+    }
+    // CDI do dia (uma vez por dia, se houver internet).
+    LaunchedEffect(st != null) {
+        val s = store.state
+        if (s != null && s.sub("market").str("cdiUpdatedAt") != todayISO()) store.updateCdi { }
+    }
+
     val isEmployee = st == null || st.optJSONObject("income")?.optString("incomeType", "empregado") == "empregado"
     val tabs = ALL_TABS.filter { it.id != "ponto" || isEmployee }
     if (tabs.none { it.id == tab }) tab = "conta"
 
-    MaterialTheme(
-        colorScheme = darkColorScheme(
-            primary = p.brand,
-            background = p.bg,
-            surface = p.card,
-            onBackground = p.text,
-            onSurface = p.text,
-        ),
-    ) {
-        Box(Modifier.fillMaxSize().background(p.bg).systemBarsPadding()) {
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 16.dp, vertical = 14.dp),
-            ) {
-                // Cabeçalho: botão ☰ + título
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        Modifier
-                            .size(44.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(p.card)
-                            .border(1.dp, p.border, RoundedCornerShape(12.dp))
-                            .clickable { menuOpen = !menuOpen },
-                        contentAlignment = Alignment.Center,
-                    ) { Text("☰", color = p.text, fontSize = 20.sp) }
-                    Spacer(Modifier.width(12.dp))
-                    Text("Meu Banco & Patrimônio", color = p.text, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                }
-                Spacer(Modifier.height(6.dp))
-                Text(
-                    "Conta, cartão, investimentos, gastos e contabilidade num só lugar",
-                    color = p.muted,
-                    fontSize = 12.sp,
-                )
-                Spacer(Modifier.height(14.dp))
+    val scheme = if (light) {
+        lightColorScheme(primary = p.brand, background = p.bg, surface = p.card, onBackground = p.text, onSurface = p.text)
+    } else {
+        darkColorScheme(primary = p.brand, background = p.bg, surface = p.card, onBackground = p.text, onSurface = p.text)
+    }
 
-                if (menuOpen) {
-                    Column(
-                        Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(p.card)
-                            .border(1.dp, p.border, RoundedCornerShape(16.dp))
-                            .padding(6.dp),
-                    ) {
-                        tabs.forEach { t ->
-                            val active = t.id == tab
-                            Row(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .clip(RoundedCornerShape(10.dp))
-                                    .background(if (active) p.brandDim else Color.Transparent)
-                                    .clickable { tab = t.id; menuOpen = false }
-                                    .padding(horizontal = 12.dp, vertical = 13.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(t.icon, fontSize = 18.sp)
-                                Spacer(Modifier.width(12.dp))
-                                Text(
-                                    t.label,
-                                    color = if (active) p.text else p.muted,
-                                    fontSize = 15.sp,
-                                    fontWeight = if (active) FontWeight.Bold else FontWeight.Medium,
-                                )
+    CompositionLocalProvider(LocalPalette provides p) {
+        MaterialTheme(colorScheme = scheme) {
+            val pinOn = st?.optJSONObject("settings")?.optBoolean("pinEnabled", false) == true
+            if (pinOn && !unlocked) {
+                PinLock(st?.optJSONObject("settings")?.optString("pinHash", "") ?: "") { unlocked = true }
+                return@MaterialTheme
+            }
+            Box(Modifier.fillMaxSize().background(p.bg).systemBarsPadding()) {
+                Column(
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = 16.dp, vertical = 14.dp),
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Box(
+                            Modifier
+                                .size(44.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(p.card)
+                                .border(1.dp, p.border, RoundedCornerShape(12.dp))
+                                .clickable { menuOpen = !menuOpen },
+                            contentAlignment = Alignment.Center,
+                        ) { Text("☰", color = p.text, fontSize = 20.sp) }
+                        Spacer(Modifier.width(12.dp))
+                        Text("Meu Banco & Patrimônio", color = p.text, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                    }
+                    Spacer(Modifier.height(6.dp))
+                    Text(
+                        "Conta, cartão, investimentos, gastos e contabilidade num só lugar",
+                        color = p.muted,
+                        fontSize = 12.sp,
+                    )
+                    Spacer(Modifier.height(14.dp))
+
+                    if (menuOpen) {
+                        Column(
+                            Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(p.card)
+                                .border(1.dp, p.border, RoundedCornerShape(16.dp))
+                                .padding(6.dp),
+                        ) {
+                            tabs.forEach { t ->
+                                val active = t.id == tab
+                                Row(
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .clip(RoundedCornerShape(10.dp))
+                                        .background(if (active) p.brandDim else Color.Transparent)
+                                        .clickable { tab = t.id; menuOpen = false }
+                                        .padding(horizontal = 12.dp, vertical = 13.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Text(t.icon, fontSize = 18.sp)
+                                    Spacer(Modifier.width(12.dp))
+                                    Text(
+                                        t.label,
+                                        color = if (active) p.text else p.muted,
+                                        fontSize = 15.sp,
+                                        fontWeight = if (active) FontWeight.Bold else FontWeight.Medium,
+                                    )
+                                }
                             }
                         }
+                        Spacer(Modifier.height(14.dp))
                     }
-                    Spacer(Modifier.height(14.dp))
-                }
 
-                when (tab) {
-                    "conta" -> ContaPanel(store, onImport) { tab = it }
-                    "historico" -> Placeholder("Extrato & histórico", "etapa 4")
-                    "carteira" -> Placeholder("Carteira de investimentos", "etapa 5")
-                    "gastos" -> GastosPanel(store)
-                    "ponto" -> PontoPanel(store)
-                    "config" -> ConfigPanel(store, onImport, onExport)
+                    when (tab) {
+                        "conta" -> ContaPanel(store, onImport) { tab = it }
+                        "historico" -> HistoricoPanel(store)
+                        "carteira" -> CarteiraPanel(store)
+                        "gastos" -> GastosPanel(store)
+                        "ponto" -> PontoPanel(store)
+                        "config" -> ConfigPanel(store, onImport, onExport)
+                    }
+                    Spacer(Modifier.height(24.dp))
                 }
-                Spacer(Modifier.height(24.dp))
             }
         }
     }
 }
 
 @Composable
-fun ContaPanel(store: Store, onImport: () -> Unit, goTo: (String) -> Unit) {
+fun PinLock(hash: String, onOk: () -> Unit) {
     val p = LocalPalette.current
-    val ctx = LocalContext.current
-    val st = store.state
-    var hidden by rememberSaveable { mutableStateOf(false) }
-
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Box(Modifier.size(8.dp).clip(CircleShape).background(p.brand))
-        Spacer(Modifier.width(6.dp))
-        Text("Banco", color = p.muted, fontSize = 10.5.sp, fontWeight = FontWeight.SemiBold)
-    }
-    Spacer(Modifier.height(8.dp))
-
-    if (st == null) {
-        CardBox {
-            Text("Nenhum dado ainda", color = p.text, fontSize = 17.sp, fontWeight = FontWeight.Bold)
-            Spacer(Modifier.height(6.dp))
-            Text(
-                "No app antigo, abra Configurações → Exportar backup. Depois toque abaixo e escolha o arquivo.",
-                color = p.muted,
-                fontSize = 13.sp,
-            )
+    var pin by remember { mutableStateOf("") }
+    var wrong by remember { mutableStateOf(false) }
+    Box(Modifier.fillMaxSize().background(p.bg).systemBarsPadding(), contentAlignment = Alignment.Center) {
+        Column(Modifier.padding(32.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Text("🔒", fontSize = 40.sp)
+            Spacer(Modifier.height(10.dp))
+            Text("Digite seu PIN", color = p.text, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Spacer(Modifier.height(16.dp))
+            GField("", pin, { pin = it.filter { c -> c.isDigit() }.take(6); wrong = false }, keyboard = KeyboardType.NumberPassword)
+            if (wrong) {
+                Spacer(Modifier.height(8.dp))
+                Text("PIN incorreto.", color = p.coral, fontSize = 13.sp)
+            }
             Spacer(Modifier.height(14.dp))
-            PrimaryButton("⬆ Importar backup", onClick = onImport)
+            PrimaryButton("Entrar") {
+                if (simpleHash(pin) == hash) onOk() else wrong = true
+            }
         }
-        return
-    }
-
-    val cash = st.optDouble("cash", 0.0)
-    val acc = st.optJSONObject("account")
-    val agency = acc?.optString("agency", "0001") ?: "0001"
-    val number = acc?.optString("number", "") ?: ""
-    val heroShape = RoundedCornerShape(22.dp)
-
-    Box(
-        Modifier
-            .fillMaxWidth()
-            .clip(heroShape)
-            .background(Brush.linearGradient(listOf(p.brandDim, p.bgSoft)))
-            .border(1.dp, p.border, heroShape)
-            .padding(22.dp),
-    ) {
-        Column {
-            Text("Saldo em conta corrente", color = p.muted, fontSize = 13.sp)
-            Spacer(Modifier.height(6.dp))
-            Text(
-                if (hidden) "R$ ••••" else brl(cash),
-                color = p.text,
-                fontSize = 34.sp,
-                fontWeight = FontWeight.Bold,
-            )
-            Spacer(Modifier.height(6.dp))
-            Text("Agência $agency · Conta $number", color = p.muted, fontSize = 12.sp)
-        }
-        Box(
-            Modifier
-                .align(Alignment.TopEnd)
-                .size(36.dp)
-                .clip(CircleShape)
-                .clickable { hidden = !hidden },
-            contentAlignment = Alignment.Center,
-        ) { Text("👁", fontSize = 18.sp) }
-    }
-    Spacer(Modifier.height(14.dp))
-
-    // Ações rápidas
-    Row(
-        Modifier.horizontalScroll(rememberScrollState()),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        QuickAction("🐷", "Caixinhas") { Toast.makeText(ctx, "Em breve", Toast.LENGTH_SHORT).show() }
-        QuickAction("🔁", "Pix") { Toast.makeText(ctx, "Em breve", Toast.LENGTH_SHORT).show() }
-        QuickAction("💳", "Cartão") { Toast.makeText(ctx, "Em breve", Toast.LENGTH_SHORT).show() }
-        QuickAction("📄", "Extrato") { goTo("historico") }
-        QuickAction("📈", "Investir") { goTo("carteira") }
-        QuickAction("🛒", "Compras") { goTo("gastos") }
-    }
-    Spacer(Modifier.height(16.dp))
-
-    CardBox {
-        Text("Etapa 1 concluída ✔", color = p.text, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-        Spacer(Modifier.height(4.dp))
-        Text(
-            "Seu saldo veio do backup do app antigo. As demais telas chegam nas próximas etapas.",
-            color = p.muted,
-            fontSize = 13.sp,
-        )
-    }
-}
-
-@Composable
-fun ConfigPanel(store: Store, onImport: () -> Unit, onExport: () -> Unit) {
-    val p = LocalPalette.current
-    val st = store.state
-    CardBox {
-        Text("💾 Dados & backup", color = p.text, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-        Spacer(Modifier.height(6.dp))
-        Text(
-            if (st == null) "Nenhum backup carregado."
-            else "Backup carregado (data da simulação: ${st.optString("simDateISO", "—")}).",
-            color = p.muted,
-            fontSize = 13.sp,
-        )
-        Spacer(Modifier.height(14.dp))
-        PrimaryButton("⬆ Importar backup", onClick = onImport)
-        Spacer(Modifier.height(8.dp))
-        GhostButton("⬇ Exportar backup agora", onClick = onExport)
-    }
-}
-
-@Composable
-fun Placeholder(title: String, etapa: String) {
-    val p = LocalPalette.current
-    CardBox {
-        Text(title, color = p.text, fontSize = 17.sp, fontWeight = FontWeight.Bold)
-        Spacer(Modifier.height(6.dp))
-        Text("Esta tela chega na $etapa da reescrita.", color = p.muted, fontSize = 13.sp)
     }
 }
 
