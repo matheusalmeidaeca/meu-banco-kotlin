@@ -184,7 +184,7 @@ fun AppRoot(store: Store) {
                     "conta" -> ContaPanel(store, onImport) { tab = it }
                     "historico" -> Placeholder("Extrato & histórico", "etapa 4")
                     "carteira" -> Placeholder("Carteira de investimentos", "etapa 5")
-                    "gastos" -> Placeholder("Gastos", "etapa 3")
+                    "gastos" -> GastosPanel(store)
                     "ponto" -> PontoPanel(store)
                     "config" -> ConfigPanel(store, onImport, onExport)
                 }
