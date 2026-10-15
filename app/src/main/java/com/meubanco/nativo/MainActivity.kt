@@ -1,5 +1,6 @@
 package com.meubanco.nativo
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
@@ -32,6 +33,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,11 +54,35 @@ import androidx.compose.ui.unit.sp
 class MainActivity : ComponentActivity() {
     private var store: Store? = null
 
+    /** Texto de um backup recebido (por exemplo, aberto a partir do anexo no Gmail), esperando confirmação. */
+    private val incoming = mutableStateOf<String?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val s = Store(applicationContext)
         store = s
-        setContent { AppRoot(s) }
+        Notifier.ensureChannel(this)
+        Notifier.schedule(this)
+        readIncoming(intent)
+        setContent { AppRoot(s, incoming) }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        readIncoming(intent)
+    }
+
+    @Suppress("DEPRECATION")
+    private fun readIncoming(i: Intent?) {
+        if (i == null) return
+        val uri: Uri? = if (i.action == Intent.ACTION_VIEW) i.data else i.getParcelableExtra(Intent.EXTRA_STREAM)
+        if (uri == null) return
+        try {
+            val text = contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
+            if (text != null) incoming.value = text
+        } catch (e: Exception) {
+        }
     }
 
     override fun onResume() {
@@ -78,7 +104,7 @@ val ALL_TABS = listOf(
 )
 
 @Composable
-fun AppRoot(store: Store) {
+fun AppRoot(store: Store, incoming: MutableState<String?>) {
     val ctx = LocalContext.current
     val st = store.current()
     val light = st?.optJSONObject("settings")?.optString("theme", "dark") == "light"
@@ -145,6 +171,22 @@ fun AppRoot(store: Store) {
             if (pinOn && !unlocked) {
                 PinLock(st?.optJSONObject("settings")?.optString("pinHash", "") ?: "") { unlocked = true }
                 return@MaterialTheme
+            }
+            if (st != null && !st.optBoolean("onboardingCompleted", true)) {
+                OnboardingScreen(store)
+                return@MaterialTheme
+            }
+            val pending = incoming.value
+            if (pending != null) {
+                GConfirm(
+                    "Recebi um arquivo de backup. Substituir os dados atuais por ele? Isso não pode ser desfeito.",
+                    onYes = {
+                        val ok = store.importText(pending)
+                        incoming.value = null
+                        Toast.makeText(ctx, if (ok) "Backup restaurado!" else "Arquivo inválido: use um backup gerado pelo app.", Toast.LENGTH_LONG).show()
+                    },
+                    onNo = { incoming.value = null },
+                )
             }
             Box(Modifier.fillMaxSize().background(p.bg).systemBarsPadding()) {
                 Column(

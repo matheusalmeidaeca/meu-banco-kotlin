@@ -1,5 +1,9 @@
 package com.meubanco.nativo
 
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -269,6 +273,12 @@ fun ConfigPanel(store: Store, onImport: () -> Unit, onExport: () -> Unit) {
     }
     Spacer(Modifier.height(10.dp))
 
+    // ---- Permissões ----
+    Accordion("🔐 Permissões e avisos", "Câmera, notificações e internet", open == "perm", { toggle("perm") }) {
+        PermissoesSection(store, st)
+    }
+    Spacer(Modifier.height(10.dp))
+
     // ---- Dados ----
     Accordion("💾 Dados & backup", "Importar, exportar e apagar", open == "dados", { toggle("dados") }) {
         Text(
@@ -281,10 +291,18 @@ fun ConfigPanel(store: Store, onImport: () -> Unit, onExport: () -> Unit) {
         PrimaryButton("⬆ Importar backup", onClick = onImport)
         Spacer(Modifier.height(8.dp))
         GhostButton("⬇ Exportar backup agora", onClick = onExport)
-        Spacer(Modifier.height(8.dp))
-        Toggle("Lembrar de fazer backup", !settings.optBoolean("autoBackupEnabled", true), "Liga os avisos de backup na aba Conta") { on ->
-            store.update { it.sub("settings").put("autoBackupEnabled", !on) }
+        Spacer(Modifier.height(14.dp))
+        Text("Guardar no e-mail", color = p.text, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+        Spacer(Modifier.height(6.dp))
+        LiveText("E-mail para backups", settings.str("backupEmail")) { v ->
+            store.update { it.sub("settings").put("backupEmail", v.trim()) }
         }
+        Spacer(Modifier.height(8.dp))
+        PrimaryButton("✉ Enviar backup por e-mail") {
+            if (!shareBackupByEmail(ctx, store)) showToast(ctx, "Não foi possível preparar o backup.")
+        }
+        Helper("O app abre o Gmail (ou outro e-mail) com o backup anexado e o seu endereço já preenchido — é só tocar em Enviar. Para restaurar, abra o anexo no celular e escolha \"Meu Banco\".")
+        Spacer(Modifier.height(8.dp))
         Spacer(Modifier.height(14.dp))
         Text("Apagar só uma parte", color = p.text, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
         Spacer(Modifier.height(6.dp))
@@ -547,4 +565,43 @@ fun Holerite(heading: String, comp: String, st: JSONObject, d: MonthlyIncome, be
             if (d.sundaysValue > 0) Helper("Domingos trabalhados (${d.sundaysCount}): ${brl(d.sundaysValue)}, pagos à parte por recibo.")
         }
     }
+}
+
+@Composable
+fun PermissoesSection(store: Store, st: JSONObject) {
+    val p = LocalPalette.current
+    val ctx = LocalContext.current
+    var tick by remember { mutableStateOf(0) }
+    val cam = tick >= 0 && hasPermission(ctx, Manifest.permission.CAMERA)
+    val notif = tick >= 0 && Notifier.canNotify(ctx)
+    val camLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { tick++ }
+    val notifLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { tick++ }
+    val on = st.sub("settings").optBoolean("notificationsEnabled", true)
+
+    Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+        Column(Modifier.weight(1f)) {
+            Text("📷 Câmera", color = p.text, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+            Text(if (cam) "Permitida — usada só para ler código de barras" else "Não permitida", color = if (cam) p.emerald else p.muted, fontSize = 12.sp)
+        }
+        if (!cam) GChip("Permitir") { camLauncher.launch(Manifest.permission.CAMERA) }
+    }
+    Spacer(Modifier.height(12.dp))
+    Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+        Column(Modifier.weight(1f)) {
+            Text("🔔 Notificações", color = p.text, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+            Text(if (notif) "Permitidas" else "Não permitidas", color = if (notif) p.emerald else p.muted, fontSize = 12.sp)
+        }
+        if (!notif && Build.VERSION.SDK_INT >= 33) GChip("Permitir") { notifLauncher.launch(Manifest.permission.POST_NOTIFICATIONS) }
+    }
+    Spacer(Modifier.height(4.dp))
+    Toggle("Avisos diários às 9h", on, "Fatura chegando, ponto, DARF e lembrete de backup") { v ->
+        store.update { it.sub("settings").put("notificationsEnabled", v) }
+        if (v && !notif && Build.VERSION.SDK_INT >= 33) notifLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+    }
+    Spacer(Modifier.height(10.dp))
+    Text("🌐 Internet", color = p.text, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+    Text("Usada só para atualizar o CDI e buscar o nome de produtos pelo código de barras. Não precisa de autorização.", color = p.muted, fontSize = 12.sp)
+    Spacer(Modifier.height(12.dp))
+    GhostButton("Abrir configurações do app") { openAppSettings(ctx) }
+    Helper("Se o pedido de permissão não aparecer mais, é porque foi negado antes — libere por aqui.")
 }

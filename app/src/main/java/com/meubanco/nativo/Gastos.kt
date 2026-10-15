@@ -33,6 +33,7 @@ import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -392,7 +393,7 @@ fun JSONObject.saveProduct(
     brand: String,
     variant: String,
     byWeight: Boolean,
-) {
+): Int {
     val list = objList("products")
     val found = if (id != null) list.firstOrNull { it.optInt("id") == id } else null
     val p = found ?: JSONObject().also { n ->
@@ -407,6 +408,7 @@ fun JSONObject.saveProduct(
     p.put("variant", variant)
     p.put("byWeight", byWeight)
     putList("products", list)
+    return p.optInt("id")
 }
 
 fun JSONObject.removeProduct(id: Int) {
@@ -709,6 +711,9 @@ fun GastosPanel(store: Store) {
     var showDiscount by rememberSaveable { mutableStateOf(false) }
     var showFree by rememberSaveable { mutableStateOf(false) }
     var showLookup by rememberSaveable { mutableStateOf(false) }
+    var showScan by rememberSaveable { mutableStateOf(false) }
+    var formBarcode by rememberSaveable { mutableStateOf("") }
+    var formAddToList by rememberSaveable { mutableStateOf(false) }
     var confirm by remember { mutableStateOf<Pair<String, () -> Unit>?>(null) }
 
     val st = store.current()
@@ -751,12 +756,7 @@ fun GastosPanel(store: Store) {
     ShoppingCard(
         store,
         onAddItem = { showShopAdd = true },
-        onScan = {
-            scanBarcode(ctx) { code ->
-                val pr = store.current()?.prodRows()?.firstOrNull { it.barcode.isNotEmpty() && it.barcode == code.trim() }
-                if (pr != null) addProduct(pr) else toast("O código $code não está no seu catálogo")
-            }
-        },
+        onScan = { showScan = true },
         onLookup = { showLookup = true },
         onDiscount = { showDiscount = true },
         onFree = { showFree = true },
@@ -783,7 +783,39 @@ fun GastosPanel(store: Store) {
         )
     }
     if (showProductForm) {
-        ProductFormSheet(store, productFormId) { showProductForm = false; productFormId = null }
+        ProductFormSheet(store, productFormId, formBarcode, formAddToList) {
+            showProductForm = false
+            productFormId = null
+            formBarcode = ""
+            formAddToList = false
+        }
+    }
+    if (showScan) {
+        ScanDialog(
+            continuous = true,
+            onCode = { code ->
+                val pr = store.current()?.prodRows()?.firstOrNull { it.barcode.isNotEmpty() && it.barcode == code }
+                when {
+                    pr == null -> {
+                        formBarcode = code
+                        formAddToList = true
+                        productFormId = null
+                        showProductForm = true
+                        ScanAction("Produto novo — cadastre pra adicionar", close = true)
+                    }
+                    pr.byWeight -> {
+                        weighId = pr.id
+                        ScanAction(close = true)
+                    }
+                    else -> {
+                        store.update { it.addProductToList(pr.id) }
+                        val q = store.current()?.objList("shoppingList")?.firstOrNull { it.optInt("productId", -1) == pr.id }?.optInt("quantity", 1) ?: 1
+                        ScanAction("✓ ${pr.name} · $q un na lista")
+                    }
+                }
+            },
+            onClose = { showScan = false },
+        )
     }
     weighId?.let { id -> WeighSheet(store, id) { weighId = null } }
     editShopId?.let { id -> EditShopSheet(store, id) { editShopId = null } }
@@ -1269,7 +1301,7 @@ fun ShopAddSheet(
 }
 
 @Composable
-fun ProductFormSheet(store: Store, editId: Int?, onClose: () -> Unit) {
+fun ProductFormSheet(store: Store, editId: Int?, initialBarcode: String = "", addToList: Boolean = false, onClose: () -> Unit) {
     val p = LocalPalette.current
     val ctx = LocalContext.current
     val existing = editId?.let { id -> store.current()?.prodRows()?.firstOrNull { it.id == id } }
@@ -1277,7 +1309,19 @@ fun ProductFormSheet(store: Store, editId: Int?, onClose: () -> Unit) {
     var cat by remember { mutableStateOf(existing?.category ?: "") }
     var price by remember { mutableStateOf(existing?.let { numText(it.price) } ?: "") }
     var byWeight by remember { mutableStateOf(existing?.byWeight ?: false) }
-    var barcode by remember { mutableStateOf(existing?.barcode ?: "") }
+    var barcode by remember { mutableStateOf(existing?.barcode ?: initialBarcode) }
+    var scanning by remember { mutableStateOf(false) }
+    LaunchedEffect(barcode) {
+        if (barcode.trim().length >= 8 && name.isBlank()) {
+            fetchProductInfo(barcode.trim()) { n, b ->
+                if (name.isBlank()) {
+                    name = n
+                    if (brand.isBlank() && b.isNotEmpty()) brand = b
+                    Toast.makeText(ctx, "Nome preenchido pelo código de barras", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
     var brand by remember { mutableStateOf(existing?.brand ?: "") }
     var variant by remember { mutableStateOf(existing?.variant ?: "") }
     var more by remember { mutableStateOf(existing != null && (existing.brand.isNotEmpty() || existing.variant.isNotEmpty())) }
@@ -1308,7 +1352,13 @@ fun ProductFormSheet(store: Store, editId: Int?, onClose: () -> Unit) {
             Text("⚖️ Vendido por peso (o preço é por kg)", color = p.text, fontSize = 13.sp)
         }
         Spacer(Modifier.height(6.dp))
-        GField("Código de barras", barcode, { barcode = it }, placeholder = "Digite o código", keyboard = KeyboardType.Number)
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.Bottom) {
+            GField("Código de barras", barcode, { barcode = it }, Modifier.weight(1f), placeholder = "Digite ou escaneie", keyboard = KeyboardType.Number)
+            GhostButton("📷", Modifier.width(60.dp)) { scanning = true }
+        }
+        if (scanning) {
+            ScanDialog(false, { code -> barcode = code; ScanAction(close = true) }, { scanning = false })
+        }
         Spacer(Modifier.height(8.dp))
         Text(
             if (more) "− Menos detalhes" else "+ Mais detalhes (marca, variação)",
@@ -1328,7 +1378,7 @@ fun ProductFormSheet(store: Store, editId: Int?, onClose: () -> Unit) {
                 Toast.makeText(ctx, "Digite o nome do produto", Toast.LENGTH_SHORT).show()
             } else {
                 store.update {
-                    it.saveProduct(
+                    val newId = it.saveProduct(
                         editId,
                         name.trim(),
                         cat.trim().ifEmpty { "Geral" },
@@ -1338,6 +1388,7 @@ fun ProductFormSheet(store: Store, editId: Int?, onClose: () -> Unit) {
                         variant.trim(),
                         byWeight,
                     )
+                    if (addToList && editId == null && !byWeight) it.addProductToList(newId)
                 }
                 onClose()
             }
@@ -1448,6 +1499,7 @@ fun LookupSheet(store: Store, onAdd: (ProdRow) -> Unit, onClose: () -> Unit) {
     val p = LocalPalette.current
     val ctx = LocalContext.current
     var code by remember { mutableStateOf("") }
+    var scanning by remember { mutableStateOf(false) }
     val prods = store.current()?.prodRows() ?: emptyList()
     val found = if (code.length >= 3) prods.firstOrNull { it.barcode.isNotEmpty() && it.barcode == code.trim() } else null
 
@@ -1456,7 +1508,10 @@ fun LookupSheet(store: Store, onAdd: (ProdRow) -> Unit, onClose: () -> Unit) {
         Spacer(Modifier.height(10.dp))
         GField("Código de barras", code, { code = it }, placeholder = "Ex.: 7891000100103", keyboard = KeyboardType.Number)
         Spacer(Modifier.height(8.dp))
-        GhostButton("📷 Escanear") { scanBarcode(ctx) { code = it } }
+        GhostButton("📷 Escanear") { scanning = true }
+        if (scanning) {
+            ScanDialog(false, { c -> code = c; ScanAction(close = true) }, { scanning = false })
+        }
         Spacer(Modifier.height(12.dp))
         if (found != null) {
             KvRow(found.name, brl(found.price) + if (found.byWeight) "/kg" else "", p.gold, bold = true)

@@ -99,14 +99,14 @@ class Store(context: Context) {
 
     /** Começa uma conta nova, sem backup. */
     fun createNew() {
-        state = defaultStateJson()
+        state = defaultStateJson().also { it.put("onboardingCompleted", false) }
         save()
         rev++
     }
 
     /** Apaga tudo e volta ao estado inicial. */
     fun resetAll() {
-        state = defaultStateJson()
+        state = defaultStateJson().also { it.put("onboardingCompleted", false) }
         save()
         rev++
     }

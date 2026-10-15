@@ -1399,7 +1399,7 @@ fun JSONObject.computeInsights(): List<Insight> {
             }
         }
     }
-    if (!sub("settings").optBoolean("autoBackupEnabled", true)) {
+    run {
         val last = str("lastBackupAt")
         val days = if (last.isEmpty()) null else try {
             ChronoUnit.DAYS.between(LocalDate.parse(last.take(10)), LocalDate.now())
@@ -1407,7 +1407,7 @@ fun JSONObject.computeInsights(): List<Insight> {
             null
         }
         if (days == null || days >= sub("settings").optInt("notifyBackupDays", 14)) {
-            out.add(Insight("💾", "Faça um backup", if (days == null) "Você ainda não exportou nenhum backup." else "Faz $days dias desde o último backup.", "config", "Backup"))
+            out.add(Insight("💾", "Faça um backup", if (days == null) "Você ainda não guardou nenhum backup. Envie um por e-mail em Configurações." else "Faz $days dias desde o último backup. Envie um por e-mail em Configurações.", "config", "Backup"))
         }
     }
     return out
