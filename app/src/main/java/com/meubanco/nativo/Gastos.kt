@@ -1311,6 +1311,10 @@ fun ProductFormSheet(store: Store, editId: Int?, initialBarcode: String = "", ad
     var byWeight by remember { mutableStateOf(existing?.byWeight ?: false) }
     var barcode by remember { mutableStateOf(existing?.barcode ?: initialBarcode) }
     var scanning by remember { mutableStateOf(false) }
+    var brand by remember { mutableStateOf(existing?.brand ?: "") }
+    var variant by remember { mutableStateOf(existing?.variant ?: "") }
+    var more by remember { mutableStateOf(existing != null && (existing.brand.isNotEmpty() || existing.variant.isNotEmpty())) }
+
     LaunchedEffect(barcode) {
         if (barcode.trim().length >= 8 && name.isBlank()) {
             fetchProductInfo(barcode.trim()) { n, b ->
@@ -1322,9 +1326,6 @@ fun ProductFormSheet(store: Store, editId: Int?, initialBarcode: String = "", ad
             }
         }
     }
-    var brand by remember { mutableStateOf(existing?.brand ?: "") }
-    var variant by remember { mutableStateOf(existing?.variant ?: "") }
-    var more by remember { mutableStateOf(existing != null && (existing.brand.isNotEmpty() || existing.variant.isNotEmpty())) }
 
     GSheet(if (existing != null) "Editar produto" else "Cadastrar produto", onClose) {
         GField("Nome do produto", name, { name = it }, placeholder = "Ex.: Arroz 5kg")
