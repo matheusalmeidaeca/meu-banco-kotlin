@@ -19,8 +19,15 @@ jobs:
       - name: Testes do servidor
         run: node cloudflare/worker.test.mjs
 
-      - name: Publicar no Cloudflare
+      - name: Publicar no Cloudflare (cria o servidor)
         id: wr
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: cloudflare
+
+      - name: Gravar as chaves no servidor
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
