@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/w_root"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:padding="12dp"
+    android:background="@drawable/widget_bg">
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Saldo em conta" android:textColor="#8B97AD" android:textSize="11sp"/>
+    <TextView android:id="@+id/w_balance" android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="R$ 0,00" android:textColor="#E8EDF7" android:textSize="22sp" android:textStyle="bold"/>
+    <TextView android:id="@+id/w_net" android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:textColor="#D4A24C" android:textSize="12sp"/>
+    <TextView android:id="@+id/w_spend" android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" android:padding="8dp" android:text="＋ Registrar gasto"
+        android:textColor="#FFFFFF" android:textSize="12sp" android:background="@drawable/widget_btn"/>
+</LinearLayout>

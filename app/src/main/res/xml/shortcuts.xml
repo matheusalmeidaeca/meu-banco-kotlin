@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut android:shortcutId="gasto" android:enabled="true" android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/atalho_gasto" android:shortcutLongLabel="@string/atalho_gasto_longo">
+        <intent android:action="com.meubanco.patrimonio.QUICK_SPEND"
+            android:targetPackage="com.meubanco.patrimonio" android:targetClass="com.meubanco.patrimonio.MainActivity"/>
+    </shortcut>
+</shortcuts>

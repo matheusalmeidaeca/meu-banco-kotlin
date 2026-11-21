@@ -1,0 +1,3755 @@
+{
+ "name": "A_empregado_completo",
+ "input": {
+  "simDateISO": "2026-11-17",
+  "account": {
+   "agency": "0001",
+   "number": "12345-6"
+  },
+  "card": {
+   "enabled": true,
+   "limit": 3000,
+   "invoiceCurrent": 650,
+   "pendingAmount": 0,
+   "pendingDueYM": null,
+   "closingDay": 25,
+   "dueDay": 5,
+   "lastClosedYM": null,
+   "last4": "1234",
+   "purchases": [
+    {
+     "id": 1,
+     "desc": "Geladeira",
+     "totalAmount": 2400,
+     "installmentsTotal": 6,
+     "installmentValue": 400,
+     "installmentsPaid": 1,
+     "dateISO": "2026-11-15"
+    },
+    {
+     "id": 2,
+     "desc": "Tênis",
+     "totalAmount": 250,
+     "installmentsTotal": 1,
+     "installmentValue": 250,
+     "installmentsPaid": 1,
+     "dateISO": "2026-11-16"
+    }
+   ],
+   "nextPurchaseId": 3,
+   "name": "Cartão principal"
+  },
+  "extraCards": [
+   {
+    "enabled": true,
+    "limit": 800,
+    "invoiceCurrent": 100,
+    "pendingAmount": 0,
+    "pendingDueYM": null,
+    "closingDay": 10,
+    "dueDay": 20,
+    "lastClosedYM": null,
+    "last4": "9999",
+    "purchases": [],
+    "nextPurchaseId": 1,
+    "name": "Cartão 2"
+   }
+  ],
+  "nextExtraCardId": 1,
+  "activeCardIdx": 0,
+  "activeMainTab": "conta",
+  "activeCatTab": "todos",
+  "showConfig": false,
+  "assets": [
+   {
+    "id": "BBAS3",
+    "ticker": "BBAS3",
+    "name": "Banco do Brasil",
+    "category": "acao",
+    "price": 27,
+    "yieldPct": 0.7,
+    "volatility": 0.03,
+    "quantity": 0,
+    "allocPct": 30
+   },
+   {
+    "id": "ITUB4",
+    "ticker": "ITUB4",
+    "name": "Itaú Unibanco",
+    "category": "acao",
+    "price": 36,
+    "yieldPct": 0.6,
+    "volatility": 0.03,
+    "quantity": 0
+   },
+   {
+    "id": "TAEE11",
+    "ticker": "TAEE11",
+    "name": "Taesa",
+    "category": "acao",
+    "price": 36,
+    "yieldPct": 0.8,
+    "volatility": 0.02,
+    "quantity": 0
+   },
+   {
+    "id": "CPFE3",
+    "ticker": "CPFE3",
+    "name": "CPFL Energia",
+    "category": "acao",
+    "price": 38,
+    "yieldPct": 0.65,
+    "volatility": 0.025,
+    "quantity": 0
+   },
+   {
+    "id": "CMIG4",
+    "ticker": "CMIG4",
+    "name": "Cemig",
+    "category": "acao",
+    "price": 11,
+    "yieldPct": 0.6,
+    "volatility": 0.03,
+    "quantity": 0
+   },
+   {
+    "id": "BBSE3",
+    "ticker": "BBSE3",
+    "name": "BB Seguridade",
+    "category": "acao",
+    "price": 35,
+    "yieldPct": 0.7,
+    "volatility": 0.025,
+    "quantity": 0
+   },
+   {
+    "id": "VBBR3",
+    "ticker": "VBBR3",
+    "name": "Vibra Energia",
+    "category": "acao",
+    "price": 22,
+    "yieldPct": 0.65,
+    "volatility": 0.03,
+    "quantity": 0
+   },
+   {
+    "id": "HGLG11",
+    "ticker": "HGLG11",
+    "name": "CSHG Logística",
+    "category": "tijolo",
+    "price": 160,
+    "yieldPct": 0.75,
+    "volatility": 0.015,
+    "quantity": 0,
+    "allocPct": 40
+   },
+   {
+    "id": "KNRI11",
+    "ticker": "KNRI11",
+    "name": "Kinea Renda Imobiliária",
+    "category": "tijolo",
+    "price": 150,
+    "yieldPct": 0.65,
+    "volatility": 0.015,
+    "quantity": 0
+   },
+   {
+    "id": "XPML11",
+    "ticker": "XPML11",
+    "name": "XP Malls",
+    "category": "tijolo",
+    "price": 95,
+    "yieldPct": 0.75,
+    "volatility": 0.015,
+    "quantity": 0
+   },
+   {
+    "id": "VISC11",
+    "ticker": "VISC11",
+    "name": "Vinci Shopping Centers",
+    "category": "tijolo",
+    "price": 105,
+    "yieldPct": 0.7,
+    "volatility": 0.015,
+    "quantity": 0
+   },
+   {
+    "id": "BTLG11",
+    "ticker": "BTLG11",
+    "name": "BTG Pactual Logística",
+    "category": "tijolo",
+    "price": 100,
+    "yieldPct": 0.75,
+    "volatility": 0.015,
+    "quantity": 0
+   },
+   {
+    "id": "GGRC11",
+    "ticker": "GGRC11",
+    "name": "GGR Covepi Renda",
+    "category": "tijolo",
+    "price": 95,
+    "yieldPct": 0.8,
+    "volatility": 0.018,
+    "quantity": 0
+   },
+   {
+    "id": "RBRP11",
+    "ticker": "RBRP11",
+    "name": "RBR Properties",
+    "category": "tijolo",
+    "price": 65,
+    "yieldPct": 0.7,
+    "volatility": 0.018,
+    "quantity": 0
+   },
+   {
+    "id": "MXRF11",
+    "ticker": "MXRF11",
+    "name": "Maxi Renda",
+    "category": "papel",
+    "price": 9.5,
+    "yieldPct": 0.9,
+    "volatility": 0.01,
+    "quantity": 0,
+    "allocPct": 30
+   },
+   {
+    "id": "KNCR11",
+    "ticker": "KNCR11",
+    "name": "Kinea Rendimentos",
+    "category": "papel",
+    "price": 98,
+    "yieldPct": 0.9,
+    "volatility": 0.008,
+    "quantity": 0
+   },
+   {
+    "id": "IRDM11",
+    "ticker": "IRDM11",
+    "name": "Iridium Recebíveis",
+    "category": "papel",
+    "price": 70,
+    "yieldPct": 0.95,
+    "volatility": 0.012,
+    "quantity": 0
+   },
+   {
+    "id": "VGIR11",
+    "ticker": "VGIR11",
+    "name": "Valora RE III",
+    "category": "papel",
+    "price": 8.8,
+    "yieldPct": 0.9,
+    "volatility": 0.008,
+    "quantity": 0
+   },
+   {
+    "id": "KNIP11",
+    "ticker": "KNIP11",
+    "name": "Kinea Índices de Preços",
+    "category": "papel",
+    "price": 85,
+    "yieldPct": 0.85,
+    "volatility": 0.01,
+    "quantity": 0
+   },
+   {
+    "id": "HGCR11",
+    "ticker": "HGCR11",
+    "name": "CSHG Recebíveis Imob.",
+    "category": "papel",
+    "price": 90,
+    "yieldPct": 0.9,
+    "volatility": 0.01,
+    "quantity": 0
+   }
+  ],
+  "selectedAssetId": null,
+  "monthlyContribution": 800,
+  "recurringInvestEnabled": true,
+  "reinvestDividends": true,
+  "taxLedger": [],
+  "taxPaid": {},
+  "investorProfile": null,
+  "realizedGain": 0,
+  "investSobra": 0,
+  "monthlyWithdrawal": 50,
+  "contributionDay": 9,
+  "leftover": 0,
+  "totalContributed": 0,
+  "totalWithdrawn": 0,
+  "totalInvestedCost": 0,
+  "totalDividendsReceived": 0,
+  "market": {
+   "autoAssets": true,
+   "simGrowthPct": 9.5,
+   "assetsUpdatedAt": null,
+   "assetsUpdatedAtMs": null,
+   "assetsError": null,
+   "assetsCheckedAtMs": null,
+   "quotesUrl": "https://raw.githubusercontent.com/matheusalmeidaeca/cotacoes/main/cotacoes.json",
+   "cdiUpdatedAt": null,
+   "cdiError": null
+  },
+  "reserves": [
+   {
+    "id": 1,
+    "name": "Reserva de emergência",
+    "balance": 0,
+    "monthlyContribution": 300,
+    "targetValue": 5000,
+    "totalContributed": 0,
+    "totalInterest": 0,
+    "startDateISO": null,
+    "createdOn": "2026-11-17"
+   },
+   {
+    "id": 2,
+    "name": "Viagens",
+    "balance": 0,
+    "monthlyContribution": 120,
+    "targetValue": 0,
+    "totalContributed": 0,
+    "totalInterest": 0,
+    "startDateISO": null,
+    "createdOn": "2026-11-17"
+   }
+  ],
+  "nextReserveId": 3,
+  "reserveConfig": {
+   "annualRatePct": 11
+  },
+  "settings": {
+   "theme": "dark",
+   "fontSize": "normal",
+   "highContrast": false,
+   "hapticEnabled": true,
+   "bioEnabled": false,
+   "bioCredId": "",
+   "assistantEnabled": true,
+   "celebrationsEnabled": true,
+   "displayName": "",
+   "hideBalance": false,
+   "pinEnabled": false,
+   "pinHash": null,
+   "pixConfirmThreshold": 0,
+   "pixDailyLimit": 0,
+   "brokerageFee": 2.5,
+   "quoteRefreshMode": "daily",
+   "notifyCardDays": 3,
+   "notifyBackupDays": 14,
+   "autoBackupEnabled": true,
+   "notifyGoalPct": 90,
+   "notifyFreeSpendPct": 90
+  },
+  "onboardingCompleted": true,
+  "pixSentTodayISO": null,
+  "pixSentTodayTotal": 0,
+  "celebrated": {},
+  "sundaysWorked": [
+   "2026-11-22",
+   "2026-12-06",
+   "2026-12-20",
+   "2027-01-10"
+  ],
+  "shoppingList": [
+   {
+    "id": 1,
+    "name": "Arroz",
+    "category": "mercearia",
+    "price": 28,
+    "quantity": 2,
+    "checked": true
+   },
+   {
+    "id": 2,
+    "name": "Frango",
+    "category": "carnes",
+    "price": 42.5,
+    "quantity": 1,
+    "checked": false,
+    "weightKg": 3,
+    "pricePerKg": 14.1667
+   }
+  ],
+  "nextShoppingId": 3,
+  "products": [],
+  "nextProductId": 1,
+  "goals": [
+   {
+    "id": 1,
+    "name": "Sofá",
+    "type": "movel",
+    "target": 3000,
+    "saved": 200,
+    "monthly": 150,
+    "rate": 8,
+    "completed": false,
+    "completedOn": null
+   }
+  ],
+  "nextGoalId": 2,
+  "profile": {
+   "birthDateISO": null,
+   "sex": null
+  },
+  "income": {
+   "incomeType": "empregado",
+   "hireDateISO": "2024-03-10",
+   "beneficioLabel": "Benefício social",
+   "beneficioAmount": 0,
+   "beneficioPayDay": 5,
+   "baseSalary": 2800,
+   "extraHours": 0,
+   "extraHourPct": 50,
+   "holidayHours": 7,
+   "holidayPct": 100,
+   "holidayNightHours": 0,
+   "holidayNightPct": 20,
+   "sundayBonus": 70,
+   "sundayAnchorISO": "2026-11-22",
+   "sundayAnchorWorked": true,
+   "sundayMode": "alternado",
+   "thirteenthEnabled": true,
+   "feriasEnabled": true,
+   "feriasMonth": 2,
+   "baseMonthKey": "2026-11",
+   "baseShift": "noite",
+   "shiftMode": "alternado",
+   "fixedShift": "noite",
+   "shifts": {
+    "manha": {
+     "name": "Manhã",
+     "detail": "07:00–11:00 · intervalo · 15:00–18:00",
+     "hours": 7
+    },
+    "noite": {
+     "name": "Tarde / Noite",
+     "detail": "11:00–15:00 · intervalo · 17:30–21:00",
+     "hours": 7.5
+    }
+   },
+   "totalReceived": 0
+  },
+  "fgts": {
+   "balance": 0,
+   "lastBackfillAmount": 0
+  },
+  "lastBackupAt": null,
+  "lastThirteenthFirstYear": null,
+  "lastThirteenthSecondYear": null,
+  "lastFeriasYear": null,
+  "expenses": [
+   {
+    "id": 1,
+    "name": "Aluguel",
+    "amount": 800,
+    "category": "Moradia"
+   },
+   {
+    "id": 2,
+    "name": "Energia",
+    "amount": 140,
+    "category": "Contas"
+   },
+   {
+    "id": 3,
+    "name": "Alimentação",
+    "amount": 0,
+    "category": "Alimentação"
+   },
+   {
+    "id": 4,
+    "name": "Internet",
+    "amount": 100,
+    "category": "Contas"
+   }
+  ],
+  "nextExpenseId": 6,
+  "shoppingLinkedExpenseId": 3,
+  "cash": 5000,
+  "totalExpensesPaid": 0,
+  "history": [],
+  "netWorthHistory": [],
+  "monthlyStats": {},
+  "shoppingDiscount": {
+   "type": "pct",
+   "value": 5
+  },
+  "lastProcessedYM": null,
+  "lastCarteiraProcessedYM": null,
+  "lastIncomePaidYM": null,
+  "secondaryIncome": {
+   "enabled": true,
+   "label": "Salário esposa",
+   "type": "salario",
+   "amount": 1300,
+   "payDay": 10
+  },
+  "lastSecondaryIncomePaidYM": null,
+  "lastExpensesPaidYM": null,
+  "timeClock": [],
+  "freeSpendCategories": [
+   "Lazer",
+   "Imprevisto",
+   "Presente",
+   "Outro"
+  ],
+  "freeSpendMonthlyLimit": 400
+ },
+ "ops": [
+  {
+   "op": "sim",
+   "days": 20
+  },
+  {
+   "op": "transfer",
+   "toInvest": true,
+   "amount": 4000
+  },
+  {
+   "op": "buy",
+   "id": "BBAS3",
+   "qty": 20
+  },
+  {
+   "op": "buy",
+   "id": "KNCR11",
+   "qty": 8
+  },
+  {
+   "op": "reserveExtra",
+   "id": 1,
+   "amount": 700
+  },
+  {
+   "op": "spendFree",
+   "amount": 85.9,
+   "category": "Lazer"
+  },
+  {
+   "op": "sim",
+   "days": 200
+  },
+  {
+   "op": "reserveWithdraw",
+   "id": 1,
+   "amount": 400
+  },
+  {
+   "op": "sell",
+   "id": "BBAS3",
+   "qty": 7
+  },
+  {
+   "op": "sim",
+   "days": 150
+  },
+  {
+   "op": "sell",
+   "id": "HGLG11",
+   "qty": 2
+  },
+  {
+   "op": "sim",
+   "days": 420
+  }
+ ],
+ "expected": {
+  "simDateISO": "2029-01-15",
+  "account": {
+   "agency": "0001",
+   "number": "12345-6"
+  },
+  "card": {
+   "enabled": true,
+   "limit": 3000,
+   "invoiceCurrent": 0,
+   "pendingAmount": 0,
+   "pendingDueYM": "2027-05",
+   "closingDay": 25,
+   "dueDay": 5,
+   "lastClosedYM": "2028-12",
+   "last4": "1234",
+   "purchases": [],
+   "nextPurchaseId": 3,
+   "name": "Cartão principal"
+  },
+  "extraCards": [
+   {
+    "enabled": true,
+    "limit": 800,
+    "invoiceCurrent": 0,
+    "pendingAmount": 0,
+    "pendingDueYM": "2026-12",
+    "closingDay": 10,
+    "dueDay": 20,
+    "lastClosedYM": "2029-01",
+    "last4": "9999",
+    "purchases": [],
+    "nextPurchaseId": 1,
+    "name": "Cartão 2"
+   }
+  ],
+  "nextExtraCardId": 1,
+  "activeCardIdx": 0,
+  "activeMainTab": "conta",
+  "activeCatTab": "todos",
+  "showConfig": false,
+  "assets": [
+   {
+    "id": "BBAS3",
+    "ticker": "BBAS3",
+    "name": "Banco do Brasil",
+    "category": "acao",
+    "price": 27,
+    "yieldPct": 0.7,
+    "volatility": 0.03,
+    "quantity": 258,
+    "allocPct": 30,
+    "costBasis": 7036.58
+   },
+   {
+    "id": "ITUB4",
+    "ticker": "ITUB4",
+    "name": "Itaú Unibanco",
+    "category": "acao",
+    "price": 36,
+    "yieldPct": 0.6,
+    "volatility": 0.03,
+    "quantity": 4,
+    "costBasis": 149
+   },
+   {
+    "id": "TAEE11",
+    "ticker": "TAEE11",
+    "name": "Taesa",
+    "category": "acao",
+    "price": 36,
+    "yieldPct": 0.8,
+    "volatility": 0.02,
+    "quantity": 0
+   },
+   {
+    "id": "CPFE3",
+    "ticker": "CPFE3",
+    "name": "CPFL Energia",
+    "category": "acao",
+    "price": 38,
+    "yieldPct": 0.65,
+    "volatility": 0.025,
+    "quantity": 2,
+    "costBasis": 81
+   },
+   {
+    "id": "CMIG4",
+    "ticker": "CMIG4",
+    "name": "Cemig",
+    "category": "acao",
+    "price": 11,
+    "yieldPct": 0.6,
+    "volatility": 0.03,
+    "quantity": 19,
+    "costBasis": 226.5
+   },
+   {
+    "id": "BBSE3",
+    "ticker": "BBSE3",
+    "name": "BB Seguridade",
+    "category": "acao",
+    "price": 35,
+    "yieldPct": 0.7,
+    "volatility": 0.025,
+    "quantity": 1,
+    "costBasis": 37.5
+   },
+   {
+    "id": "VBBR3",
+    "ticker": "VBBR3",
+    "name": "Vibra Energia",
+    "category": "acao",
+    "price": 22,
+    "yieldPct": 0.65,
+    "volatility": 0.03,
+    "quantity": 0
+   },
+   {
+    "id": "HGLG11",
+    "ticker": "HGLG11",
+    "name": "CSHG Logística",
+    "category": "tijolo",
+    "price": 160,
+    "yieldPct": 0.75,
+    "volatility": 0.015,
+    "quantity": 50,
+    "allocPct": 40,
+    "costBasis": 8062.5
+   },
+   {
+    "id": "KNRI11",
+    "ticker": "KNRI11",
+    "name": "Kinea Renda Imobiliária",
+    "category": "tijolo",
+    "price": 150,
+    "yieldPct": 0.65,
+    "volatility": 0.015,
+    "quantity": 0
+   },
+   {
+    "id": "XPML11",
+    "ticker": "XPML11",
+    "name": "XP Malls",
+    "category": "tijolo",
+    "price": 95,
+    "yieldPct": 0.75,
+    "volatility": 0.015,
+    "quantity": 1,
+    "costBasis": 97.5
+   },
+   {
+    "id": "VISC11",
+    "ticker": "VISC11",
+    "name": "Vinci Shopping Centers",
+    "category": "tijolo",
+    "price": 105,
+    "yieldPct": 0.7,
+    "volatility": 0.015,
+    "quantity": 0
+   },
+   {
+    "id": "BTLG11",
+    "ticker": "BTLG11",
+    "name": "BTG Pactual Logística",
+    "category": "tijolo",
+    "price": 100,
+    "yieldPct": 0.75,
+    "volatility": 0.015,
+    "quantity": 0
+   },
+   {
+    "id": "GGRC11",
+    "ticker": "GGRC11",
+    "name": "GGR Covepi Renda",
+    "category": "tijolo",
+    "price": 95,
+    "yieldPct": 0.8,
+    "volatility": 0.018,
+    "quantity": 0
+   },
+   {
+    "id": "RBRP11",
+    "ticker": "RBRP11",
+    "name": "RBR Properties",
+    "category": "tijolo",
+    "price": 65,
+    "yieldPct": 0.7,
+    "volatility": 0.018,
+    "quantity": 0
+   },
+   {
+    "id": "MXRF11",
+    "ticker": "MXRF11",
+    "name": "Maxi Renda",
+    "category": "papel",
+    "price": 9.5,
+    "yieldPct": 0.9,
+    "volatility": 0.01,
+    "quantity": 754,
+    "allocPct": 30,
+    "costBasis": 7245.5
+   },
+   {
+    "id": "KNCR11",
+    "ticker": "KNCR11",
+    "name": "Kinea Rendimentos",
+    "category": "papel",
+    "price": 98,
+    "yieldPct": 0.9,
+    "volatility": 0.008,
+    "quantity": 8,
+    "costBasis": 786.5
+   },
+   {
+    "id": "IRDM11",
+    "ticker": "IRDM11",
+    "name": "Iridium Recebíveis",
+    "category": "papel",
+    "price": 70,
+    "yieldPct": 0.95,
+    "volatility": 0.012,
+    "quantity": 0
+   },
+   {
+    "id": "VGIR11",
+    "ticker": "VGIR11",
+    "name": "Valora RE III",
+    "category": "papel",
+    "price": 8.8,
+    "yieldPct": 0.9,
+    "volatility": 0.008,
+    "quantity": 30,
+    "costBasis": 274
+   },
+   {
+    "id": "KNIP11",
+    "ticker": "KNIP11",
+    "name": "Kinea Índices de Preços",
+    "category": "papel",
+    "price": 85,
+    "yieldPct": 0.85,
+    "volatility": 0.01,
+    "quantity": 0
+   },
+   {
+    "id": "HGCR11",
+    "ticker": "HGCR11",
+    "name": "CSHG Recebíveis Imob.",
+    "category": "papel",
+    "price": 90,
+    "yieldPct": 0.9,
+    "volatility": 0.01,
+    "quantity": 0
+   }
+  ],
+  "selectedAssetId": null,
+  "monthlyContribution": 800,
+  "recurringInvestEnabled": true,
+  "reinvestDividends": true,
+  "taxLedger": [
+   {
+    "ym": "2027-06",
+    "ticker": "BBAS3",
+    "cls": "acao",
+    "gross": 189,
+    "gain": -4.42
+   },
+   {
+    "ym": "2027-11",
+    "ticker": "HGLG11",
+    "cls": "fii",
+    "gross": 320,
+    "gain": -5
+   }
+  ],
+  "taxPaid": {},
+  "investorProfile": null,
+  "realizedGain": -9.42,
+  "investSobra": 0.23,
+  "monthlyWithdrawal": 50,
+  "contributionDay": 9,
+  "leftover": 1875.23,
+  "totalContributed": 20800,
+  "totalWithdrawn": 1300,
+  "totalInvestedCost": 23996.579999999998,
+  "totalDividendsReceived": 2381.23,
+  "market": {
+   "autoAssets": true,
+   "simGrowthPct": 9.5,
+   "assetsUpdatedAt": null,
+   "assetsUpdatedAtMs": null,
+   "assetsError": null,
+   "assetsCheckedAtMs": null,
+   "quotesUrl": "https://raw.githubusercontent.com/matheusalmeidaeca/cotacoes/main/cotacoes.json",
+   "cdiUpdatedAt": null,
+   "cdiError": null
+  },
+  "reserves": [
+   {
+    "id": 1,
+    "name": "Reserva de emergência",
+    "balance": 9134.134427222678,
+    "monthlyContribution": 300,
+    "targetValue": 5000,
+    "totalContributed": 8500,
+    "totalInterest": 1019.4028364402437,
+    "startDateISO": "2026-12-07",
+    "createdOn": "2026-11-17"
+   },
+   {
+    "id": 2,
+    "name": "Viagens",
+    "balance": 3493.0184120990557,
+    "monthlyContribution": 120,
+    "targetValue": 0,
+    "totalContributed": 3120,
+    "totalInterest": 373.01841209905615,
+    "startDateISO": "2026-12-09",
+    "createdOn": "2026-11-17"
+   }
+  ],
+  "nextReserveId": 3,
+  "reserveConfig": {
+   "annualRatePct": 11
+  },
+  "settings": {
+   "theme": "dark",
+   "fontSize": "normal",
+   "highContrast": false,
+   "hapticEnabled": true,
+   "bioEnabled": false,
+   "bioCredId": "",
+   "assistantEnabled": true,
+   "celebrationsEnabled": true,
+   "displayName": "",
+   "hideBalance": false,
+   "pinEnabled": false,
+   "pinHash": null,
+   "pixConfirmThreshold": 0,
+   "pixDailyLimit": 0,
+   "brokerageFee": 2.5,
+   "quoteRefreshMode": "daily",
+   "notifyCardDays": 3,
+   "notifyBackupDays": 14,
+   "autoBackupEnabled": true,
+   "notifyGoalPct": 90,
+   "notifyFreeSpendPct": 90
+  },
+  "onboardingCompleted": true,
+  "pixSentTodayISO": null,
+  "pixSentTodayTotal": 0,
+  "celebrated": {},
+  "sundaysWorked": [
+   "2026-11-22",
+   "2026-12-06",
+   "2026-12-20",
+   "2027-01-10"
+  ],
+  "shoppingList": [
+   {
+    "id": 1,
+    "name": "Arroz",
+    "category": "mercearia",
+    "price": 28,
+    "quantity": 2,
+    "checked": true
+   },
+   {
+    "id": 2,
+    "name": "Frango",
+    "category": "carnes",
+    "price": 42.5,
+    "quantity": 1,
+    "checked": false,
+    "weightKg": 3,
+    "pricePerKg": 14.1667
+   }
+  ],
+  "nextShoppingId": 3,
+  "products": [],
+  "nextProductId": 1,
+  "goals": [
+   {
+    "id": 1,
+    "name": "Sofá",
+    "type": "movel",
+    "target": 3000,
+    "saved": 3077.590733219161,
+    "monthly": 150,
+    "rate": 8,
+    "completed": true,
+    "completedOn": "2028-05-10"
+   }
+  ],
+  "nextGoalId": 2,
+  "profile": {
+   "birthDateISO": null,
+   "sex": null
+  },
+  "income": {
+   "incomeType": "empregado",
+   "hireDateISO": "2024-03-10",
+   "beneficioLabel": "Benefício social",
+   "beneficioAmount": 0,
+   "beneficioPayDay": 5,
+   "baseSalary": 2800,
+   "extraHours": 0,
+   "extraHourPct": 50,
+   "holidayHours": 7,
+   "holidayPct": 100,
+   "holidayNightHours": 0,
+   "holidayNightPct": 20,
+   "sundayBonus": 70,
+   "sundayAnchorISO": "2026-11-22",
+   "sundayAnchorWorked": true,
+   "sundayMode": "alternado",
+   "thirteenthEnabled": true,
+   "feriasEnabled": true,
+   "feriasMonth": 2,
+   "baseMonthKey": "2026-11",
+   "baseShift": "noite",
+   "shiftMode": "alternado",
+   "fixedShift": "noite",
+   "shifts": {
+    "manha": {
+     "name": "Manhã",
+     "detail": "07:00–11:00 · intervalo · 15:00–18:00",
+     "hours": 7
+    },
+    "noite": {
+     "name": "Tarde / Noite",
+     "detail": "11:00–15:00 · intervalo · 17:30–21:00",
+     "hours": 7.5
+    }
+   },
+   "totalReceived": 100626.3
+  },
+  "fgts": {
+   "balance": 6903.21,
+   "lastBackfillAmount": 0
+  },
+  "lastBackupAt": null,
+  "lastThirteenthFirstYear": 2028,
+  "lastThirteenthSecondYear": 2028,
+  "lastFeriasYear": 2028,
+  "expenses": [
+   {
+    "id": 1,
+    "name": "Aluguel",
+    "amount": 800,
+    "category": "Moradia"
+   },
+   {
+    "id": 2,
+    "name": "Energia",
+    "amount": 140,
+    "category": "Contas"
+   },
+   {
+    "id": 3,
+    "name": "Alimentação",
+    "amount": 0,
+    "category": "Alimentação"
+   },
+   {
+    "id": 4,
+    "name": "Internet",
+    "amount": 100,
+    "category": "Contas"
+   }
+  ],
+  "nextExpenseId": 6,
+  "shoppingLinkedExpenseId": 3,
+  "cash": 53055.66,
+  "totalExpensesPaid": 27040,
+  "history": [
+   {
+    "ts": "2029-01-10",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2029-01-10",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2029-01-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2029-01-09",
+    "type": "compra",
+    "label": "Compra de 1 cota(s) de XPML11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -97.5
+   },
+   {
+    "ts": "2029-01-09",
+    "type": "compra",
+    "label": "Compra de 30 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -287.5
+   },
+   {
+    "ts": "2029-01-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2029-01-09",
+    "type": "compra",
+    "label": "Compra de 10 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -272.5
+   },
+   {
+    "ts": "2029-01-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2029-01-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2029-01-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 178.66
+   },
+   {
+    "ts": "2029-01-09",
+    "type": "despesa",
+    "label": "Gastos fixos de janeiro de 2029 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2029-01-08",
+    "type": "renda",
+    "label": "Salário de dezembro de 2028, recebido hoje — 1 feriado(s)",
+    "amount": 2750.49
+   },
+   {
+    "ts": "2028-12-20",
+    "type": "renda",
+    "label": "13º salário — 2ª parcela (INSS R$ 227,69, IR R$ 0,00)",
+    "amount": 1172.31
+   },
+   {
+    "ts": "2028-12-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2028-12-09",
+    "type": "compra",
+    "label": "Compra de 9 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -88
+   },
+   {
+    "ts": "2028-12-09",
+    "type": "compra",
+    "label": "Compra de 30 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -287.5
+   },
+   {
+    "ts": "2028-12-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2028-12-09",
+    "type": "compra",
+    "label": "Compra de 10 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -272.5
+   },
+   {
+    "ts": "2028-12-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2028-12-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2028-12-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 171.04
+   },
+   {
+    "ts": "2028-12-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2028-12-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2028-12-08",
+    "type": "despesa",
+    "label": "Gastos fixos de dezembro de 2028 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2028-12-07",
+    "type": "renda",
+    "label": "Salário de novembro de 2028, recebido hoje — 3 feriado(s)",
+    "amount": 3106.85
+   },
+   {
+    "ts": "2028-11-30",
+    "type": "renda",
+    "label": "13º salário — 1ª parcela (2028)",
+    "amount": 1400
+   },
+   {
+    "ts": "2028-11-10",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2028-11-10",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2028-11-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2028-11-09",
+    "type": "compra",
+    "label": "Compra de 9 cota(s) de VGIR11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -81.7
+   },
+   {
+    "ts": "2028-11-09",
+    "type": "compra",
+    "label": "Compra de 30 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -287.5
+   },
+   {
+    "ts": "2028-11-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2028-11-09",
+    "type": "compra",
+    "label": "Compra de 10 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -272.5
+   },
+   {
+    "ts": "2028-11-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2028-11-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2028-11-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 163.47
+   },
+   {
+    "ts": "2028-11-09",
+    "type": "despesa",
+    "label": "Gastos fixos de novembro de 2028 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2028-11-08",
+    "type": "renda",
+    "label": "Salário de outubro de 2028, recebido hoje — 1 feriado(s)",
+    "amount": 2750.49
+   },
+   {
+    "ts": "2028-10-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2028-10-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de ITUB4 (corretagem de R$ 2,50 inclusa)",
+    "amount": -74.5
+   },
+   {
+    "ts": "2028-10-09",
+    "type": "compra",
+    "label": "Compra de 30 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -287.5
+   },
+   {
+    "ts": "2028-10-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2028-10-09",
+    "type": "compra",
+    "label": "Compra de 10 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -272.5
+   },
+   {
+    "ts": "2028-10-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2028-10-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2028-10-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 156.18
+   },
+   {
+    "ts": "2028-10-08",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2028-10-08",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2028-10-07",
+    "type": "despesa",
+    "label": "Gastos fixos de outubro de 2028 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2028-10-06",
+    "type": "renda",
+    "label": "Salário de setembro de 2028, recebido hoje — 1 feriado(s)",
+    "amount": 2750.49
+   },
+   {
+    "ts": "2028-09-10",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2028-09-10",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2028-09-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2028-09-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de ITUB4 (corretagem de R$ 2,50 inclusa)",
+    "amount": -74.5
+   },
+   {
+    "ts": "2028-09-09",
+    "type": "compra",
+    "label": "Compra de 29 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -278
+   },
+   {
+    "ts": "2028-09-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2028-09-09",
+    "type": "compra",
+    "label": "Compra de 10 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -272.5
+   },
+   {
+    "ts": "2028-09-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2028-09-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2028-09-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 148.98
+   },
+   {
+    "ts": "2028-09-09",
+    "type": "despesa",
+    "label": "Gastos fixos de setembro de 2028 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2028-09-08",
+    "type": "renda",
+    "label": "Salário de agosto de 2028, recebido hoje",
+    "amount": 2572.31
+   },
+   {
+    "ts": "2028-08-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2028-08-09",
+    "type": "compra",
+    "label": "Compra de 7 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -69
+   },
+   {
+    "ts": "2028-08-09",
+    "type": "compra",
+    "label": "Compra de 29 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -278
+   },
+   {
+    "ts": "2028-08-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2028-08-09",
+    "type": "compra",
+    "label": "Compra de 10 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -272.5
+   },
+   {
+    "ts": "2028-08-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2028-08-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2028-08-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 141.61
+   },
+   {
+    "ts": "2028-08-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2028-08-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2028-08-08",
+    "type": "despesa",
+    "label": "Gastos fixos de agosto de 2028 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2028-08-07",
+    "type": "renda",
+    "label": "Salário de julho de 2028, recebido hoje",
+    "amount": 2572.31
+   },
+   {
+    "ts": "2028-07-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2028-07-09",
+    "type": "compra",
+    "label": "Compra de 7 cota(s) de VGIR11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -64.1
+   },
+   {
+    "ts": "2028-07-09",
+    "type": "compra",
+    "label": "Compra de 29 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -278
+   },
+   {
+    "ts": "2028-07-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2028-07-09",
+    "type": "compra",
+    "label": "Compra de 10 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -272.5
+   },
+   {
+    "ts": "2028-07-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2028-07-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2028-07-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 134.29
+   },
+   {
+    "ts": "2028-07-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2028-07-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2028-07-08",
+    "type": "despesa",
+    "label": "Gastos fixos de julho de 2028 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2028-07-07",
+    "type": "renda",
+    "label": "Salário de junho de 2028, recebido hoje",
+    "amount": 2572.31
+   },
+   {
+    "ts": "2028-06-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2028-06-09",
+    "type": "compra",
+    "label": "Compra de 5 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -50
+   },
+   {
+    "ts": "2028-06-09",
+    "type": "compra",
+    "label": "Compra de 29 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -278
+   },
+   {
+    "ts": "2028-06-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2028-06-09",
+    "type": "compra",
+    "label": "Compra de 10 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -272.5
+   },
+   {
+    "ts": "2028-06-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2028-06-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2028-06-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 127.09
+   },
+   {
+    "ts": "2028-06-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2028-06-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2028-06-08",
+    "type": "despesa",
+    "label": "Gastos fixos de junho de 2028 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2028-06-07",
+    "type": "renda",
+    "label": "Salário de maio de 2028, recebido hoje — 1 feriado(s)",
+    "amount": 2750.49
+   },
+   {
+    "ts": "2028-05-10",
+    "type": "conquista",
+    "label": "Meta concluída: Sofá",
+    "amount": 3000
+   },
+   {
+    "ts": "2028-05-10",
+    "type": "meta",
+    "label": "Aporte na meta \"Sofá\"",
+    "amount": -150
+   },
+   {
+    "ts": "2028-05-10",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2028-05-10",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2028-05-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2028-05-09",
+    "type": "compra",
+    "label": "Compra de 6 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -59.5
+   },
+   {
+    "ts": "2028-05-09",
+    "type": "compra",
+    "label": "Compra de 28 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -268.5
+   },
+   {
+    "ts": "2028-05-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2028-05-09",
+    "type": "compra",
+    "label": "Compra de 10 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -272.5
+   },
+   {
+    "ts": "2028-05-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2028-05-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2028-05-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 119.9
+   },
+   {
+    "ts": "2028-05-09",
+    "type": "despesa",
+    "label": "Gastos fixos de maio de 2028 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2028-05-08",
+    "type": "renda",
+    "label": "Salário de abril de 2028, recebido hoje — 2 feriado(s)",
+    "amount": 2928.67
+   },
+   {
+    "ts": "2028-04-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2028-04-09",
+    "type": "compra",
+    "label": "Compra de 4 cota(s) de CMIG4 (corretagem de R$ 2,50 inclusa)",
+    "amount": -46.5
+   },
+   {
+    "ts": "2028-04-09",
+    "type": "compra",
+    "label": "Compra de 28 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -268.5
+   },
+   {
+    "ts": "2028-04-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2028-04-09",
+    "type": "compra",
+    "label": "Compra de 10 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -272.5
+   },
+   {
+    "ts": "2028-04-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2028-04-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2028-04-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 112.95
+   },
+   {
+    "ts": "2028-04-09",
+    "type": "meta",
+    "label": "Aporte na meta \"Sofá\"",
+    "amount": -150
+   },
+   {
+    "ts": "2028-04-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2028-04-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2028-04-08",
+    "type": "despesa",
+    "label": "Gastos fixos de abril de 2028 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2028-04-07",
+    "type": "aviso",
+    "label": "Sem salário este mês — março foi mês de férias, já coberto no pagamento anterior",
+    "amount": 0
+   },
+   {
+    "ts": "2028-03-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2028-03-09",
+    "type": "compra",
+    "label": "Compra de 7 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -69
+   },
+   {
+    "ts": "2028-03-09",
+    "type": "compra",
+    "label": "Compra de 28 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -268.5
+   },
+   {
+    "ts": "2028-03-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2028-03-09",
+    "type": "compra",
+    "label": "Compra de 9 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -245.5
+   },
+   {
+    "ts": "2028-03-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2028-03-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2028-03-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 105.85
+   },
+   {
+    "ts": "2028-03-09",
+    "type": "meta",
+    "label": "Aporte na meta \"Sofá\"",
+    "amount": -150
+   },
+   {
+    "ts": "2028-03-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2028-03-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2028-03-08",
+    "type": "despesa",
+    "label": "Gastos fixos de março de 2028 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2028-03-07",
+    "type": "renda",
+    "label": "Férias + 1/3 constitucional (março/2028)",
+    "amount": 3505.64
+   },
+   {
+    "ts": "2028-03-07",
+    "type": "renda",
+    "label": "Salário de fevereiro de 2028, recebido hoje — 2 feriado(s)",
+    "amount": 2928.67
+   },
+   {
+    "ts": "2028-02-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2028-02-09",
+    "type": "compra",
+    "label": "Compra de 7 cota(s) de VGIR11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -64.1
+   },
+   {
+    "ts": "2028-02-09",
+    "type": "compra",
+    "label": "Compra de 28 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -268.5
+   },
+   {
+    "ts": "2028-02-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2028-02-09",
+    "type": "compra",
+    "label": "Compra de 9 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -245.5
+   },
+   {
+    "ts": "2028-02-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2028-02-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2028-02-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 98.81
+   },
+   {
+    "ts": "2028-02-09",
+    "type": "meta",
+    "label": "Aporte na meta \"Sofá\"",
+    "amount": -150
+   },
+   {
+    "ts": "2028-02-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2028-02-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2028-02-08",
+    "type": "despesa",
+    "label": "Gastos fixos de fevereiro de 2028 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2028-02-07",
+    "type": "renda",
+    "label": "Salário de janeiro de 2028, recebido hoje — 1 feriado(s)",
+    "amount": 2750.49
+   },
+   {
+    "ts": "2028-01-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2028-01-09",
+    "type": "compra",
+    "label": "Compra de 7 cota(s) de VGIR11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -64.1
+   },
+   {
+    "ts": "2028-01-09",
+    "type": "compra",
+    "label": "Compra de 27 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -259
+   },
+   {
+    "ts": "2028-01-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2028-01-09",
+    "type": "compra",
+    "label": "Compra de 9 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -245.5
+   },
+   {
+    "ts": "2028-01-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2028-01-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2028-01-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 91.84
+   },
+   {
+    "ts": "2028-01-09",
+    "type": "meta",
+    "label": "Aporte na meta \"Sofá\"",
+    "amount": -150
+   },
+   {
+    "ts": "2028-01-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2028-01-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2028-01-08",
+    "type": "despesa",
+    "label": "Gastos fixos de janeiro de 2028 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2028-01-07",
+    "type": "renda",
+    "label": "Salário de dezembro de 2027, recebido hoje — 1 feriado(s)",
+    "amount": 2750.49
+   },
+   {
+    "ts": "2027-12-20",
+    "type": "renda",
+    "label": "13º salário — 2ª parcela (INSS R$ 227,69, IR R$ 0,00)",
+    "amount": 1172.31
+   },
+   {
+    "ts": "2027-12-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2027-12-09",
+    "type": "compra",
+    "label": "Compra de 5 cota(s) de CMIG4 (corretagem de R$ 2,50 inclusa)",
+    "amount": -57.5
+   },
+   {
+    "ts": "2027-12-09",
+    "type": "compra",
+    "label": "Compra de 27 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -259
+   },
+   {
+    "ts": "2027-12-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2027-12-09",
+    "type": "compra",
+    "label": "Compra de 9 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -245.5
+   },
+   {
+    "ts": "2027-12-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2027-12-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2027-12-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 85.1
+   },
+   {
+    "ts": "2027-12-09",
+    "type": "meta",
+    "label": "Aporte na meta \"Sofá\"",
+    "amount": -150
+   },
+   {
+    "ts": "2027-12-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2027-12-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2027-12-08",
+    "type": "despesa",
+    "label": "Gastos fixos de dezembro de 2027 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-12-07",
+    "type": "renda",
+    "label": "Salário de novembro de 2027, recebido hoje — 3 feriado(s)",
+    "amount": 3106.85
+   },
+   {
+    "ts": "2027-11-30",
+    "type": "renda",
+    "label": "13º salário — 1ª parcela (2027)",
+    "amount": 1400
+   },
+   {
+    "ts": "2027-11-22",
+    "type": "venda",
+    "label": "Venda de 2 cota(s) de HGLG11 (prejuízo R$ 5,00)",
+    "amount": 317.5
+   },
+   {
+    "ts": "2027-11-10",
+    "type": "meta",
+    "label": "Aporte na meta \"Sofá\"",
+    "amount": -150
+   },
+   {
+    "ts": "2027-11-10",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2027-11-10",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2027-11-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2027-11-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -56.5
+   },
+   {
+    "ts": "2027-11-09",
+    "type": "compra",
+    "label": "Compra de 27 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -259
+   },
+   {
+    "ts": "2027-11-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2027-11-09",
+    "type": "compra",
+    "label": "Compra de 9 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -245.5
+   },
+   {
+    "ts": "2027-11-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2027-11-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2027-11-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 80.71
+   },
+   {
+    "ts": "2027-11-09",
+    "type": "despesa",
+    "label": "Gastos fixos de novembro de 2027 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-11-08",
+    "type": "renda",
+    "label": "Salário de outubro de 2027, recebido hoje — 1 feriado(s)",
+    "amount": 2750.49
+   },
+   {
+    "ts": "2027-10-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2027-10-09",
+    "type": "compra",
+    "label": "Compra de 4 cota(s) de CMIG4 (corretagem de R$ 2,50 inclusa)",
+    "amount": -46.5
+   },
+   {
+    "ts": "2027-10-09",
+    "type": "compra",
+    "label": "Compra de 27 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -259
+   },
+   {
+    "ts": "2027-10-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2027-10-09",
+    "type": "compra",
+    "label": "Compra de 9 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -245.5
+   },
+   {
+    "ts": "2027-10-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2027-10-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2027-10-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 74.04
+   },
+   {
+    "ts": "2027-10-09",
+    "type": "meta",
+    "label": "Aporte na meta \"Sofá\"",
+    "amount": -150
+   },
+   {
+    "ts": "2027-10-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2027-10-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2027-10-08",
+    "type": "despesa",
+    "label": "Gastos fixos de outubro de 2027 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-10-07",
+    "type": "renda",
+    "label": "Salário de setembro de 2027, recebido hoje — 1 feriado(s)",
+    "amount": 2750.49
+   },
+   {
+    "ts": "2027-09-10",
+    "type": "meta",
+    "label": "Aporte na meta \"Sofá\"",
+    "amount": -150
+   },
+   {
+    "ts": "2027-09-10",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2027-09-10",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2027-09-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2027-09-09",
+    "type": "compra",
+    "label": "Compra de 1 cota(s) de CPFE3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -40.5
+   },
+   {
+    "ts": "2027-09-09",
+    "type": "compra",
+    "label": "Compra de 27 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -259
+   },
+   {
+    "ts": "2027-09-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2027-09-09",
+    "type": "compra",
+    "label": "Compra de 9 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -245.5
+   },
+   {
+    "ts": "2027-09-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2027-09-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2027-09-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 67.38
+   },
+   {
+    "ts": "2027-09-09",
+    "type": "despesa",
+    "label": "Gastos fixos de setembro de 2027 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-09-08",
+    "type": "renda",
+    "label": "Salário de agosto de 2027, recebido hoje",
+    "amount": 2572.31
+   },
+   {
+    "ts": "2027-08-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2027-08-09",
+    "type": "compra",
+    "label": "Compra de 1 cota(s) de CPFE3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -40.5
+   },
+   {
+    "ts": "2027-08-09",
+    "type": "compra",
+    "label": "Compra de 26 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -249.5
+   },
+   {
+    "ts": "2027-08-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2027-08-09",
+    "type": "compra",
+    "label": "Compra de 9 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -245.5
+   },
+   {
+    "ts": "2027-08-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2027-08-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2027-08-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 60.81
+   },
+   {
+    "ts": "2027-08-08",
+    "type": "meta",
+    "label": "Aporte na meta \"Sofá\"",
+    "amount": -150
+   },
+   {
+    "ts": "2027-08-08",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2027-08-08",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2027-08-07",
+    "type": "despesa",
+    "label": "Gastos fixos de agosto de 2027 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-08-06",
+    "type": "renda",
+    "label": "Salário de julho de 2027, recebido hoje",
+    "amount": 2572.31
+   },
+   {
+    "ts": "2027-07-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2027-07-09",
+    "type": "compra",
+    "label": "Compra de 1 cota(s) de BBSE3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -37.5
+   },
+   {
+    "ts": "2027-07-09",
+    "type": "compra",
+    "label": "Compra de 26 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -249.5
+   },
+   {
+    "ts": "2027-07-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2027-07-09",
+    "type": "compra",
+    "label": "Compra de 9 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -245.5
+   },
+   {
+    "ts": "2027-07-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2027-07-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2027-07-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 54.24
+   },
+   {
+    "ts": "2027-07-09",
+    "type": "meta",
+    "label": "Aporte na meta \"Sofá\"",
+    "amount": -150
+   },
+   {
+    "ts": "2027-07-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2027-07-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2027-07-08",
+    "type": "despesa",
+    "label": "Gastos fixos de julho de 2027 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-07-07",
+    "type": "renda",
+    "label": "Salário de junho de 2027, recebido hoje",
+    "amount": 2572.31
+   },
+   {
+    "ts": "2027-06-25",
+    "type": "venda",
+    "label": "Venda de 7 cota(s) de BBAS3 (prejuízo R$ 4,42)",
+    "amount": 186.5
+   },
+   {
+    "ts": "2027-06-25",
+    "type": "cdb",
+    "label": "Resgate da reserva \"Reserva de emergência\" (IR de R$ 2,95 sobre o rendimento)",
+    "amount": 397.05
+   },
+   {
+    "ts": "2027-06-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2027-06-09",
+    "type": "compra",
+    "label": "Compra de 3 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -31
+   },
+   {
+    "ts": "2027-06-09",
+    "type": "compra",
+    "label": "Compra de 26 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -249.5
+   },
+   {
+    "ts": "2027-06-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2027-06-09",
+    "type": "compra",
+    "label": "Compra de 9 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -245.5
+   },
+   {
+    "ts": "2027-06-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2027-06-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2027-06-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 48.99
+   },
+   {
+    "ts": "2027-06-09",
+    "type": "meta",
+    "label": "Aporte na meta \"Sofá\"",
+    "amount": -150
+   },
+   {
+    "ts": "2027-06-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2027-06-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2027-06-08",
+    "type": "despesa",
+    "label": "Gastos fixos de junho de 2027 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-06-07",
+    "type": "renda",
+    "label": "Salário de maio de 2027, recebido hoje — 1 feriado(s)",
+    "amount": 2750.49
+   },
+   {
+    "ts": "2027-05-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2027-05-09",
+    "type": "compra",
+    "label": "Compra de 3 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -31
+   },
+   {
+    "ts": "2027-05-09",
+    "type": "compra",
+    "label": "Compra de 26 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -249.5
+   },
+   {
+    "ts": "2027-05-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2027-05-09",
+    "type": "compra",
+    "label": "Compra de 9 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -245.5
+   },
+   {
+    "ts": "2027-05-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2027-05-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2027-05-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 42.41
+   },
+   {
+    "ts": "2027-05-09",
+    "type": "meta",
+    "label": "Aporte na meta \"Sofá\"",
+    "amount": -150
+   },
+   {
+    "ts": "2027-05-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2027-05-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2027-05-08",
+    "type": "despesa",
+    "label": "Gastos fixos de maio de 2027 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-05-07",
+    "type": "renda",
+    "label": "Salário de abril de 2027, recebido hoje — 1 feriado(s)",
+    "amount": 2750.49
+   },
+   {
+    "ts": "2027-05-05",
+    "type": "fatura",
+    "label": "Fatura do Cartão principal",
+    "amount": -400
+   },
+   {
+    "ts": "2027-04-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2027-04-09",
+    "type": "compra",
+    "label": "Compra de 1 cota(s) de CMIG4 (corretagem de R$ 2,50 inclusa)",
+    "amount": -13.5
+   },
+   {
+    "ts": "2027-04-09",
+    "type": "compra",
+    "label": "Compra de 26 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -249.5
+   },
+   {
+    "ts": "2027-04-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2027-04-09",
+    "type": "compra",
+    "label": "Compra de 9 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -245.5
+   },
+   {
+    "ts": "2027-04-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2027-04-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2027-04-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 36.02
+   },
+   {
+    "ts": "2027-04-09",
+    "type": "meta",
+    "label": "Aporte na meta \"Sofá\"",
+    "amount": -150
+   },
+   {
+    "ts": "2027-04-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2027-04-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2027-04-08",
+    "type": "despesa",
+    "label": "Gastos fixos de abril de 2027 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-04-07",
+    "type": "aviso",
+    "label": "Sem salário este mês — março foi mês de férias, já coberto no pagamento anterior",
+    "amount": 0
+   },
+   {
+    "ts": "2027-04-05",
+    "type": "fatura",
+    "label": "Fatura do Cartão principal",
+    "amount": -400
+   },
+   {
+    "ts": "2027-03-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2027-03-09",
+    "type": "compra",
+    "label": "Compra de 1 cota(s) de CMIG4 (corretagem de R$ 2,50 inclusa)",
+    "amount": -13.5
+   },
+   {
+    "ts": "2027-03-09",
+    "type": "compra",
+    "label": "Compra de 26 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -249.5
+   },
+   {
+    "ts": "2027-03-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2027-03-09",
+    "type": "compra",
+    "label": "Compra de 9 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -245.5
+   },
+   {
+    "ts": "2027-03-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2027-03-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2027-03-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 29.63
+   },
+   {
+    "ts": "2027-03-07",
+    "type": "meta",
+    "label": "Aporte na meta \"Sofá\"",
+    "amount": -150
+   },
+   {
+    "ts": "2027-03-07",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2027-03-07",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2027-03-06",
+    "type": "despesa",
+    "label": "Gastos fixos de março de 2027 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-03-05",
+    "type": "fatura",
+    "label": "Fatura do Cartão principal",
+    "amount": -400
+   },
+   {
+    "ts": "2027-03-05",
+    "type": "renda",
+    "label": "Férias + 1/3 constitucional (março/2027)",
+    "amount": 3505.64
+   },
+   {
+    "ts": "2027-03-05",
+    "type": "renda",
+    "label": "Salário de fevereiro de 2027, recebido hoje — 2 feriado(s)",
+    "amount": 2928.67
+   },
+   {
+    "ts": "2027-02-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2027-02-09",
+    "type": "compra",
+    "label": "Compra de 1 cota(s) de CMIG4 (corretagem de R$ 2,50 inclusa)",
+    "amount": -13.5
+   },
+   {
+    "ts": "2027-02-09",
+    "type": "compra",
+    "label": "Compra de 25 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -240
+   },
+   {
+    "ts": "2027-02-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2027-02-09",
+    "type": "compra",
+    "label": "Compra de 9 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -245.5
+   },
+   {
+    "ts": "2027-02-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2027-02-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2027-02-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 23.32
+   },
+   {
+    "ts": "2027-02-07",
+    "type": "meta",
+    "label": "Aporte na meta \"Sofá\"",
+    "amount": -150
+   },
+   {
+    "ts": "2027-02-07",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2027-02-07",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2027-02-06",
+    "type": "despesa",
+    "label": "Gastos fixos de fevereiro de 2027 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-02-05",
+    "type": "fatura",
+    "label": "Fatura do Cartão principal",
+    "amount": -400
+   },
+   {
+    "ts": "2027-02-05",
+    "type": "renda",
+    "label": "Recibo de domingo trabalhado (1 dia(s)) — janeiro de 2027",
+    "amount": 70
+   },
+   {
+    "ts": "2027-02-05",
+    "type": "renda",
+    "label": "Salário de janeiro de 2027, recebido hoje — 1 feriado(s)",
+    "amount": 2750.49
+   },
+   {
+    "ts": "2027-01-10",
+    "type": "meta",
+    "label": "Aporte na meta \"Sofá\"",
+    "amount": -150
+   },
+   {
+    "ts": "2027-01-10",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2027-01-10",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2027-01-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2027-01-09",
+    "type": "compra",
+    "label": "Compra de 3 cota(s) de CMIG4 (corretagem de R$ 2,50 inclusa)",
+    "amount": -35.5
+   },
+   {
+    "ts": "2027-01-09",
+    "type": "compra",
+    "label": "Compra de 25 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -240
+   },
+   {
+    "ts": "2027-01-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2027-01-09",
+    "type": "compra",
+    "label": "Compra de 8 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -218.5
+   },
+   {
+    "ts": "2027-01-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2027-01-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2027-01-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 17.07
+   },
+   {
+    "ts": "2027-01-09",
+    "type": "despesa",
+    "label": "Gastos fixos de janeiro de 2027 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-01-08",
+    "type": "renda",
+    "label": "Recibo de domingo trabalhado (2 dia(s)) — dezembro de 2026",
+    "amount": 140
+   },
+   {
+    "ts": "2027-01-08",
+    "type": "renda",
+    "label": "Salário de dezembro de 2026, recebido hoje — 1 feriado(s)",
+    "amount": 2750.49
+   },
+   {
+    "ts": "2027-01-05",
+    "type": "fatura",
+    "label": "Fatura do Cartão principal",
+    "amount": -400
+   },
+   {
+    "ts": "2026-12-20",
+    "type": "fatura",
+    "label": "Fatura do Cartão 2",
+    "amount": -100
+   },
+   {
+    "ts": "2026-12-20",
+    "type": "renda",
+    "label": "13º salário — 2ª parcela (INSS R$ 227,69, IR R$ 0,00)",
+    "amount": 1172.31
+   },
+   {
+    "ts": "2026-12-10",
+    "type": "renda",
+    "label": "Salário esposa recebida",
+    "amount": 1300
+   },
+   {
+    "ts": "2026-12-09",
+    "type": "compra",
+    "label": "Compra de 1 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -29.5
+   },
+   {
+    "ts": "2026-12-09",
+    "type": "compra",
+    "label": "Compra de 25 cota(s) de MXRF11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -240
+   },
+   {
+    "ts": "2026-12-09",
+    "type": "compra",
+    "label": "Compra de 2 cota(s) de HGLG11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -322.5
+   },
+   {
+    "ts": "2026-12-09",
+    "type": "compra",
+    "label": "Compra de 8 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -218.5
+   },
+   {
+    "ts": "2026-12-09",
+    "type": "aporte",
+    "label": "Aporte recorrente na conta de investimentos",
+    "amount": -800
+   },
+   {
+    "ts": "2026-12-09",
+    "type": "saque",
+    "label": "Retirada da conta de investimentos para a conta principal",
+    "amount": 50
+   },
+   {
+    "ts": "2026-12-09",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 10.84
+   },
+   {
+    "ts": "2026-12-09",
+    "type": "meta",
+    "label": "Aporte na meta \"Sofá\"",
+    "amount": -150
+   },
+   {
+    "ts": "2026-12-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Viagens\"",
+    "amount": -120
+   },
+   {
+    "ts": "2026-12-09",
+    "type": "cdb",
+    "label": "Aporte na reserva \"Reserva de emergência\"",
+    "amount": -300
+   },
+   {
+    "ts": "2026-12-08",
+    "type": "despesa",
+    "label": "Gastos fixos de dezembro de 2026 (1 dia após o salário)",
+    "amount": -1040,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2026-12-07",
+    "type": "gastolivre",
+    "label": "Gasto livre — Lazer",
+    "amount": -85.9,
+    "category": "Lazer"
+   },
+   {
+    "ts": "2026-12-07",
+    "type": "cdb",
+    "label": "Aporte extra na reserva \"Reserva de emergência\"",
+    "amount": -700
+   },
+   {
+    "ts": "2026-12-07",
+    "type": "compra",
+    "label": "Compra de 8 cota(s) de KNCR11 (corretagem de R$ 2,50 inclusa)",
+    "amount": -786.5
+   },
+   {
+    "ts": "2026-12-07",
+    "type": "compra",
+    "label": "Compra de 20 cota(s) de BBAS3 (corretagem de R$ 2,50 inclusa)",
+    "amount": -542.5
+   },
+   {
+    "ts": "2026-12-07",
+    "type": "transferencia",
+    "label": "Transferência para a conta de investimentos",
+    "amount": -4000
+   },
+   {
+    "ts": "2026-12-07",
+    "type": "renda",
+    "label": "Recibo de domingo trabalhado (1 dia(s)) — novembro de 2026",
+    "amount": 70
+   },
+   {
+    "ts": "2026-12-07",
+    "type": "renda",
+    "label": "Salário de novembro de 2026, recebido hoje — 3 feriado(s)",
+    "amount": 3106.85
+   },
+   {
+    "ts": "2026-12-05",
+    "type": "fatura",
+    "label": "Fatura do Cartão principal",
+    "amount": -650
+   },
+   {
+    "ts": "2026-11-30",
+    "type": "renda",
+    "label": "13º salário — 1ª parcela (2026)",
+    "amount": 1400
+   }
+  ],
+  "netWorthHistory": [
+   {
+    "ym": "2026-12",
+    "value": 7997.28,
+    "invested": 5466.33
+   },
+   {
+    "ym": "2027-01",
+    "value": 13140.66,
+    "invested": 7556.91
+   },
+   {
+    "ym": "2027-02",
+    "value": 14536.6,
+    "invested": 8142.36
+   },
+   {
+    "ym": "2027-03",
+    "value": 20864.06,
+    "invested": 9495.51
+   },
+   {
+    "ym": "2027-04",
+    "value": 20772.27,
+    "invested": 10863.72
+   },
+   {
+    "ym": "2027-05",
+    "value": 23439.57,
+    "invested": 12240.53
+   },
+   {
+    "ym": "2027-06",
+    "value": 26519.27,
+    "invested": 13629.74
+   },
+   {
+    "ym": "2027-07",
+    "value": 29423.99,
+    "invested": 14625.1
+   },
+   {
+    "ym": "2027-08",
+    "value": 32342.45,
+    "invested": 16031.25
+   },
+   {
+    "ym": "2027-09",
+    "value": 36634.48,
+    "invested": 18260.97
+   },
+   {
+    "ym": "2027-10",
+    "value": 38395.05,
+    "invested": 18881.05
+   },
+   {
+    "ym": "2027-11",
+    "value": 42900.88,
+    "invested": 21146.39
+   },
+   {
+    "ym": "2027-12",
+    "value": 46425.02,
+    "invested": 21773.68
+   },
+   {
+    "ym": "2028-01",
+    "value": 50752.07,
+    "invested": 23237.93
+   },
+   {
+    "ym": "2028-02",
+    "value": 53918.85,
+    "invested": 24714.22
+   },
+   {
+    "ym": "2028-03",
+    "value": 60776.6,
+    "invested": 26197.66
+   },
+   {
+    "ym": "2028-04",
+    "value": 61217.61,
+    "invested": 27698.67
+   },
+   {
+    "ym": "2028-05",
+    "value": 66009.72,
+    "invested": 30072.11
+   },
+   {
+    "ym": "2028-06",
+    "value": 67793.64,
+    "invested": 30565.54
+   },
+   {
+    "ym": "2028-07",
+    "value": 70820.73,
+    "invested": 31930.32
+   },
+   {
+    "ym": "2028-08",
+    "value": 73862.04,
+    "invested": 33309.32
+   },
+   {
+    "ym": "2028-09",
+    "value": 78357.05,
+    "invested": 35592.02
+   },
+   {
+    "ym": "2028-10",
+    "value": 80152.19,
+    "invested": 36096.67
+   },
+   {
+    "ym": "2028-11",
+    "value": 84866.97,
+    "invested": 38420.96
+   },
+   {
+    "ym": "2028-12",
+    "value": 88430.08,
+    "invested": 38937.22
+   },
+   {
+    "ym": "2029-01",
+    "value": 94353.59,
+    "invested": 41297.93
+   }
+  ],
+  "monthlyStats": {
+   "2026-11": {
+    "spent": 0,
+    "income": 1400,
+    "invested": 0,
+    "cats": {}
+   },
+   "2026-12": {
+    "spent": 1875.9,
+    "income": 5649.16,
+    "invested": 6070,
+    "cats": {
+     "Cartão": 750,
+     "Lazer": 85.9,
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2027-01": {
+    "spent": 1440,
+    "income": 4190.49,
+    "invested": 1370,
+    "cats": {
+     "Cartão": 400,
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2027-02": {
+    "spent": 1440,
+    "income": 4120.49,
+    "invested": 1370,
+    "cats": {
+     "Cartão": 400,
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2027-03": {
+    "spent": 1440,
+    "income": 7734.31,
+    "invested": 1370,
+    "cats": {
+     "Cartão": 400,
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2027-04": {
+    "spent": 1440,
+    "income": 1300,
+    "invested": 1370,
+    "cats": {
+     "Cartão": 400,
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2027-05": {
+    "spent": 1440,
+    "income": 4050.49,
+    "invested": 1370,
+    "cats": {
+     "Cartão": 400,
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2027-06": {
+    "spent": 1040,
+    "income": 4050.49,
+    "invested": 1370,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2027-07": {
+    "spent": 1040,
+    "income": 3872.31,
+    "invested": 1370,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2027-08": {
+    "spent": 1040,
+    "income": 3872.31,
+    "invested": 1370,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2027-09": {
+    "spent": 1040,
+    "income": 3872.31,
+    "invested": 1370,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2027-10": {
+    "spent": 1040,
+    "income": 4050.49,
+    "invested": 1370,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2027-11": {
+    "spent": 1040,
+    "income": 5450.49,
+    "invested": 1370,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2027-12": {
+    "spent": 1040,
+    "income": 5579.16,
+    "invested": 1370,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2028-01": {
+    "spent": 1040,
+    "income": 4050.49,
+    "invested": 1370,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2028-02": {
+    "spent": 1040,
+    "income": 4050.49,
+    "invested": 1370,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2028-03": {
+    "spent": 1040,
+    "income": 7734.31,
+    "invested": 1370,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2028-04": {
+    "spent": 1040,
+    "income": 1300,
+    "invested": 1370,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2028-05": {
+    "spent": 1040,
+    "income": 4228.67,
+    "invested": 1370,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2028-06": {
+    "spent": 1040,
+    "income": 4050.49,
+    "invested": 1220,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2028-07": {
+    "spent": 1040,
+    "income": 3872.31,
+    "invested": 1220,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2028-08": {
+    "spent": 1040,
+    "income": 3872.31,
+    "invested": 1220,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2028-09": {
+    "spent": 1040,
+    "income": 3872.31,
+    "invested": 1220,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2028-10": {
+    "spent": 1040,
+    "income": 4050.49,
+    "invested": 1220,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2028-11": {
+    "spent": 1040,
+    "income": 5450.49,
+    "invested": 1220,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2028-12": {
+    "spent": 1040,
+    "income": 5579.16,
+    "invested": 1220,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   },
+   "2029-01": {
+    "spent": 1040,
+    "income": 4050.49,
+    "invested": 1220,
+    "cats": {
+     "Moradia": 800,
+     "Contas": 240,
+     "Alimentação": 0
+    }
+   }
+  },
+  "shoppingDiscount": {
+   "type": "pct",
+   "value": 5
+  },
+  "lastProcessedYM": "2029-01",
+  "lastCarteiraProcessedYM": "2029-01",
+  "lastIncomePaidYM": "2028-12",
+  "secondaryIncome": {
+   "enabled": true,
+   "label": "Salário esposa",
+   "type": "salario",
+   "amount": 1300,
+   "payDay": 10
+  },
+  "lastSecondaryIncomePaidYM": "2029-01",
+  "lastExpensesPaidYM": "2029-01",
+  "timeClock": [],
+  "freeSpendCategories": [
+   "Lazer",
+   "Imprevisto",
+   "Presente",
+   "Outro"
+  ],
+  "freeSpendMonthlyLimit": 400
+ },
+ "log": [
+  true,
+  true,
+  true,
+  {
+   "proceeds": 186.5,
+   "gain": -4.42
+  },
+  {
+   "proceeds": 317.5,
+   "gain": -5
+  }
+ ]
+}

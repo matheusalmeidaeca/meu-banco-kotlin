@@ -1,0 +1,1538 @@
+{
+ "name": "B_beneficio_vendas_ir",
+ "input": {
+  "simDateISO": "2026-11-17",
+  "account": {
+   "agency": "0001",
+   "number": "12345-6"
+  },
+  "card": {
+   "enabled": true,
+   "limit": 1500,
+   "invoiceCurrent": 90,
+   "pendingAmount": 0,
+   "pendingDueYM": null,
+   "closingDay": 28,
+   "dueDay": 3,
+   "lastClosedYM": null,
+   "last4": "1234",
+   "purchases": [],
+   "nextPurchaseId": 1,
+   "name": "Cartão principal"
+  },
+  "extraCards": [],
+  "nextExtraCardId": 1,
+  "activeCardIdx": 0,
+  "activeMainTab": "conta",
+  "activeCatTab": "todos",
+  "showConfig": false,
+  "assets": [
+   {
+    "id": "BBAS3",
+    "ticker": "BBAS3",
+    "name": "Banco do Brasil",
+    "category": "acao",
+    "price": 27,
+    "yieldPct": 0.7,
+    "volatility": 0.03,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "ITUB4",
+    "ticker": "ITUB4",
+    "name": "Itaú Unibanco",
+    "category": "acao",
+    "price": 40.37,
+    "yieldPct": 0.6,
+    "volatility": 0.03,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "TAEE11",
+    "ticker": "TAEE11",
+    "name": "Taesa",
+    "category": "acao",
+    "price": 35.9,
+    "yieldPct": 0.8,
+    "volatility": 0.02,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "CPFE3",
+    "ticker": "CPFE3",
+    "name": "CPFL Energia",
+    "category": "acao",
+    "price": 38,
+    "yieldPct": 0.65,
+    "volatility": 0.025,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "CMIG4",
+    "ticker": "CMIG4",
+    "name": "Cemig",
+    "category": "acao",
+    "price": 11,
+    "yieldPct": 0.6,
+    "volatility": 0.03,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "BBSE3",
+    "ticker": "BBSE3",
+    "name": "BB Seguridade",
+    "category": "acao",
+    "price": 35,
+    "yieldPct": 0.7,
+    "volatility": 0.025,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "VBBR3",
+    "ticker": "VBBR3",
+    "name": "Vibra Energia",
+    "category": "acao",
+    "price": 22,
+    "yieldPct": 0.65,
+    "volatility": 0.03,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "HGLG11",
+    "ticker": "HGLG11",
+    "name": "CSHG Logística",
+    "category": "tijolo",
+    "price": 160,
+    "yieldPct": 0.75,
+    "volatility": 0.015,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "KNRI11",
+    "ticker": "KNRI11",
+    "name": "Kinea Renda Imobiliária",
+    "category": "tijolo",
+    "price": 150,
+    "yieldPct": 0.65,
+    "volatility": 0.015,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "XPML11",
+    "ticker": "XPML11",
+    "name": "XP Malls",
+    "category": "tijolo",
+    "price": 95,
+    "yieldPct": 0.75,
+    "volatility": 0.015,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "VISC11",
+    "ticker": "VISC11",
+    "name": "Vinci Shopping Centers",
+    "category": "tijolo",
+    "price": 105,
+    "yieldPct": 0.7,
+    "volatility": 0.015,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "BTLG11",
+    "ticker": "BTLG11",
+    "name": "BTG Pactual Logística",
+    "category": "tijolo",
+    "price": 100,
+    "yieldPct": 0.75,
+    "volatility": 0.015,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "GGRC11",
+    "ticker": "GGRC11",
+    "name": "GGR Covepi Renda",
+    "category": "tijolo",
+    "price": 95,
+    "yieldPct": 0.8,
+    "volatility": 0.018,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "RBRP11",
+    "ticker": "RBRP11",
+    "name": "RBR Properties",
+    "category": "tijolo",
+    "price": 65,
+    "yieldPct": 0.7,
+    "volatility": 0.018,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "MXRF11",
+    "ticker": "MXRF11",
+    "name": "Maxi Renda",
+    "category": "papel",
+    "price": 9.5,
+    "yieldPct": 0.9,
+    "volatility": 0.01,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "KNCR11",
+    "ticker": "KNCR11",
+    "name": "Kinea Rendimentos",
+    "category": "papel",
+    "price": 98,
+    "yieldPct": 0.9,
+    "volatility": 0.008,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "IRDM11",
+    "ticker": "IRDM11",
+    "name": "Iridium Recebíveis",
+    "category": "papel",
+    "price": 70,
+    "yieldPct": 0.95,
+    "volatility": 0.012,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "VGIR11",
+    "ticker": "VGIR11",
+    "name": "Valora RE III",
+    "category": "papel",
+    "price": 8.8,
+    "yieldPct": 0.9,
+    "volatility": 0.008,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "KNIP11",
+    "ticker": "KNIP11",
+    "name": "Kinea Índices de Preços",
+    "category": "papel",
+    "price": 85,
+    "yieldPct": 0.85,
+    "volatility": 0.01,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "HGCR11",
+    "ticker": "HGCR11",
+    "name": "CSHG Recebíveis Imob.",
+    "category": "papel",
+    "price": 90,
+    "yieldPct": 0.9,
+    "volatility": 0.01,
+    "quantity": 0,
+    "costBasis": 0
+   }
+  ],
+  "selectedAssetId": null,
+  "monthlyContribution": 0,
+  "recurringInvestEnabled": false,
+  "reinvestDividends": false,
+  "taxLedger": [],
+  "taxPaid": {},
+  "investorProfile": null,
+  "realizedGain": 0,
+  "investSobra": 0,
+  "monthlyWithdrawal": 0,
+  "contributionDay": 7,
+  "leftover": 60000,
+  "totalContributed": 0,
+  "totalWithdrawn": 0,
+  "totalInvestedCost": 0,
+  "totalDividendsReceived": 0,
+  "market": {
+   "autoAssets": true,
+   "simGrowthPct": 9.5,
+   "assetsUpdatedAt": null,
+   "assetsUpdatedAtMs": null,
+   "assetsError": null,
+   "assetsCheckedAtMs": null,
+   "quotesUrl": "https://raw.githubusercontent.com/matheusalmeidaeca/cotacoes/main/cotacoes.json",
+   "cdiUpdatedAt": null,
+   "cdiError": null
+  },
+  "reserves": [
+   {
+    "id": 1,
+    "name": "Reserva de emergência",
+    "balance": 1000,
+    "monthlyContribution": 0,
+    "targetValue": 0,
+    "totalContributed": 0,
+    "totalInterest": 80,
+    "startDateISO": "2026-01-01",
+    "createdOn": "2026-11-17"
+   },
+   {
+    "id": 2,
+    "name": "Viagens",
+    "balance": 0,
+    "monthlyContribution": 0,
+    "targetValue": 0,
+    "totalContributed": 0,
+    "totalInterest": 0,
+    "startDateISO": null,
+    "createdOn": "2026-11-17"
+   }
+  ],
+  "nextReserveId": 3,
+  "reserveConfig": {
+   "annualRatePct": 10.65
+  },
+  "settings": {
+   "theme": "dark",
+   "fontSize": "normal",
+   "highContrast": false,
+   "hapticEnabled": true,
+   "bioEnabled": false,
+   "bioCredId": "",
+   "assistantEnabled": true,
+   "celebrationsEnabled": true,
+   "displayName": "",
+   "hideBalance": false,
+   "pinEnabled": false,
+   "pinHash": null,
+   "pixConfirmThreshold": 0,
+   "pixDailyLimit": 0,
+   "brokerageFee": 0,
+   "quoteRefreshMode": "daily",
+   "notifyCardDays": 3,
+   "notifyBackupDays": 14,
+   "autoBackupEnabled": true,
+   "notifyGoalPct": 90,
+   "notifyFreeSpendPct": 90
+  },
+  "onboardingCompleted": true,
+  "pixSentTodayISO": null,
+  "pixSentTodayTotal": 0,
+  "celebrated": {},
+  "sundaysWorked": [],
+  "shoppingList": [],
+  "nextShoppingId": 1,
+  "products": [],
+  "nextProductId": 1,
+  "goals": [],
+  "nextGoalId": 1,
+  "profile": {
+   "birthDateISO": null,
+   "sex": null
+  },
+  "income": {
+   "incomeType": "renda",
+   "hireDateISO": null,
+   "beneficioLabel": "Bolsa Família",
+   "beneficioAmount": 680,
+   "beneficioPayDay": 12,
+   "baseSalary": 1621,
+   "extraHours": 0,
+   "extraHourPct": 50,
+   "holidayHours": 7,
+   "holidayPct": 100,
+   "holidayNightHours": 0,
+   "holidayNightPct": 20,
+   "sundayBonus": 70,
+   "sundayAnchorISO": "2026-11-22",
+   "sundayAnchorWorked": true,
+   "sundayMode": "alternado",
+   "thirteenthEnabled": true,
+   "feriasEnabled": true,
+   "feriasMonth": 10,
+   "baseMonthKey": "2026-11",
+   "baseShift": "noite",
+   "shiftMode": "alternado",
+   "fixedShift": "noite",
+   "shifts": {
+    "manha": {
+     "name": "Manhã",
+     "detail": "07:00–11:00 · intervalo · 15:00–18:00",
+     "hours": 7
+    },
+    "noite": {
+     "name": "Tarde / Noite",
+     "detail": "11:00–15:00 · intervalo · 17:30–21:00",
+     "hours": 7.5
+    }
+   },
+   "totalReceived": 0
+  },
+  "fgts": {
+   "balance": 0,
+   "lastBackfillAmount": 0
+  },
+  "lastBackupAt": null,
+  "lastThirteenthFirstYear": null,
+  "lastThirteenthSecondYear": null,
+  "lastFeriasYear": null,
+  "expenses": [
+   {
+    "id": 1,
+    "name": "Aluguel",
+    "amount": 400,
+    "category": "Moradia"
+   },
+   {
+    "id": 2,
+    "name": "Energia",
+    "amount": 100,
+    "category": "Contas"
+   },
+   {
+    "id": 3,
+    "name": "Alimentação",
+    "amount": 0,
+    "category": "Alimentação"
+   },
+   {
+    "id": 4,
+    "name": "Internet",
+    "amount": 130,
+    "category": "Contas"
+   },
+   {
+    "id": 5,
+    "name": "Telefonia",
+    "amount": 120,
+    "category": "Contas"
+   }
+  ],
+  "nextExpenseId": 6,
+  "shoppingLinkedExpenseId": 3,
+  "cash": 100,
+  "totalExpensesPaid": 0,
+  "history": [],
+  "netWorthHistory": [],
+  "monthlyStats": {},
+  "shoppingDiscount": {
+   "type": "pct",
+   "value": 0
+  },
+  "lastProcessedYM": null,
+  "lastCarteiraProcessedYM": null,
+  "lastIncomePaidYM": null,
+  "secondaryIncome": {
+   "enabled": false,
+   "label": "Renda extra",
+   "type": "salario",
+   "amount": 0,
+   "payDay": 5
+  },
+  "lastSecondaryIncomePaidYM": null,
+  "lastExpensesPaidYM": null,
+  "timeClock": [],
+  "freeSpendCategories": [
+   "Lazer",
+   "Imprevisto",
+   "Presente",
+   "Outro"
+  ],
+  "freeSpendMonthlyLimit": 0
+ },
+ "ops": [
+  {
+   "op": "buy",
+   "id": "ITUB4",
+   "qty": 400
+  },
+  {
+   "op": "buy",
+   "id": "TAEE11",
+   "qty": 300
+  },
+  {
+   "op": "buy",
+   "id": "XPML11",
+   "qty": 100
+  },
+  {
+   "op": "sim",
+   "days": 35
+  },
+  {
+   "op": "sell",
+   "id": "ITUB4",
+   "qty": 300
+  },
+  {
+   "op": "sell",
+   "id": "XPML11",
+   "qty": 40
+  },
+  {
+   "op": "sim",
+   "days": 40
+  },
+  {
+   "op": "sell",
+   "id": "TAEE11",
+   "qty": 100
+  },
+  {
+   "op": "reserveWithdraw",
+   "id": 1,
+   "amount": 500
+  },
+  {
+   "op": "sim",
+   "days": 300
+  }
+ ],
+ "expected": {
+  "simDateISO": "2027-11-27",
+  "account": {
+   "agency": "0001",
+   "number": "12345-6"
+  },
+  "card": {
+   "enabled": true,
+   "limit": 1500,
+   "invoiceCurrent": 0,
+   "pendingAmount": 0,
+   "pendingDueYM": "2026-12",
+   "closingDay": 28,
+   "dueDay": 3,
+   "lastClosedYM": "2027-10",
+   "last4": "1234",
+   "purchases": [],
+   "nextPurchaseId": 1,
+   "name": "Cartão principal"
+  },
+  "extraCards": [],
+  "nextExtraCardId": 1,
+  "activeCardIdx": 0,
+  "activeMainTab": "conta",
+  "activeCatTab": "todos",
+  "showConfig": false,
+  "assets": [
+   {
+    "id": "BBAS3",
+    "ticker": "BBAS3",
+    "name": "Banco do Brasil",
+    "category": "acao",
+    "price": 27,
+    "yieldPct": 0.7,
+    "volatility": 0.03,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "ITUB4",
+    "ticker": "ITUB4",
+    "name": "Itaú Unibanco",
+    "category": "acao",
+    "price": 40.37,
+    "yieldPct": 0.6,
+    "volatility": 0.03,
+    "quantity": 100,
+    "costBasis": 4037
+   },
+   {
+    "id": "TAEE11",
+    "ticker": "TAEE11",
+    "name": "Taesa",
+    "category": "acao",
+    "price": 35.9,
+    "yieldPct": 0.8,
+    "volatility": 0.02,
+    "quantity": 200,
+    "costBasis": 7180
+   },
+   {
+    "id": "CPFE3",
+    "ticker": "CPFE3",
+    "name": "CPFL Energia",
+    "category": "acao",
+    "price": 38,
+    "yieldPct": 0.65,
+    "volatility": 0.025,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "CMIG4",
+    "ticker": "CMIG4",
+    "name": "Cemig",
+    "category": "acao",
+    "price": 11,
+    "yieldPct": 0.6,
+    "volatility": 0.03,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "BBSE3",
+    "ticker": "BBSE3",
+    "name": "BB Seguridade",
+    "category": "acao",
+    "price": 35,
+    "yieldPct": 0.7,
+    "volatility": 0.025,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "VBBR3",
+    "ticker": "VBBR3",
+    "name": "Vibra Energia",
+    "category": "acao",
+    "price": 22,
+    "yieldPct": 0.65,
+    "volatility": 0.03,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "HGLG11",
+    "ticker": "HGLG11",
+    "name": "CSHG Logística",
+    "category": "tijolo",
+    "price": 160,
+    "yieldPct": 0.75,
+    "volatility": 0.015,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "KNRI11",
+    "ticker": "KNRI11",
+    "name": "Kinea Renda Imobiliária",
+    "category": "tijolo",
+    "price": 150,
+    "yieldPct": 0.65,
+    "volatility": 0.015,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "XPML11",
+    "ticker": "XPML11",
+    "name": "XP Malls",
+    "category": "tijolo",
+    "price": 95,
+    "yieldPct": 0.75,
+    "volatility": 0.015,
+    "quantity": 60,
+    "costBasis": 5700
+   },
+   {
+    "id": "VISC11",
+    "ticker": "VISC11",
+    "name": "Vinci Shopping Centers",
+    "category": "tijolo",
+    "price": 105,
+    "yieldPct": 0.7,
+    "volatility": 0.015,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "BTLG11",
+    "ticker": "BTLG11",
+    "name": "BTG Pactual Logística",
+    "category": "tijolo",
+    "price": 100,
+    "yieldPct": 0.75,
+    "volatility": 0.015,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "GGRC11",
+    "ticker": "GGRC11",
+    "name": "GGR Covepi Renda",
+    "category": "tijolo",
+    "price": 95,
+    "yieldPct": 0.8,
+    "volatility": 0.018,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "RBRP11",
+    "ticker": "RBRP11",
+    "name": "RBR Properties",
+    "category": "tijolo",
+    "price": 65,
+    "yieldPct": 0.7,
+    "volatility": 0.018,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "MXRF11",
+    "ticker": "MXRF11",
+    "name": "Maxi Renda",
+    "category": "papel",
+    "price": 9.5,
+    "yieldPct": 0.9,
+    "volatility": 0.01,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "KNCR11",
+    "ticker": "KNCR11",
+    "name": "Kinea Rendimentos",
+    "category": "papel",
+    "price": 98,
+    "yieldPct": 0.9,
+    "volatility": 0.008,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "IRDM11",
+    "ticker": "IRDM11",
+    "name": "Iridium Recebíveis",
+    "category": "papel",
+    "price": 70,
+    "yieldPct": 0.95,
+    "volatility": 0.012,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "VGIR11",
+    "ticker": "VGIR11",
+    "name": "Valora RE III",
+    "category": "papel",
+    "price": 8.8,
+    "yieldPct": 0.9,
+    "volatility": 0.008,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "KNIP11",
+    "ticker": "KNIP11",
+    "name": "Kinea Índices de Preços",
+    "category": "papel",
+    "price": 85,
+    "yieldPct": 0.85,
+    "volatility": 0.01,
+    "quantity": 0,
+    "costBasis": 0
+   },
+   {
+    "id": "HGCR11",
+    "ticker": "HGCR11",
+    "name": "CSHG Recebíveis Imob.",
+    "category": "papel",
+    "price": 90,
+    "yieldPct": 0.9,
+    "volatility": 0.01,
+    "quantity": 0,
+    "costBasis": 0
+   }
+  ],
+  "selectedAssetId": null,
+  "monthlyContribution": 0,
+  "recurringInvestEnabled": false,
+  "reinvestDividends": false,
+  "taxLedger": [
+   {
+    "ym": "2026-12",
+    "ticker": "ITUB4",
+    "cls": "acao",
+    "gross": 12111,
+    "gain": 0
+   },
+   {
+    "ym": "2026-12",
+    "ticker": "XPML11",
+    "cls": "fii",
+    "gross": 3800,
+    "gain": 0
+   },
+   {
+    "ym": "2027-01",
+    "ticker": "TAEE11",
+    "cls": "acao",
+    "gross": 3590,
+    "gain": 0
+   }
+  ],
+  "taxPaid": {},
+  "investorProfile": null,
+  "realizedGain": 0,
+  "investSobra": 0,
+  "monthlyWithdrawal": 0,
+  "contributionDay": 7,
+  "leftover": 44734.53,
+  "totalContributed": 0,
+  "totalWithdrawn": 0,
+  "totalInvestedCost": 16917,
+  "totalDividendsReceived": 1651.5300000000004,
+  "market": {
+   "autoAssets": true,
+   "simGrowthPct": 9.5,
+   "assetsUpdatedAt": null,
+   "assetsUpdatedAtMs": null,
+   "assetsError": null,
+   "assetsCheckedAtMs": null,
+   "quotesUrl": "https://raw.githubusercontent.com/matheusalmeidaeca/cotacoes/main/cotacoes.json",
+   "cdiUpdatedAt": null,
+   "cdiError": null
+  },
+  "reserves": [
+   {
+    "id": 1,
+    "name": "Reserva de emergência",
+    "balance": 566.2036994388918,
+    "monthlyContribution": 0,
+    "targetValue": 0,
+    "totalContributed": 0,
+    "totalInterest": 96.73107186624237,
+    "startDateISO": "2026-01-01",
+    "createdOn": "2026-11-17"
+   },
+   {
+    "id": 2,
+    "name": "Viagens",
+    "balance": 0,
+    "monthlyContribution": 0,
+    "targetValue": 0,
+    "totalContributed": 0,
+    "totalInterest": 0,
+    "startDateISO": null,
+    "createdOn": "2026-11-17"
+   }
+  ],
+  "nextReserveId": 3,
+  "reserveConfig": {
+   "annualRatePct": 10.65
+  },
+  "settings": {
+   "theme": "dark",
+   "fontSize": "normal",
+   "highContrast": false,
+   "hapticEnabled": true,
+   "bioEnabled": false,
+   "bioCredId": "",
+   "assistantEnabled": true,
+   "celebrationsEnabled": true,
+   "displayName": "",
+   "hideBalance": false,
+   "pinEnabled": false,
+   "pinHash": null,
+   "pixConfirmThreshold": 0,
+   "pixDailyLimit": 0,
+   "brokerageFee": 0,
+   "quoteRefreshMode": "daily",
+   "notifyCardDays": 3,
+   "notifyBackupDays": 14,
+   "autoBackupEnabled": true,
+   "notifyGoalPct": 90,
+   "notifyFreeSpendPct": 90
+  },
+  "onboardingCompleted": true,
+  "pixSentTodayISO": null,
+  "pixSentTodayTotal": 0,
+  "celebrated": {},
+  "sundaysWorked": [],
+  "shoppingList": [],
+  "nextShoppingId": 1,
+  "products": [],
+  "nextProductId": 1,
+  "goals": [],
+  "nextGoalId": 1,
+  "profile": {
+   "birthDateISO": null,
+   "sex": null
+  },
+  "income": {
+   "incomeType": "renda",
+   "hireDateISO": null,
+   "beneficioLabel": "Bolsa Família",
+   "beneficioAmount": 680,
+   "beneficioPayDay": 12,
+   "baseSalary": 1621,
+   "extraHours": 0,
+   "extraHourPct": 50,
+   "holidayHours": 7,
+   "holidayPct": 100,
+   "holidayNightHours": 0,
+   "holidayNightPct": 20,
+   "sundayBonus": 70,
+   "sundayAnchorISO": "2026-11-22",
+   "sundayAnchorWorked": true,
+   "sundayMode": "alternado",
+   "thirteenthEnabled": true,
+   "feriasEnabled": true,
+   "feriasMonth": 10,
+   "baseMonthKey": "2026-11",
+   "baseShift": "noite",
+   "shiftMode": "alternado",
+   "fixedShift": "noite",
+   "shifts": {
+    "manha": {
+     "name": "Manhã",
+     "detail": "07:00–11:00 · intervalo · 15:00–18:00",
+     "hours": 7
+    },
+    "noite": {
+     "name": "Tarde / Noite",
+     "detail": "11:00–15:00 · intervalo · 17:30–21:00",
+     "hours": 7.5
+    }
+   },
+   "totalReceived": 8160
+  },
+  "fgts": {
+   "balance": 0,
+   "lastBackfillAmount": 0
+  },
+  "lastBackupAt": null,
+  "lastThirteenthFirstYear": null,
+  "lastThirteenthSecondYear": null,
+  "lastFeriasYear": null,
+  "expenses": [
+   {
+    "id": 1,
+    "name": "Aluguel",
+    "amount": 400,
+    "category": "Moradia"
+   },
+   {
+    "id": 2,
+    "name": "Energia",
+    "amount": 100,
+    "category": "Contas"
+   },
+   {
+    "id": 3,
+    "name": "Alimentação",
+    "amount": 0,
+    "category": "Alimentação"
+   },
+   {
+    "id": 4,
+    "name": "Internet",
+    "amount": 130,
+    "category": "Contas"
+   },
+   {
+    "id": 5,
+    "name": "Telefonia",
+    "amount": 120,
+    "category": "Contas"
+   }
+  ],
+  "nextExpenseId": 6,
+  "shoppingLinkedExpenseId": 3,
+  "cash": 680,
+  "totalExpensesPaid": 7981.34,
+  "history": [
+   {
+    "ts": "2027-11-12",
+    "type": "renda",
+    "label": "Bolsa Família recebido",
+    "amount": 680
+   },
+   {
+    "ts": "2027-11-09",
+    "type": "aviso",
+    "label": "Caixa insuficiente: gastos fixos pagos parcialmente (R$ 680,00 de R$ 750,00)",
+    "amount": 0
+   },
+   {
+    "ts": "2027-11-09",
+    "type": "despesa",
+    "label": "Gastos fixos de novembro de 2027 (1 dia após o salário)",
+    "amount": -680,
+    "cats": {
+     "Moradia": 362.67,
+     "Contas": 317.33,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-11-07",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 124.41
+   },
+   {
+    "ts": "2027-10-12",
+    "type": "renda",
+    "label": "Bolsa Família recebido",
+    "amount": 680
+   },
+   {
+    "ts": "2027-10-08",
+    "type": "aviso",
+    "label": "Caixa insuficiente: gastos fixos pagos parcialmente (R$ 680,00 de R$ 750,00)",
+    "amount": 0
+   },
+   {
+    "ts": "2027-10-08",
+    "type": "despesa",
+    "label": "Gastos fixos de outubro de 2027 (1 dia após o salário)",
+    "amount": -680,
+    "cats": {
+     "Moradia": 362.67,
+     "Contas": 317.33,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-10-07",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 124.41
+   },
+   {
+    "ts": "2027-09-12",
+    "type": "renda",
+    "label": "Bolsa Família recebido",
+    "amount": 680
+   },
+   {
+    "ts": "2027-09-09",
+    "type": "aviso",
+    "label": "Caixa insuficiente: gastos fixos pagos parcialmente (R$ 681,34 de R$ 750,00)",
+    "amount": 0
+   },
+   {
+    "ts": "2027-09-09",
+    "type": "despesa",
+    "label": "Gastos fixos de setembro de 2027 (1 dia após o salário)",
+    "amount": -681.34,
+    "cats": {
+     "Moradia": 363.38,
+     "Contas": 317.96,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-09-07",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 124.41
+   },
+   {
+    "ts": "2027-08-12",
+    "type": "renda",
+    "label": "Bolsa Família recebido",
+    "amount": 680
+   },
+   {
+    "ts": "2027-08-07",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 124.41
+   },
+   {
+    "ts": "2027-08-07",
+    "type": "despesa",
+    "label": "Gastos fixos de agosto de 2027 (1 dia após o salário)",
+    "amount": -750,
+    "cats": {
+     "Moradia": 400,
+     "Contas": 350,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-07-12",
+    "type": "renda",
+    "label": "Bolsa Família recebido",
+    "amount": 680
+   },
+   {
+    "ts": "2027-07-08",
+    "type": "despesa",
+    "label": "Gastos fixos de julho de 2027 (1 dia após o salário)",
+    "amount": -750,
+    "cats": {
+     "Moradia": 400,
+     "Contas": 350,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-07-07",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 124.41
+   },
+   {
+    "ts": "2027-06-12",
+    "type": "renda",
+    "label": "Bolsa Família recebido",
+    "amount": 680
+   },
+   {
+    "ts": "2027-06-08",
+    "type": "despesa",
+    "label": "Gastos fixos de junho de 2027 (1 dia após o salário)",
+    "amount": -750,
+    "cats": {
+     "Moradia": 400,
+     "Contas": 350,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-06-07",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 124.41
+   },
+   {
+    "ts": "2027-05-12",
+    "type": "renda",
+    "label": "Bolsa Família recebido",
+    "amount": 680
+   },
+   {
+    "ts": "2027-05-08",
+    "type": "despesa",
+    "label": "Gastos fixos de maio de 2027 (1 dia após o salário)",
+    "amount": -750,
+    "cats": {
+     "Moradia": 400,
+     "Contas": 350,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-05-07",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 124.41
+   },
+   {
+    "ts": "2027-04-12",
+    "type": "renda",
+    "label": "Bolsa Família recebido",
+    "amount": 680
+   },
+   {
+    "ts": "2027-04-08",
+    "type": "despesa",
+    "label": "Gastos fixos de abril de 2027 (1 dia após o salário)",
+    "amount": -750,
+    "cats": {
+     "Moradia": 400,
+     "Contas": 350,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-04-07",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 124.41
+   },
+   {
+    "ts": "2027-03-12",
+    "type": "renda",
+    "label": "Bolsa Família recebido",
+    "amount": 680
+   },
+   {
+    "ts": "2027-03-07",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 124.41
+   },
+   {
+    "ts": "2027-03-06",
+    "type": "despesa",
+    "label": "Gastos fixos de março de 2027 (1 dia após o salário)",
+    "amount": -750,
+    "cats": {
+     "Moradia": 400,
+     "Contas": 350,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-02-12",
+    "type": "renda",
+    "label": "Bolsa Família recebido",
+    "amount": 680
+   },
+   {
+    "ts": "2027-02-07",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 124.41
+   },
+   {
+    "ts": "2027-02-06",
+    "type": "despesa",
+    "label": "Gastos fixos de fevereiro de 2027 (1 dia após o salário)",
+    "amount": -750,
+    "cats": {
+     "Moradia": 400,
+     "Contas": 350,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-01-31",
+    "type": "cdb",
+    "label": "Resgate da reserva \"Reserva de emergência\" (IR de R$ 8,66 sobre o rendimento)",
+    "amount": 491.34
+   },
+   {
+    "ts": "2027-01-31",
+    "type": "venda",
+    "label": "Venda de 100 cota(s) de TAEE11 (lucro R$ 0,00)",
+    "amount": 3590
+   },
+   {
+    "ts": "2027-01-12",
+    "type": "renda",
+    "label": "Bolsa Família recebido",
+    "amount": 680
+   },
+   {
+    "ts": "2027-01-09",
+    "type": "aviso",
+    "label": "Caixa insuficiente: gastos fixos pagos parcialmente (R$ 680,00 de R$ 750,00)",
+    "amount": 0
+   },
+   {
+    "ts": "2027-01-09",
+    "type": "despesa",
+    "label": "Gastos fixos de janeiro de 2027 (1 dia após o salário)",
+    "amount": -680,
+    "cats": {
+     "Moradia": 362.67,
+     "Contas": 317.33,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2027-01-07",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 153.13
+   },
+   {
+    "ts": "2026-12-22",
+    "type": "venda",
+    "label": "Venda de 40 cota(s) de XPML11 (lucro R$ 0,00)",
+    "amount": 3800
+   },
+   {
+    "ts": "2026-12-22",
+    "type": "venda",
+    "label": "Venda de 300 cota(s) de ITUB4 (lucro R$ 0,00)",
+    "amount": 12111
+   },
+   {
+    "ts": "2026-12-12",
+    "type": "renda",
+    "label": "Bolsa Família recebido",
+    "amount": 680
+   },
+   {
+    "ts": "2026-12-08",
+    "type": "aviso",
+    "label": "Caixa insuficiente: gastos fixos pagos parcialmente (R$ 10,00 de R$ 750,00)",
+    "amount": 0
+   },
+   {
+    "ts": "2026-12-08",
+    "type": "despesa",
+    "label": "Gastos fixos de dezembro de 2026 (1 dia após o salário)",
+    "amount": -10,
+    "cats": {
+     "Moradia": 5.33,
+     "Contas": 4.67,
+     "Alimentação": 0
+    }
+   },
+   {
+    "ts": "2026-12-07",
+    "type": "dividendo",
+    "label": "Dividendos recebidos",
+    "amount": 254.3
+   },
+   {
+    "ts": "2026-12-03",
+    "type": "fatura",
+    "label": "Fatura do Cartão principal",
+    "amount": -90
+   },
+   {
+    "ts": "2026-11-17",
+    "type": "compra",
+    "label": "Compra de 100 cota(s) de XPML11",
+    "amount": -9500
+   },
+   {
+    "ts": "2026-11-17",
+    "type": "compra",
+    "label": "Compra de 300 cota(s) de TAEE11",
+    "amount": -10770
+   },
+   {
+    "ts": "2026-11-17",
+    "type": "compra",
+    "label": "Compra de 400 cota(s) de ITUB4",
+    "amount": -16148
+   }
+  ],
+  "netWorthHistory": [
+   {
+    "ym": "2026-12",
+    "value": 61260.42,
+    "invested": 61260.42
+   },
+   {
+    "ym": "2027-01",
+    "value": 61422.51,
+    "invested": 61422.51
+   },
+   {
+    "ym": "2027-02",
+    "value": 61350.79,
+    "invested": 60929.45
+   },
+   {
+    "ym": "2027-03",
+    "value": 61409.27,
+    "invested": 61057.93
+   },
+   {
+    "ym": "2027-04",
+    "value": 61592.93,
+    "invested": 61311.59
+   },
+   {
+    "ym": "2027-05",
+    "value": 61651.77,
+    "invested": 61440.43
+   },
+   {
+    "ym": "2027-06",
+    "value": 61710.81,
+    "invested": 61569.47
+   },
+   {
+    "ym": "2027-07",
+    "value": 61769.73,
+    "invested": 61698.39
+   },
+   {
+    "ym": "2027-08",
+    "value": 61828.68,
+    "invested": 61827.34
+   },
+   {
+    "ym": "2027-09",
+    "value": 61956.8,
+    "invested": 61956.8
+   },
+   {
+    "ym": "2027-10",
+    "value": 62085.68,
+    "invested": 62085.68
+   },
+   {
+    "ym": "2027-11",
+    "value": 62215.07,
+    "invested": 62215.07
+   }
+  ],
+  "monthlyStats": {
+   "2026-11": {
+    "spent": 0,
+    "income": 0,
+    "invested": 0,
+    "cats": {}
+   },
+   "2026-12": {
+    "spent": 100,
+    "income": 680,
+    "invested": 0,
+    "cats": {
+     "Cartão": 90,
+     "Moradia": 5.33,
+     "Contas": 4.67,
+     "Alimentação": 0
+    }
+   },
+   "2027-01": {
+    "spent": 680,
+    "income": 680,
+    "invested": 0,
+    "cats": {
+     "Moradia": 362.67,
+     "Contas": 317.33,
+     "Alimentação": 0
+    }
+   },
+   "2027-02": {
+    "spent": 750,
+    "income": 680,
+    "invested": 0,
+    "cats": {
+     "Moradia": 400,
+     "Contas": 350,
+     "Alimentação": 0
+    }
+   },
+   "2027-03": {
+    "spent": 750,
+    "income": 680,
+    "invested": 0,
+    "cats": {
+     "Moradia": 400,
+     "Contas": 350,
+     "Alimentação": 0
+    }
+   },
+   "2027-04": {
+    "spent": 750,
+    "income": 680,
+    "invested": 0,
+    "cats": {
+     "Moradia": 400,
+     "Contas": 350,
+     "Alimentação": 0
+    }
+   },
+   "2027-05": {
+    "spent": 750,
+    "income": 680,
+    "invested": 0,
+    "cats": {
+     "Moradia": 400,
+     "Contas": 350,
+     "Alimentação": 0
+    }
+   },
+   "2027-06": {
+    "spent": 750,
+    "income": 680,
+    "invested": 0,
+    "cats": {
+     "Moradia": 400,
+     "Contas": 350,
+     "Alimentação": 0
+    }
+   },
+   "2027-07": {
+    "spent": 750,
+    "income": 680,
+    "invested": 0,
+    "cats": {
+     "Moradia": 400,
+     "Contas": 350,
+     "Alimentação": 0
+    }
+   },
+   "2027-08": {
+    "spent": 750,
+    "income": 680,
+    "invested": 0,
+    "cats": {
+     "Moradia": 400,
+     "Contas": 350,
+     "Alimentação": 0
+    }
+   },
+   "2027-09": {
+    "spent": 681.34,
+    "income": 680,
+    "invested": 0,
+    "cats": {
+     "Moradia": 363.38,
+     "Contas": 317.96,
+     "Alimentação": 0
+    }
+   },
+   "2027-10": {
+    "spent": 680,
+    "income": 680,
+    "invested": 0,
+    "cats": {
+     "Moradia": 362.67,
+     "Contas": 317.33,
+     "Alimentação": 0
+    }
+   },
+   "2027-11": {
+    "spent": 680,
+    "income": 680,
+    "invested": 0,
+    "cats": {
+     "Moradia": 362.67,
+     "Contas": 317.33,
+     "Alimentação": 0
+    }
+   }
+  },
+  "shoppingDiscount": {
+   "type": "pct",
+   "value": 0
+  },
+  "lastProcessedYM": "2027-11",
+  "lastCarteiraProcessedYM": "2027-11",
+  "lastIncomePaidYM": "2027-11",
+  "secondaryIncome": {
+   "enabled": false,
+   "label": "Renda extra",
+   "type": "salario",
+   "amount": 0,
+   "payDay": 5
+  },
+  "lastSecondaryIncomePaidYM": null,
+  "lastExpensesPaidYM": "2027-11",
+  "timeClock": [],
+  "freeSpendCategories": [
+   "Lazer",
+   "Imprevisto",
+   "Presente",
+   "Outro"
+  ],
+  "freeSpendMonthlyLimit": 0
+ },
+ "log": [
+  true,
+  true,
+  true,
+  {
+   "proceeds": 12111,
+   "gain": 0
+  },
+  {
+   "proceeds": 3800,
+   "gain": 0
+  },
+  {
+   "proceeds": 3590,
+   "gain": 0
+  }
+ ],
+ "pendingDarfYm": []
+}
