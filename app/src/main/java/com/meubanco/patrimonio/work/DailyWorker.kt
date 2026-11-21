@@ -54,7 +54,7 @@ class DailyWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx,
             try { if (com.meubanco.patrimonio.data.PluggyApi.hasCreds(ctx)) com.meubanco.patrimonio.data.PluggyApi.syncNow(ctx, s) } catch (e: Exception) {}
             Store.commit()
             Store.writeNow()
-            if (s.settings.autoBackupEnabled) { Backup.autoLocalCopy(ctx); Backup.writeCloud(ctx) }
+            if (s.settings.autoBackupEnabled) { Backup.autoLocalCopy(ctx); Backup.writeCloud(ctx); com.meubanco.patrimonio.data.GoogleDrive.dailyBackup(ctx) }
             if (s.settings.notifyBudget) newBudgetAlerts(s).forEach { Notifier.show(ctx, 30 + Math.abs(it.category.hashCode() % 1000), "Orçamento: ${it.category}", "Você usou ${formatBRL(it.spent)} de ${formatBRL(it.limit)} neste mês.") }
             Store.commit()
             // avisos

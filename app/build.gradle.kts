@@ -13,8 +13,8 @@ android {
         applicationId = "com.meubanco.patrimonio"
         minSdk = 26
         targetSdk = 34
-        versionCode = 56
-        versionName = "56.0-kotlin"
+        versionCode = 57
+        versionName = "57.0-kotlin"
     }
 
     // Chave fixa (vem dos Secrets do GitHub). Sem ela, cai na chave de debug e o app continua compilando.
@@ -75,6 +75,7 @@ dependencies {
     implementation("androidx.biometric:biometric:1.1.0")
     implementation("androidx.documentfile:documentfile:1.0.1")
     implementation("androidx.work:work-runtime-ktx:2.9.1")
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
 
     // leitor de código de barras
     implementation("androidx.camera:camera-core:1.3.4")
