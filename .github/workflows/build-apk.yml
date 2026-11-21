@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -47,10 +49,18 @@ jobs:
       - name: Compilar APKs (teste e versão final)
         run: ./gradlew assembleDebug assembleRelease --no-daemon
 
-      - name: Guardar APK
+      - name: Publicar APK na aba Releases (não gasta a cota de artefatos)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp app/build/outputs/apk/release/app-release.apk MeuBanco-release.apk
+          gh release delete ultimo -y --cleanup-tag 2>/dev/null || true
+          gh release create ultimo MeuBanco-release.apk --target "$GITHUB_SHA" --title "Última versão" --notes "APK assinado com a chave fixa. Commit ${GITHUB_SHA::7}"
+
+      - name: Guardar APK (opcional)
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: MeuBanco-APK
-          path: |
-            app/build/outputs/apk/debug/*.apk
-            app/build/outputs/apk/release/*.apk
+          retention-days: 1
+          path: app/build/outputs/apk/release/*.apk
