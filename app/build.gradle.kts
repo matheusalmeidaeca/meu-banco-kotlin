@@ -13,8 +13,10 @@ android {
         applicationId = "com.meubanco.patrimonio"
         minSdk = 26
         targetSdk = 34
-        versionCode = 57
-        versionName = "57.0-kotlin"
+        buildConfigField("String", "BACKEND_URL", "\"" + (System.getenv("BACKEND_URL") ?: "") + "\"")
+        buildConfigField("boolean", "PLUGGY_SANDBOX", (System.getenv("PLUGGY_SANDBOX") == "1").toString())
+        versionCode = 58
+        versionName = "58.0-kotlin"
     }
 
     // Chave fixa (vem dos Secrets do GitHub). Sem ela, cai na chave de debug e o app continua compilando.
@@ -47,7 +49,7 @@ android {
     }
     kotlinOptions { jvmTarget = "17" }
 
-    buildFeatures { compose = true }
+    buildFeatures { compose = true; buildConfig = true }
 
     packaging {
         resources.excludes += setOf("/META-INF/{AL2.0,LGPL2.1}", "META-INF/DEPENDENCIES")

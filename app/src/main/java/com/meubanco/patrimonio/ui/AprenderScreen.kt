@@ -23,7 +23,7 @@ fun AprenderScreen(goTab: (String) -> Unit) {
             }
             else -> Card {
                 H2("Meu Banco & Patrimônio")
-                KV("Versão", "57.0-kotlin")
+                KV("Versão", "58.0-kotlin")
                 Txt("Controle financeiro pessoal e simulador de investimentos. Não é banco nem corretora e não move dinheiro real.", color = P.muted)
                 Txt("Privacidade: os dados ficam somente no seu aparelho. O app acessa a internet só para cotações, CDI e consulta de código de barras.", color = P.muted)
             }

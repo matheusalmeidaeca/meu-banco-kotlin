@@ -96,14 +96,19 @@ object PluggyApi {
     fun parseItemIds(raw: String): List<String> = Regex("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}").findAll(raw).map { it.value.lowercase() }.distinct().toList()
     fun loadItemIds(ctx: Context): List<String> = try { parseItemIds(itemsFile(ctx).readText()) } catch (e: Exception) { emptyList() }
     fun saveItemIds(ctx: Context, raw: String): Int { val ids = parseItemIds(raw); itemsFile(ctx).writeText(ids.joinToString("\n")); return ids.size }
+    fun addItemId(ctx: Context, id: String) { saveItemIds(ctx, (loadItemIds(ctx) + id).joinToString("\n")) }
+    fun removeItemId(ctx: Context, id: String) { saveItemIds(ctx, loadItemIds(ctx).filter { it != id.lowercase() }.joinToString("\n")) }
     fun hasCreds(ctx: Context) = loadCreds(ctx) != null
 
     private fun enc(v: String) = URLEncoder.encode(v, "UTF-8")
 
-    private fun getJson(http: PluggyHttp, apiKey: String, path: String): JsonObject {
-        val (code, txt) = http.call("GET", BASE + path, mapOf("X-API-KEY" to apiKey, "Accept" to "application/json"), null)
+    class Route(val base: String, val headerName: String, val headerValue: String)
+
+    private fun getJson(http: PluggyHttp, r: Route, path: String): JsonObject {
+        val (code, txt) = http.call("GET", r.base + path, mapOf(r.headerName to r.headerValue, "Accept" to "application/json"), null)
         when {
-            code == 401 || code == 403 -> throw PluggyException("A Pluggy recusou o acesso (chave expirada ou sem permissão).")
+            code == 401 -> throw PluggyException(if (r.base == BASE) "A Pluggy recusou o acesso (chave expirada ou sem permissão)." else "Entre com sua conta Google de novo.")
+            code == 403 -> throw PluggyException(if (r.base == BASE) "A Pluggy recusou o acesso (chave expirada ou sem permissão)." else "Essa conexão não pertence à sua conta.")
             code == 429 -> throw PluggyException("Muitas consultas à Pluggy. Tente de novo em alguns minutos.")
             code == -1 || txt == null -> throw PluggyException("Sem resposta da Pluggy (" + (RealHttp.lastError ?: "sem detalhe") + ").")
             code !in 200..299 -> throw PluggyException("A Pluggy respondeu com erro ($code).")
@@ -121,15 +126,18 @@ object PluggyApi {
     }
 
     /** Busca conexões, contas e lançamentos e atualiza o estado. Bloqueante: chame fora da thread principal. */
-    fun sync(s: AppState, clientId: String, clientSecret: String, itemIds: List<String> = emptyList(), http: PluggyHttp = RealHttp, todayISO: String = AppClock.todayISO()): PluggySyncResult {
-        val key = auth(http, clientId, clientSecret)
+    fun sync(s: AppState, clientId: String, clientSecret: String, itemIds: List<String> = emptyList(), http: PluggyHttp = RealHttp, todayISO: String = AppClock.todayISO(), backend: Pair<String, String>? = null): PluggySyncResult {
+        // backend = (url do servidor, token Google). Sem ele, usa as chaves próprias (modo avançado).
+        val route = if (backend != null) Route(backend.first.trimEnd('/') + "/p", "Authorization", "Bearer " + backend.second)
+                    else Route(BASE, "X-API-KEY", auth(http, clientId, clientSecret))
+        if (backend != null && itemIds.isEmpty()) throw PluggyException("Nenhum banco conectado ainda. Toque em Conectar banco.")
         val warnings = mutableListOf<String>()
 
         // 1) conexões (itens) do seu aplicativo
         val items = mutableListOf<JsonObject>()
         if (itemIds.isNotEmpty()) {
             for (id in itemIds) {
-                try { items.add(getJson(http, key, "/items/${enc(id)}")) }
+                try { items.add(getJson(http, route, "/items/${enc(id)}")) }
                 catch (e: PluggyException) { warnings.add("Conexão ${id.take(8)}…: ${e.message}") }
             }
         } else {
@@ -137,7 +145,7 @@ object PluggyApi {
             var guard = 0
             try {
                 while (next != null && guard++ < 20) {
-                    val j = getJson(http, key, "/v2/items$next")
+                    val j = getJson(http, route, "/v2/items$next")
                     (j["results"] as? JsonArray)?.forEach { (it as? JsonObject)?.let(items::add) }
                     next = (j["next"] as? JsonPrimitive)?.takeIf { it !is JsonNull }?.contentOrNull
                 }
@@ -157,13 +165,13 @@ object PluggyApi {
             val status = (it["status"] as? JsonPrimitive)?.contentOrNull.orEmpty()
             links.add(RealLink(itemId, name, status, (it["lastUpdatedAt"] as? JsonPrimitive)?.contentOrNull, (it["consentExpiresAt"] as? JsonPrimitive)?.contentOrNull))
             try {
-                val accs = parseRealAccounts(itemId, (getJson(http, key, "/accounts?itemId=${enc(itemId)}&pageSize=500")["results"] as? JsonArray) ?: JsonArray(emptyList()))
+                val accs = parseRealAccounts(itemId, (getJson(http, route, "/accounts?itemId=${enc(itemId)}&pageSize=500")["results"] as? JsonArray) ?: JsonArray(emptyList()))
                 accounts.addAll(accs)
                 for (a in accs) {
                     var n: String? = "?accountId=${enc(a.id)}&dateFrom=$from&dateTo=$todayISO"
                     var g = 0
                     while (n != null && g++ < 40) {
-                        val j = getJson(http, key, "/v2/transactions$n")
+                        val j = getJson(http, route, "/v2/transactions$n")
                         fetched.addAll(parseRealTx(a.id, a.kind == "credit", (j["results"] as? JsonArray) ?: JsonArray(emptyList())))
                         n = (j["next"] as? JsonPrimitive)?.takeIf { it !is JsonNull }?.contentOrNull
                     }
@@ -173,7 +181,7 @@ object PluggyApi {
             try {
                 var page = 1; var total = 1
                 while (page <= total && page <= 10) {
-                    val j = getJson(http, key, "/investments?itemId=${enc(itemId)}&pageSize=500&page=$page")
+                    val j = getJson(http, route, "/investments?itemId=${enc(itemId)}&pageSize=500&page=$page")
                     invests.addAll(parseRealInvest(itemId, (j["results"] as? JsonArray) ?: JsonArray(emptyList())))
                     total = (j["totalPages"] as? JsonPrimitive)?.intOrNull ?: 1; page++
                 }
@@ -197,6 +205,7 @@ object PluggyApi {
 
     /** Para a interface e o worker: devolve uma mensagem pronta. */
     suspend fun syncNow(ctx: Context, s: AppState): String = withContext(Dispatchers.IO) {
+        if (Backend.enabled() && GoogleDrive.isSignedIn(ctx) && !hasCreds(ctx)) return@withContext Backend.syncNow(ctx, s)
         val c = loadCreds(ctx) ?: return@withContext "Informe o client_id e o client_secret primeiro."
         try {
             val r = sync(s, c.first, c.second, loadItemIds(ctx))

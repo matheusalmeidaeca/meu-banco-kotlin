@@ -1,0 +1,39 @@
+name: Publicar servidor (Cloudflare)
+
+on:
+  push:
+    branches: [ main, master ]
+    paths: [ "cloudflare/**" ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Testes do servidor
+        run: node cloudflare/worker.test.mjs
+
+      - name: Publicar no Cloudflare
+        id: wr
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: cloudflare
+          secrets: |
+            PLUGGY_CLIENT_ID
+            PLUGGY_CLIENT_SECRET
+            GOOGLE_ANDROID_CLIENT_ID
+        env:
+          PLUGGY_CLIENT_ID: ${{ secrets.PLUGGY_CLIENT_ID }}
+          PLUGGY_CLIENT_SECRET: ${{ secrets.PLUGGY_CLIENT_SECRET }}
+          GOOGLE_ANDROID_CLIENT_ID: ${{ secrets.GOOGLE_ANDROID_CLIENT_ID }}
+
+      - name: Endereço do servidor
+        run: echo "ENDERECO=${{ steps.wr.outputs.deployment-url }}"

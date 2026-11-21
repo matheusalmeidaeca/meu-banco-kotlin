@@ -46,3 +46,9 @@ Compilar: push no GitHub → aba Actions → artefato **MeuBanco-APK**.
 - Inflação (IPCA 12 meses) e Selic lidas da BrasilAPI e usadas nas metas e nos comparadores; o valor digitado tem prioridade.
 - Valorização dos ativos vinda do histórico de preços do repositório de cotações (hist_precos.json / hist_celular.json), média ponderada pela posição, limitada a -10%…+15% a.a.
 - Repositório de cotações: novo modo `historico` (celular) e cálculo de valorização anualizada por ativo (valAnnualPct, valMonths, ret12mPct).
+
+## Conexão com bancos (v58): servidor + Pluggy Connect
+- `cloudflare/worker.js`: servidor mínimo (Cloudflare Worker). Guarda o Client Secret da Pluggy, cria o token do widget e repassa só os dados do usuário logado (Google). Testes: `node cloudflare/worker.test.mjs`.
+- Secrets do GitHub: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `PLUGGY_CLIENT_ID`, `PLUGGY_CLIENT_SECRET`, `GOOGLE_ANDROID_CLIENT_ID`.
+- Variáveis do GitHub: `BACKEND_URL` (endereço do Worker) e, para testes, `PLUGGY_SANDBOX=1`.
+- Sem `BACKEND_URL` o app usa o modo avançado (chaves próprias da Pluggy).

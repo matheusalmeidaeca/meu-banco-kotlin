@@ -47,6 +47,9 @@ jobs:
         run: chmod +x gradlew && ./gradlew testDebugUnitTest --no-daemon
 
       - name: Compilar APKs (teste e versão final)
+        env:
+          BACKEND_URL: ${{ vars.BACKEND_URL }}
+          PLUGGY_SANDBOX: ${{ vars.PLUGGY_SANDBOX }}
         run: ./gradlew assembleDebug assembleRelease --no-daemon
 
       - name: Publicar APK na aba Releases (não gasta a cota de artefatos)

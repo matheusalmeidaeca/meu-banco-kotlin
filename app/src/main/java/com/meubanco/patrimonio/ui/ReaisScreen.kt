@@ -2,11 +2,14 @@ package com.meubanco.patrimonio.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.meubanco.patrimonio.data.PluggyApi
 import com.meubanco.patrimonio.data.Store
+import com.meubanco.patrimonio.data.Backend
+import com.meubanco.patrimonio.data.GoogleDrive
 import com.meubanco.patrimonio.domain.*
 import kotlinx.coroutines.launch
 
@@ -19,14 +22,57 @@ fun ReaisScreen() {
     var busy by remember { mutableStateOf(false) }
     var ids by remember { mutableStateOf(PluggyApi.loadItemIds(ctx).joinToString("\n")) }
     var idsInfo by remember { mutableStateOf(PluggyApi.loadItemIds(ctx).size) }
+    val useBackend = Backend.enabled() && GoogleDrive.isSignedIn(ctx) && !has
+    var widgetToken by remember { mutableStateOf<String?>(null) }
+    var linkTick by remember { mutableIntStateOf(0) }
     var q by remember { mutableStateOf("") }
     var ym by remember { mutableStateOf(AppClock.todayISO().take(7)) }
 
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         H2("Contas conectadas")
-        Muted("Somente leitura, via Meu Pluggy (Open Finance). O app nunca movimenta dinheiro. Estes são dados reais e ficam separados da simulação.")
+        Muted("Somente leitura, via Open Finance. O app nunca movimenta dinheiro. Estes são dados reais e ficam separados da simulação.")
 
-        if (!has) {
+        widgetToken?.let { tk ->
+            PluggyConnectView(tk,
+                onItem = { id ->
+                    widgetToken = null
+                    if (id.isNotBlank()) { PluggyApi.addItemId(ctx, id); linkTick++; busy = true
+                        scope.launch { val m = PluggyApi.syncNow(ctx, Store.state); Store.commit(); busy = false; Ui.show(m) } }
+                },
+                onError = { m -> widgetToken = null; Ui.show("Não foi possível conectar: $m") },
+                onClose = { widgetToken = null })
+        }
+
+        if (Backend.enabled() && !has) {
+            Card {
+                Txt("Conectar banco", bold = true)
+                if (!GoogleDrive.isSignedIn(ctx)) {
+                    Muted("Primeiro entre com sua conta Google em Configurações → Dados → Conta Google. Depois volte aqui.")
+                } else {
+                    Muted("Escolha seu banco e autorize o compartilhamento de dados pelo Open Finance. Você pode revogar quando quiser.")
+                    PrimaryButton(if (busy) "Aguarde…" else "Conectar um banco", enabled = !busy) {
+                        busy = true
+                        scope.launch {
+                            val r = Backend.connectToken(ctx); busy = false
+                            if (r.token != null) widgetToken = r.token else Ui.show(r.error ?: "Não foi possível conectar agora")
+                        }
+                    }
+                    key(linkTick, s.realLinks.size) {
+                        s.realLinks.forEach { l ->
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Muted("🔗 ${l.name}", Modifier.weight(1f))
+                                GhostButton("Remover", danger = true) {
+                                    scope.launch { val ok = Backend.removeItem(ctx, Store.state, l.itemId); Store.commit(); linkTick++; Ui.show(if (ok) "Conexão removida" else "Não consegui remover agora") }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!has && !useBackend) {
+            if (Backend.enabled()) { return@Column }
             Card {
                 Txt("Passo a passo", bold = true)
                 Muted("1. Meu Pluggy: conta criada e bancos conectados (já feito).")
@@ -60,7 +106,7 @@ fun ReaisScreen() {
             }
         }
 
-        Card {
+        if (has) Card {
             Txt("IDs das conexões ($idsInfo salvos)", bold = true)
             Muted("No painel da Pluggy → seu aplicativo Demo → toque em cada conexão MeuPluggy e copie o ID (formato xxxxxxxx-xxxx-…). Cole todos aqui, um por linha.")
             Field(ids, { ids = it }, "IDs (um por linha)", singleLine = false)
@@ -117,7 +163,7 @@ fun ReaisScreen() {
             }
         }
 
-        Card {
+        if (has) Card {
             GhostButton("Remover chaves e dados reais", danger = true) {
                 PluggyApi.clearCreds(ctx); has = false
                 Store.mutate { it.realAccounts = mutableListOf(); it.realTx = mutableListOf(); it.realLinks = mutableListOf(); it.realInvest = mutableListOf(); it.realLastSyncISO = null; it.realSyncError = null }
