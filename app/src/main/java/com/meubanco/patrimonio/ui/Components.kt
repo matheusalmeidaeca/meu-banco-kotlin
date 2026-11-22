@@ -30,6 +30,8 @@ object Ui {
     var quickSpend by mutableStateOf(false)
     /** Retorno do navegador após conectar o banco: item=..., error=... ou closed=1 */
     var pluggyResult by mutableStateOf<String?>(null)
+    /** Conexão criada pelo caminho direto, esperando o usuário autorizar no site/app do banco. */
+    var pendingItem by mutableStateOf<String?>(null)
     val celebrationQueue = mutableListOf<Celebration>()
     fun show(msg: String, sub: String = "") { toast = if (sub.isBlank()) msg else "$msg — $sub" }
     fun enqueue(list: List<Celebration>) {

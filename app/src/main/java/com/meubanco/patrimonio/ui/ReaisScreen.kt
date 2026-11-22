@@ -32,10 +32,22 @@ fun ReaisScreen() {
         if (res != null) {
             Ui.pluggyResult = null
             val m = res.split("&").associate { it.substringBefore("=") to java.net.URLDecoder.decode(it.substringAfter("=", ""), "UTF-8") }
+            val pend = Ui.pendingItem
+            val got = (m["item"] ?: m["itemId"] ?: m["item_id"] ?: pend)?.takeIf { it.isNotBlank() }
             when {
-                !m["item"].isNullOrBlank() -> { connErr = ""; linkedNow = true; PluggyApi.addItemId(ctx, m["item"]!!); linkTick++; busy = true
-                    val msg = PluggyApi.syncNow(ctx, Store.state); Store.commit(); busy = false; Ui.show(msg) }
-                m.containsKey("error") -> connErr = "Não foi possível conectar: ${m["error"]}"
+                m.containsKey("error") && m["error"]!!.isNotBlank() -> { Ui.pendingItem = null; connErr = "Não foi possível conectar: ${m["error"]}" }
+                got != null -> {
+                    busy = true
+                    val st = if (pend != null) Backend.itemState(ctx, got) else null
+                    val bad = st?.error
+                        ?: (if (st?.status == "WAITING_USER_ACTION" || st?.status == "WAITING_USER_INPUT") "a autorização ainda não foi concluída; autorize no navegador e toque em verificar" else null)
+                        ?: (if (st?.status == "LOGIN_ERROR" || st?.status == "OUTDATED") "a Pluggy marcou a conexão como ${st.status}" + (st.execution?.let { e -> " ($e)" } ?: "") else null)
+                    if (bad != null) { busy = false; connErr = "Não foi possível conectar: $bad" }
+                    else {
+                        Ui.pendingItem = null; connErr = ""; linkedNow = true; PluggyApi.addItemId(ctx, got); linkTick++
+                        val msg = PluggyApi.syncNow(ctx, Store.state); Store.commit(); busy = false; Ui.show(msg)
+                    }
+                }
                 else -> connErr = "A conexão foi fechada antes de concluir."
             }
         }
@@ -82,6 +94,21 @@ fun ReaisScreen() {
                             val r = Backend.connectToken(ctx); busy = false
                             if (r.token != null) widgetToken = r.token else { connErr = r.error ?: "Não foi possível conectar agora"; Ui.show(connErr) }
                         }
+                    }
+                    GhostButton("Conectar MeuPluggy direto (sem widget)", Modifier.fillMaxWidth(), enabled = !busy) {
+                        busy = true; connErr = ""; linkedNow = false
+                        scope.launch {
+                            val r = Backend.startOauth(ctx); busy = false
+                            if (r.url != null && r.itemId != null) {
+                                Ui.pendingItem = r.itemId
+                                try { ctx.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(r.url)).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)) }
+                                catch (e: Exception) { connErr = "Não consegui abrir o navegador para autorizar." }
+                            } else { connErr = r.error ?: "Não foi possível conectar agora"; Ui.show(connErr) }
+                        }
+                    }
+                    Ui.pendingItem?.let { pid ->
+                        Muted("Autorize no navegador e volte ao app. Se ele não voltar sozinho, toque abaixo.")
+                        GhostButton("Já autorizei: verificar conexão", Modifier.fillMaxWidth(), enabled = !busy) { Ui.pluggyResult = "check=1" }
                     }
                     if (connErr.isNotEmpty()) Muted("⚠ $connErr")
                     key(linkTick, s.realLinks.size) {

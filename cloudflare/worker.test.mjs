@@ -11,7 +11,8 @@ const f = async (url, opts = {}) => {
   if (url.endsWith("/auth")) return J({ apiKey: "KEY" });
   assert.equal(opts.headers["X-API-KEY"], "KEY");
   if (url.endsWith("/connect_token")) return J({ accessToken: "CT" });
-  if (url.endsWith("/items/" + ME)) return J({ id: ME, clientUserId: "g-P1" });
+  if (url.endsWith("/items") && opts.method === "POST") { const b = JSON.parse(opts.body); return b.connectorId === 999 ? J({ message: "connector not found" }, 400) : J({ id: ME, status: "CREATED", echo: b }, 201); }
+  if (url.endsWith("/items/" + ME)) return J({ id: ME, clientUserId: "g-P1", status: "WAITING_USER_ACTION", parameter: { type: "oauth", data: "https://meu.pluggy.ai/oauth?x=1" } });
   if (url.endsWith("/items/" + OTHER)) return J({ id: OTHER, clientUserId: "g-OUTRO" });
   if (url.endsWith("/accounts/" + ACC)) return J({ id: ACC, itemId: ME });
   if (url.includes("/accounts?itemId=") || url.includes("/investments?") || url.includes("/v2/transactions?")) return J({ results: [] });
@@ -37,6 +38,16 @@ assert.equal((await handle(req("GET", `/p/accounts?itemId=nao-uuid`), env, f)).s
 // token de outro app (audiência errada) é recusado
 const f2 = async (u, o) => u.includes("tokeninfo") ? new Response(JSON.stringify({ azp: "OUTRO" })) : f(u, o);
 assert.equal((await handle(req("POST", "/connect-token", "GOOD2"), env, f2)).status, 401);
+// conexão direta (OAuth sem widget)
+r = await handle(req("POST", "/oauth-item", "GOOD", {}), env, f);
+assert.equal(r.status, 200); assert.equal((await r.json()).itemId, ME);
+assert.ok(calls.some(c => c === "POST https://api.pluggy.ai/items"));
+r = await handle(req("POST", "/oauth-item", "GOOD", { connectorId: 999 }), env, f);
+assert.equal(r.status, 502); assert.ok((await r.json()).error.includes("connector not found"));   // erro real aparece
+assert.equal((await handle(req("POST", "/oauth-item", null), env, f)).status, 401);
+r = await handle(req("GET", `/oauth-item/${ME}`), env, f);
+let oj = await r.json(); assert.equal(r.status, 200); assert.equal(oj.oauthUrl, "https://meu.pluggy.ai/oauth?x=1");
+assert.equal((await handle(req("GET", `/oauth-item/${OTHER}`), env, f)).status, 403);
 // página do widget (sem login Google; o token da Pluggy é curto e só abre o widget)
 const pg = await handle(new Request("https://x.test/connect?t=" + "a".repeat(40) + "&s=1"), env, f);
 assert.equal(pg.status, 200);

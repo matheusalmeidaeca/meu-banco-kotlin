@@ -29,6 +29,12 @@ async function pluggy(env, f, method, path, body) {
   return { status: r.status, data, text };
 }
 
+/** Texto curto com o motivo que a Pluggy devolveu (para o app mostrar o erro de verdade). */
+function motivo(r) {
+  const m = (r.data && (r.data.message || (r.data.error && (r.data.error.message || r.data.error)) || r.data.code)) || r.text || "sem detalhe";
+  return String(typeof m === "string" ? m : JSON.stringify(m)).replace(/\s+/g, " ").slice(0, 160);
+}
+
 /** Confere o token Google do usuário e devolve um identificador estável dele. */
 async function whoIs(request, env, f) {
   const h = request.headers.get("authorization") || "";
@@ -114,8 +120,27 @@ async function route(request, env, f) {
     const body = { options: { clientUserId: uid, oauthRedirectUri: OAUTH_REDIRECT } };
     if (itemId) body.itemId = itemId;
     const r = await pluggy(env, f, "POST", "/connect_token", body);
-    if (r.status !== 200 || !r.data?.accessToken) return err(502, "A Pluggy não liberou a conexão agora.");
+    if (r.status !== 200 || !r.data?.accessToken) return err(502, "A Pluggy não liberou a conexão agora (" + r.status + "): " + motivo(r));
     return json({ accessToken: r.data.accessToken });
+  }
+
+  // 1b) conexão direta (sem widget) para conectores com autorização no site/app do banco, como o MeuPluggy
+  if (url.pathname === "/oauth-item" && request.method === "POST") {
+    let connectorId = 200; try { const b = await request.json(); if (Number.isInteger(b.connectorId)) connectorId = b.connectorId; } catch { /* sem corpo */ }
+    const r = await pluggy(env, f, "POST", "/items", { connectorId, parameters: {}, clientUserId: uid, oauthRedirectUri: OAUTH_REDIRECT });
+    if (r.status < 200 || r.status > 299 || !r.data?.id) return err(502, "A Pluggy recusou criar a conexão (" + r.status + "): " + motivo(r));
+    return json({ itemId: r.data.id, status: r.data.status || null });
+  }
+  const oi = url.pathname.match(/^\/oauth-item\/([^/]+)$/);
+  if (oi && request.method === "GET") {
+    if (!(await ownsItem(env, f, uid, oi[1]))) return err(403, "Conexão não é sua.");
+    const r = await pluggy(env, f, "GET", "/items/" + oi[1]);
+    if (r.status !== 200 || !r.data) return err(502, "Não consegui consultar a conexão (" + r.status + "): " + motivo(r));
+    const p = r.data.parameter;
+    const e = r.data.error;
+    return json({ status: r.data.status || null, executionStatus: r.data.executionStatus || null,
+      oauthUrl: p && p.type === "oauth" && typeof p.data === "string" && p.data.startsWith("https://") ? p.data : null,
+      error: e ? String(e.message || e.code || "erro").slice(0, 160) : null });
   }
 
   // 2) apagar uma conexão (LGPD: o usuário pode remover seus dados)

@@ -28,6 +28,42 @@ object Backend {
         ConnectToken(null, when (code) { 401 -> "Entre com sua conta Google de novo."; 429 -> "Muitas tentativas. Aguarde um minuto."; -1 -> "Sem resposta do servidor. Verifique a internet."; else -> "O servidor não conseguiu abrir a conexão agora ($code)" + (try { Json.parseToJsonElement(txt ?: "").jsonObject["error"]?.jsonPrimitive?.contentOrNull?.let { ": $it" } } catch (e: Exception) { null } ?: ".") })
     }
 
+    private fun apiError(txt: String?): String? = try { Json.parseToJsonElement(txt ?: "").jsonObject["error"]?.jsonPrimitive?.contentOrNull } catch (e: Exception) { null }
+
+    class OauthStart(val itemId: String?, val url: String?, val error: String?)
+    class ItemState(val status: String?, val execution: String?, val error: String?)
+
+    /** Conexão direta (sem widget): o servidor cria a conexão e devolve o endereço de autorização do banco/Meu Pluggy. */
+    suspend fun startOauth(ctx: Context, http: PluggyHttp = RealHttp, waitMs: Long = 2000): OauthStart = withContext(Dispatchers.IO) {
+        val g = googleToken(ctx) ?: return@withContext OauthStart(null, null, "Entre com sua conta Google de novo (Configurações → Conta Google).")
+        val h = mapOf("Authorization" to "Bearer $g", "Content-Type" to "application/json")
+        val (c, txt) = http.call("POST", url() + "/oauth-item", h, "{}")
+        val id = try { Json.parseToJsonElement(txt ?: "").jsonObject["itemId"]?.jsonPrimitive?.contentOrNull } catch (e: Exception) { null }
+        if (c !in 200..299 || id == null) return@withContext OauthStart(null, null, if (c == -1) "Sem resposta do servidor. Verifique a internet." else (apiError(txt) ?: "O servidor não conseguiu criar a conexão ($c)."))
+        repeat(20) {
+            val (c2, t2) = http.call("GET", url() + "/oauth-item/$id", h, null)
+            if (c2 in 200..299 && t2 != null) {
+                val o = try { Json.parseToJsonElement(t2).jsonObject } catch (e: Exception) { null }
+                val u = o?.get("oauthUrl")?.takeIf { it !is JsonNull }?.jsonPrimitive?.contentOrNull
+                val e = o?.get("error")?.takeIf { it !is JsonNull }?.jsonPrimitive?.contentOrNull
+                if (u != null) return@withContext OauthStart(id, u, null)
+                if (e != null) return@withContext OauthStart(id, null, "A Pluggy respondeu: $e")
+            } else if (c2 == 401 || c2 == 403) return@withContext OauthStart(id, null, apiError(t2) ?: "Sem permissão ($c2).")
+            kotlinx.coroutines.delay(waitMs)
+        }
+        OauthStart(id, null, "A Pluggy demorou para liberar o endereço de autorização. Tente de novo em instantes.")
+    }
+
+    /** Situação atual de uma conexão criada por [startOauth]. */
+    suspend fun itemState(ctx: Context, itemId: String, http: PluggyHttp = RealHttp): ItemState = withContext(Dispatchers.IO) {
+        val g = googleToken(ctx) ?: return@withContext ItemState(null, null, "Entre com sua conta Google de novo.")
+        val (c, t) = http.call("GET", url() + "/oauth-item/$itemId", mapOf("Authorization" to "Bearer $g"), null)
+        if (c !in 200..299 || t == null) return@withContext ItemState(null, null, apiError(t) ?: "Não consegui consultar a conexão ($c).")
+        val o = try { Json.parseToJsonElement(t).jsonObject } catch (e: Exception) { null }
+        fun s(k: String) = o?.get(k)?.takeIf { it !is JsonNull }?.jsonPrimitive?.contentOrNull
+        ItemState(s("status"), s("executionStatus"), s("error"))
+    }
+
     /** Endereço da página de conexão (abre no navegador do celular). */
     fun connectUrl(token: String): String = url() + "/connect?t=" + java.net.URLEncoder.encode(token, "UTF-8") + (if (sandbox()) "&s=1" else "")
 
