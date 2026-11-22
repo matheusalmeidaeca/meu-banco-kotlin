@@ -58,7 +58,8 @@ object Backend {
     fun widgetHtml(connectToken: String, sandbox: Boolean): String {
         val tk = Json.encodeToString(JsonPrimitive.serializer(), JsonPrimitive(connectToken))
         return """<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">
-<script src="https://cdn.pluggy.ai/connect/v2/pluggy-connect.js"></script></head>
+<script src="https://cdn.pluggy.ai/pluggy-connect/latest/pluggy-connect.js"></script>
+<script>if(!window.PluggyConnect){document.write('<scr'+'ipt src="https://cdn.pluggy.ai/pluggy-connect/v2.7.0/pluggy-connect.js"></scr'+'ipt>');}</script></head>
 <body style="margin:0;background:#0b1020"><script>
 window.onerror = function (m) { Android.onError("js: " + m); };
 try {

@@ -41,6 +41,6 @@ assert.equal((await handle(req("POST", "/connect-token", "GOOD2"), env, f2)).sta
 const pg = await handle(new Request("https://x.test/connect?t=" + "a".repeat(40) + "&s=1"), env, f);
 assert.equal(pg.status, 200);
 const html = await pg.text();
-assert.ok(html.includes("pluggy-connect.js") && html.includes("includeSandbox: true") && html.includes("admoney"));
+assert.ok(html.includes("/pluggy-connect/latest/pluggy-connect.js") && html.includes("includeSandbox: true") && html.includes("admoney"));
 assert.equal((await handle(new Request("https://x.test/connect?t=curto"), env, f)).status, 400);
 console.log("worker: todos os testes passaram");

@@ -71,7 +71,8 @@ function connectPage(token, sandbox) {
   const tk = JSON.stringify(token).replace(/</g, "\\u003c");
   const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Admoney · conectar banco</title><style>body{margin:0;font-family:sans-serif;background:#0b1020;color:#e8ecf8}#m{padding:24px;text-align:center}</style>
-<script src="https://cdn.pluggy.ai/connect/v2/pluggy-connect.js"></script></head>
+<script src="https://cdn.pluggy.ai/pluggy-connect/latest/pluggy-connect.js"></script>
+<script>if(!window.PluggyConnect){document.write('<scr'+'ipt src="https://cdn.pluggy.ai/pluggy-connect/v2.7.0/pluggy-connect.js"></scr'+'ipt>');}</script></head>
 <body><div id="m">Abrindo a conexão segura…</div><script>
 function back(q){
   var u = "intent://pluggy?" + q + "#Intent;scheme=admoney;package=com.admoney.app;end";
