@@ -39,6 +39,9 @@ fun PluggyConnectView(connectToken: String, onItem: (String) -> Unit, onError: (
                 settings.javaScriptCanOpenWindowsAutomatically = true
                 addJavascriptInterface(Bridge(onItem, onError, onClose), "Android")
                 webViewClient = object : WebViewClient() {
+                    override fun onReceivedError(v: WebView, r: WebResourceRequest, e: android.webkit.WebResourceError) {
+                        if (r.isForMainFrame || r.url.host == "cdn.pluggy.ai") onError("não carregou ${r.url.host}: ${e.description}")
+                    }
                     override fun shouldOverrideUrlLoading(v: WebView, r: WebResourceRequest): Boolean {
                         val u = r.url
                         return if (u.scheme == "about" || u.scheme == "data" || internalHost(u)) false else { external(u); true }

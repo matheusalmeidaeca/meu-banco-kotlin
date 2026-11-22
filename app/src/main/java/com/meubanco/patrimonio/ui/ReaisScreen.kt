@@ -24,6 +24,8 @@ fun ReaisScreen() {
     var idsInfo by remember { mutableStateOf(PluggyApi.loadItemIds(ctx).size) }
     val useBackend = Backend.enabled() && GoogleDrive.isSignedIn(ctx) && !has
     var widgetToken by remember { mutableStateOf<String?>(null) }
+    var connErr by remember { mutableStateOf("") }
+    var linkedNow by remember { mutableStateOf(false) }
     var linkTick by remember { mutableIntStateOf(0) }
     var q by remember { mutableStateOf("") }
     var ym by remember { mutableStateOf(AppClock.todayISO().take(7)) }
@@ -36,11 +38,12 @@ fun ReaisScreen() {
             PluggyConnectView(tk,
                 onItem = { id ->
                     widgetToken = null
+                    connErr = ""; linkedNow = true
                     if (id.isNotBlank()) { PluggyApi.addItemId(ctx, id); linkTick++; busy = true
                         scope.launch { val m = PluggyApi.syncNow(ctx, Store.state); Store.commit(); busy = false; Ui.show(m) } }
                 },
-                onError = { m -> widgetToken = null; Ui.show("Não foi possível conectar: $m") },
-                onClose = { widgetToken = null })
+                onError = { m -> widgetToken = null; connErr = "Não foi possível conectar: $m"; Ui.show("Não foi possível conectar: $m") },
+                onClose = { widgetToken = null; if (!linkedNow) connErr = "A janela do banco fechou antes de concluir." })
         }
 
         if (Backend.enabled() && !has) {
@@ -51,12 +54,13 @@ fun ReaisScreen() {
                 } else {
                     Muted("Escolha seu banco e autorize o compartilhamento de dados pelo Open Finance. Você pode revogar quando quiser.")
                     PrimaryButton(if (busy) "Aguarde…" else "Conectar um banco", enabled = !busy) {
-                        busy = true
+                        busy = true; connErr = ""; linkedNow = false
                         scope.launch {
                             val r = Backend.connectToken(ctx); busy = false
-                            if (r.token != null) widgetToken = r.token else Ui.show(r.error ?: "Não foi possível conectar agora")
+                            if (r.token != null) widgetToken = r.token else { connErr = r.error ?: "Não foi possível conectar agora"; Ui.show(connErr) }
                         }
                     }
+                    if (connErr.isNotEmpty()) Muted("⚠ $connErr")
                     key(linkTick, s.realLinks.size) {
                         s.realLinks.forEach { l ->
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

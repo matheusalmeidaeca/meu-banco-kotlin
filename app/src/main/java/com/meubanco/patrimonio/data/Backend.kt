@@ -19,17 +19,17 @@ object Backend {
 
     /** Pede ao servidor o token que abre a tela de conexão. */
     suspend fun connectToken(ctx: Context, http: PluggyHttp = RealHttp): ConnectToken = withContext(Dispatchers.IO) {
-        val g = googleToken(ctx) ?: return@withContext ConnectToken(null, "Entre com sua conta Google de novo (Configurações → Dados).")
+        val g = googleToken(ctx) ?: return@withContext ConnectToken(null, "Entre com sua conta Google de novo (Configurações → Conta Google).")
         val (code, txt) = http.call("POST", url() + "/connect-token", mapOf("Authorization" to "Bearer $g", "Content-Type" to "application/json"), "{}")
         if (code in 200..299 && txt != null) {
             val t = try { Json.parseToJsonElement(txt).jsonObject["accessToken"]?.jsonPrimitive?.contentOrNull } catch (e: Exception) { null }
             if (t != null) return@withContext ConnectToken(t, null)
         }
-        ConnectToken(null, when (code) { 401 -> "Entre com sua conta Google de novo."; 429 -> "Muitas tentativas. Aguarde um minuto."; -1 -> "Sem resposta do servidor. Verifique a internet."; else -> "O servidor não conseguiu abrir a conexão agora ($code)." })
+        ConnectToken(null, when (code) { 401 -> "Entre com sua conta Google de novo."; 429 -> "Muitas tentativas. Aguarde um minuto."; -1 -> "Sem resposta do servidor. Verifique a internet."; else -> "O servidor não conseguiu abrir a conexão agora ($code)" + (try { Json.parseToJsonElement(txt ?: "").jsonObject["error"]?.jsonPrimitive?.contentOrNull?.let { ": $it" } } catch (e: Exception) { null } ?: ".") })
     }
 
     suspend fun syncNow(ctx: Context, s: AppState): String {
-        val g = googleToken(ctx) ?: return "Entre com sua conta Google de novo (Configurações → Dados)."
+        val g = googleToken(ctx) ?: return "Entre com sua conta Google de novo (Configurações → Conta Google)."
         return try {
             val r = PluggyApi.sync(s, "", "", PluggyApi.loadItemIds(ctx), backend = url() to g)
             "✓ ${r.accounts} conta(s), ${r.newTx} lançamento(s) novo(s)" + (if (r.imported > 0) ", ${r.imported} levado(s) ao histórico" else "") + "." +
@@ -57,13 +57,16 @@ object Backend {
         return """<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">
 <script src="https://cdn.pluggy.ai/connect/v2/pluggy-connect.js"></script></head>
 <body style="margin:0;background:#0b1020"><script>
-var pc = new window.PluggyConnect({
-  connectToken: $tk, includeSandbox: $sandbox,
-  onSuccess: function (d) { Android.onItem(d && d.item ? d.item.id : ""); },
-  onError: function (e) { Android.onError(String((e && (e.message || e.code)) || e)); },
-  onClose: function () { Android.onClose(); }
-});
-pc.init();
+window.onerror = function (m) { Android.onError("js: " + m); };
+try {
+  var pc = new window.PluggyConnect({
+    connectToken: $tk, includeSandbox: $sandbox,
+    onSuccess: function (d) { Android.onItem(d && d.item ? d.item.id : ""); },
+    onError: function (e) { Android.onError(String((e && (e.message || e.code)) || JSON.stringify(e) || e)); },
+    onClose: function () { Android.onClose(); }
+  });
+  pc.init();
+} catch (e) { Android.onError("init: " + e); }
 </script></body></html>"""
     }
 }

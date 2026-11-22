@@ -65,7 +65,7 @@ async function ownsItem(env, f, uid, itemId) {
   return r.status === 200 && r.data && r.data.clientUserId === uid;
 }
 
-export async function handle(request, env, f = fetch) {
+async function route(request, env, f) {
   const url = new URL(request.url);
   if (url.pathname === "/" ) return json({ ok: true, app: "meu-banco-api" });
   const uid = await whoIs(request, env, f);
@@ -108,6 +108,11 @@ export async function handle(request, env, f = fetch) {
     return new Response(r.text, { status: r.status, headers: { "content-type": "application/json" } });
   }
   return err(404, "Rota não encontrada");
+}
+
+export async function handle(request, env, f = fetch) {
+  try { return await route(request, env, f); }
+  catch (e) { return err(502, "Falha no servidor: " + String(e && e.message || e).slice(0, 120)); }
 }
 
 export default { fetch: (request, env) => handle(request, env) };
