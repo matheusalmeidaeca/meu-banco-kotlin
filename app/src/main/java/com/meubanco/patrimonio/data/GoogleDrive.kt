@@ -57,14 +57,24 @@ object GoogleDrive {
     class Profile(val email: String, val name: String?, val photoUrl: String?)
 
     /** Perfil da conta Google (e-mail, nome e foto). */
+    @Volatile var lastError: String = ""
+
     fun profile(token: String, http: PluggyHttp = RealHttp): Profile? {
-        val (code, txt) = http.call("GET", "$API/about?fields=user(emailAddress,displayName,photoLink)", hdr(token), null)
-        if (code !in 200..299 || txt == null) return null
-        return try {
-            val u = Json.parseToJsonElement(txt).jsonObject["user"]?.jsonObject ?: return null
-            val mail = u["emailAddress"]?.jsonPrimitive?.contentOrNull ?: return null
-            Profile(mail, u["displayName"]?.jsonPrimitive?.contentOrNull, u["photoLink"]?.jsonPrimitive?.contentOrNull)
-        } catch (e: Exception) { null }
+        lastError = ""
+        for (fields in listOf("user(emailAddress,displayName,photoLink)", "user(emailAddress)")) {
+            val (code, txt) = http.call("GET", "$API/about?fields=$fields", hdr(token), null)
+            if (code in 200..299 && txt != null) {
+                try {
+                    val u = Json.parseToJsonElement(txt).jsonObject["user"]?.jsonObject ?: continue
+                    val mail = u["emailAddress"]?.jsonPrimitive?.contentOrNull ?: continue
+                    return Profile(mail, u["displayName"]?.jsonPrimitive?.contentOrNull, u["photoLink"]?.jsonPrimitive?.contentOrNull)
+                } catch (e: Exception) { }
+            } else {
+                val msg = try { Json.parseToJsonElement(txt ?: "").jsonObject["error"]?.jsonObject?.get("message")?.jsonPrimitive?.contentOrNull } catch (e: Exception) { null }
+                lastError = "Drive respondeu $code" + (msg?.let { ": " + it.take(160) } ?: "")
+            }
+        }
+        return null
     }
 
     private fun downloadPhoto(ctx: Context, url: String) {
@@ -121,7 +131,7 @@ object GoogleDrive {
      */
     suspend fun loginSync(ctx: Context, token: String): String = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
         try {
-            val pr = profile(token) ?: return@withContext "Não consegui confirmar a conta"
+            val pr = profile(token) ?: return@withContext "Não consegui confirmar a conta (${lastError.ifEmpty { "sem resposta" }})"
             val mail = pr.email
             saveEmail(ctx, mail)
             prefs(ctx).edit().putString("name", pr.name).apply()

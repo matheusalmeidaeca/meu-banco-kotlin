@@ -55,7 +55,7 @@ object Backend {
     fun widgetHtml(connectToken: String, sandbox: Boolean): String {
         val tk = Json.encodeToString(JsonPrimitive.serializer(), JsonPrimitive(connectToken))
         return """<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">
-<script src="https://cdn.pluggy.ai/pluggy-connect/v2.11.0/pluggy-connect.js"></script></head>
+<script src="https://cdn.pluggy.ai/connect/v2/pluggy-connect.js"></script></head>
 <body style="margin:0;background:#0b1020"><script>
 var pc = new window.PluggyConnect({
   connectToken: $tk, includeSandbox: $sandbox,
