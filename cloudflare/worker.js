@@ -65,9 +65,43 @@ async function ownsItem(env, f, uid, itemId) {
   return r.status === 200 && r.data && r.data.clientUserId === uid;
 }
 
+
+/** Página do widget da Pluggy, aberta no navegador do celular. Devolve o resultado ao app por admoney://pluggy. */
+function connectPage(token, sandbox) {
+  const tk = JSON.stringify(token).replace(/</g, "\\u003c");
+  const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admoney · conectar banco</title><style>body{margin:0;font-family:sans-serif;background:#0b1020;color:#e8ecf8}#m{padding:24px;text-align:center}</style>
+<script src="https://cdn.pluggy.ai/connect/v2/pluggy-connect.js"></script></head>
+<body><div id="m">Abrindo a conexão segura…</div><script>
+function back(q){
+  var u = "intent://pluggy?" + q + "#Intent;scheme=admoney;package=com.admoney.app;end";
+  var m = document.getElementById("m");
+  m.innerHTML = '<p>Pronto! Toque para voltar ao Admoney.</p><p><a id="go" style="display:inline-block;padding:14px 22px;background:#4f7cff;color:#fff;border-radius:12px;text-decoration:none" href="' + u + '">Voltar ao Admoney</a></p>';
+  location.href = u;
+}
+window.onerror = function (m) { document.getElementById("m").textContent = "Erro: " + m; };
+try {
+  if (!window.PluggyConnect) throw new Error("não carregou o widget da Pluggy");
+  new window.PluggyConnect({
+    connectToken: ${tk}, includeSandbox: ${sandbox ? "true" : "false"},
+    onSuccess: function (d) { back("item=" + encodeURIComponent(d && d.item ? d.item.id : "")); },
+    onError: function (e) { back("error=" + encodeURIComponent(String((e && (e.message || e.code)) || "erro"))); },
+    onClose: function () { back("closed=1"); }
+  }).init();
+  document.getElementById("m").textContent = "";
+} catch (e) { document.getElementById("m").textContent = "Erro: " + e.message; setTimeout(function(){ back("error=" + encodeURIComponent(e.message)); }, 2500); }
+</script></body></html>`;
+  return new Response(html, { status: 200, headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store", "referrer-policy": "no-referrer" } });
+}
+
 async function route(request, env, f) {
   const url = new URL(request.url);
   if (url.pathname === "/" ) return json({ ok: true, app: "meu-banco-api" });
+  if (url.pathname === "/connect" && request.method === "GET") {
+    const t = url.searchParams.get("t") || "";
+    if (!/^[\w.-]{20,4000}$/.test(t)) return err(400, "token inválido");
+    return connectPage(t, url.searchParams.get("s") === "1");
+  }
   const uid = await whoIs(request, env, f);
   if (!uid) return err(401, "Entre com sua conta Google de novo.");
   if (limited(uid)) return err(429, "Muitas consultas. Tente em instantes.");

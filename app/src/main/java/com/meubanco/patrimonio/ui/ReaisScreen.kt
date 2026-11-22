@@ -27,6 +27,19 @@ fun ReaisScreen() {
     var connErr by remember { mutableStateOf("") }
     var linkedNow by remember { mutableStateOf(false) }
     var linkTick by remember { mutableIntStateOf(0) }
+    val res = Ui.pluggyResult
+    LaunchedEffect(res) {
+        if (res != null) {
+            Ui.pluggyResult = null
+            val m = res.split("&").associate { it.substringBefore("=") to java.net.URLDecoder.decode(it.substringAfter("=", ""), "UTF-8") }
+            when {
+                !m["item"].isNullOrBlank() -> { connErr = ""; linkedNow = true; PluggyApi.addItemId(ctx, m["item"]!!); linkTick++; busy = true
+                    val msg = PluggyApi.syncNow(ctx, Store.state); Store.commit(); busy = false; Ui.show(msg) }
+                m.containsKey("error") -> connErr = "Não foi possível conectar: ${m["error"]}"
+                else -> connErr = "A conexão foi fechada antes de concluir."
+            }
+        }
+    }
     var q by remember { mutableStateOf("") }
     var ym by remember { mutableStateOf(AppClock.todayISO().take(7)) }
 
@@ -54,6 +67,16 @@ fun ReaisScreen() {
                 } else {
                     Muted("Escolha seu banco e autorize o compartilhamento de dados pelo Open Finance. Você pode revogar quando quiser.")
                     PrimaryButton(if (busy) "Aguarde…" else "Conectar um banco", enabled = !busy) {
+                        busy = true; connErr = ""; linkedNow = false
+                        scope.launch {
+                            val r = Backend.connectToken(ctx); busy = false
+                            if (r.token != null) {
+                                try { ctx.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(Backend.connectUrl(r.token))).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)) }
+                                catch (e: Exception) { widgetToken = r.token }
+                            } else { connErr = r.error ?: "Não foi possível conectar agora"; Ui.show(connErr) }
+                        }
+                    }
+                    GhostButton("Conectar aqui dentro (alternativo)", Modifier.fillMaxWidth(), enabled = !busy) {
                         busy = true; connErr = ""; linkedNow = false
                         scope.launch {
                             val r = Backend.connectToken(ctx); busy = false

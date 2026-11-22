@@ -37,4 +37,10 @@ assert.equal((await handle(req("GET", `/p/accounts?itemId=nao-uuid`), env, f)).s
 // token de outro app (audiência errada) é recusado
 const f2 = async (u, o) => u.includes("tokeninfo") ? new Response(JSON.stringify({ azp: "OUTRO" })) : f(u, o);
 assert.equal((await handle(req("POST", "/connect-token", "GOOD2"), env, f2)).status, 401);
+// página do widget (sem login Google; o token da Pluggy é curto e só abre o widget)
+const pg = await handle(new Request("https://x.test/connect?t=" + "a".repeat(40) + "&s=1"), env, f);
+assert.equal(pg.status, 200);
+const html = await pg.text();
+assert.ok(html.includes("pluggy-connect.js") && html.includes("includeSandbox: true") && html.includes("admoney"));
+assert.equal((await handle(new Request("https://x.test/connect?t=curto"), env, f)).status, 400);
 console.log("worker: todos os testes passaram");

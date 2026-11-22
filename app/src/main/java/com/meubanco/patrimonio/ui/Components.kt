@@ -28,6 +28,8 @@ object Ui {
     var toast by mutableStateOf<String?>(null)
     var celebration by mutableStateOf<Celebration?>(null)
     var quickSpend by mutableStateOf(false)
+    /** Retorno do navegador após conectar o banco: item=..., error=... ou closed=1 */
+    var pluggyResult by mutableStateOf<String?>(null)
     val celebrationQueue = mutableListOf<Celebration>()
     fun show(msg: String, sub: String = "") { toast = if (sub.isBlank()) msg else "$msg — $sub" }
     fun enqueue(list: List<Celebration>) {

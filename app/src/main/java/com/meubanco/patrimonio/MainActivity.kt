@@ -53,6 +53,8 @@ class MainActivity : FragmentActivity() {
     override fun onNewIntent(intent: android.content.Intent) { super.onNewIntent(intent); handleIntent(intent) }
     private fun handleIntent(i: android.content.Intent?) {
         if (i?.action == com.meubanco.patrimonio.widget.BalanceWidget.ACTION_QUICK_SPEND) Ui.quickSpend = true
+        val d = i?.data
+        if (d != null && d.scheme == "admoney" && d.host == "pluggy") Ui.pluggyResult = d.query ?: "closed=1"
     }
 
     override fun onPause() { super.onPause(); Store.writeNow() }

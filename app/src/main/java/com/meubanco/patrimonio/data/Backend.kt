@@ -28,6 +28,9 @@ object Backend {
         ConnectToken(null, when (code) { 401 -> "Entre com sua conta Google de novo."; 429 -> "Muitas tentativas. Aguarde um minuto."; -1 -> "Sem resposta do servidor. Verifique a internet."; else -> "O servidor não conseguiu abrir a conexão agora ($code)" + (try { Json.parseToJsonElement(txt ?: "").jsonObject["error"]?.jsonPrimitive?.contentOrNull?.let { ": $it" } } catch (e: Exception) { null } ?: ".") })
     }
 
+    /** Endereço da página de conexão (abre no navegador do celular). */
+    fun connectUrl(token: String): String = url() + "/connect?t=" + java.net.URLEncoder.encode(token, "UTF-8") + (if (sandbox()) "&s=1" else "")
+
     suspend fun syncNow(ctx: Context, s: AppState): String {
         val g = googleToken(ctx) ?: return "Entre com sua conta Google de novo (Configurações → Conta Google)."
         return try {
