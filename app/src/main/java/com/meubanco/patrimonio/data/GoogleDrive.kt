@@ -26,7 +26,9 @@ object GoogleDrive {
     fun email(ctx: Context): String? = prefs(ctx).getString("email", null)
     fun isSignedIn(ctx: Context) = email(ctx) != null
     fun lastUpload(ctx: Context): String? = prefs(ctx).getString("last", null)
-    fun signOut(ctx: Context) { prefs(ctx).edit().clear().apply() }
+    fun signOut(ctx: Context) { prefs(ctx).edit().clear().apply(); try { photoFile(ctx).delete() } catch (_: Exception) {} }
+    fun name(ctx: Context): String? = prefs(ctx).getString("name", null)
+    fun photoFile(ctx: Context) = java.io.File(ctx.filesDir, "foto-google.jpg")
     fun saveEmail(ctx: Context, e: String) { prefs(ctx).edit().putString("email", e).apply() }
     private fun markUploaded(ctx: Context) { prefs(ctx).edit().putString("last", java.time.Instant.ofEpochMilli(AppClock.nowMs()).toString()).apply() }
 
@@ -50,6 +52,28 @@ object GoogleDrive {
         val (code, txt) = http.call("GET", "$API/about?fields=user(emailAddress,displayName)", hdr(token), null)
         if (code !in 200..299 || txt == null) return null
         return try { Json.parseToJsonElement(txt).jsonObject["user"]?.jsonObject?.get("emailAddress")?.jsonPrimitive?.contentOrNull } catch (e: Exception) { null }
+    }
+
+    class Profile(val email: String, val name: String?, val photoUrl: String?)
+
+    /** Perfil da conta Google (e-mail, nome e foto). */
+    fun profile(token: String, http: PluggyHttp = RealHttp): Profile? {
+        val (code, txt) = http.call("GET", "$API/about?fields=user(emailAddress,displayName,photoLink)", hdr(token), null)
+        if (code !in 200..299 || txt == null) return null
+        return try {
+            val u = Json.parseToJsonElement(txt).jsonObject["user"]?.jsonObject ?: return null
+            val mail = u["emailAddress"]?.jsonPrimitive?.contentOrNull ?: return null
+            Profile(mail, u["displayName"]?.jsonPrimitive?.contentOrNull, u["photoLink"]?.jsonPrimitive?.contentOrNull)
+        } catch (e: Exception) { null }
+    }
+
+    private fun downloadPhoto(ctx: Context, url: String) {
+        try {
+            val big = url.replace(Regex("=s\\d+(-c)?$"), "=s256-c")
+            val c = java.net.URL(big).openConnection() as java.net.HttpURLConnection
+            c.connectTimeout = 10000; c.readTimeout = 15000
+            if (c.responseCode in 200..299) c.inputStream.use { i -> photoFile(ctx).outputStream().use { o -> i.copyTo(o) } }
+        } catch (_: Exception) {}
     }
 
     private fun findId(token: String, http: PluggyHttp): String? {
@@ -97,13 +121,21 @@ object GoogleDrive {
      */
     suspend fun loginSync(ctx: Context, token: String): String = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
         try {
-            val mail = whoAmI(token) ?: return@withContext "Não consegui confirmar a conta"
+            val pr = profile(token) ?: return@withContext "Não consegui confirmar a conta"
+            val mail = pr.email
             saveEmail(ctx, mail)
+            prefs(ctx).edit().putString("name", pr.name).apply()
+            pr.photoUrl?.let { downloadPhoto(ctx, it) }
+            val first = pr.name?.trim()?.split(" ")?.firstOrNull().orEmpty()
             if (Store.state.onboardingCompleted == false) {
                 val txt = download(token)
                 if (txt != null) { Store.replace(decodeState(txt)); return@withContext "Bem-vindo de volta! Seus dados foram restaurados." }
-                "Conectado: $mail. Seus dados serão salvos sozinhos no seu Drive."
-            } else { backupNow(ctx, token); "Conectado: $mail. Backup automático ligado." }
+                if (first.isNotEmpty() && Store.state.settings.displayName.isBlank()) Store.mutate { it.settings.displayName = first }
+                "Olá, ${first.ifEmpty { mail }}! Seus dados serão salvos sozinhos no seu Drive."
+            } else {
+                if (first.isNotEmpty() && Store.state.settings.displayName.isBlank()) Store.mutate { it.settings.displayName = first }
+                backupNow(ctx, token); "Conectado: $mail. Backup automático ligado."
+            }
         } catch (e: Exception) { "Não consegui acessar o Drive (${e.message ?: "sem rede"})" }
     }
 

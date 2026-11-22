@@ -69,7 +69,8 @@ fun OnboardingScreen() {
                         GoogleAccountBox()
                     }
                 }
-                "name" -> { H2("Como podemos te chamar?"); Field(d.name, { d.name = it; tick++ }, "Nome") }
+                "name" -> { LaunchedEffect(Unit) { if (d.name.isBlank()) { val g = com.meubanco.patrimonio.data.GoogleDrive.name(ctx)?.trim()?.split(" ")?.firstOrNull().orEmpty(); if (g.isNotEmpty()) { d.name = g; tick++ } } }
+                    H2("Como podemos te chamar?"); Field(d.name, { d.name = it; tick++ }, "Nome") }
                 "goal" -> {
                     H2("O que você mais quer agora?")
                     Muted("Vamos priorizar as dicas e a tela inicial para esse objetivo.")

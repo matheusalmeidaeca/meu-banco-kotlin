@@ -4,7 +4,13 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.meubanco.patrimonio.data.GoogleDrive
@@ -46,10 +52,26 @@ fun GoogleAccountBox() {
                 Muted("Entre com sua conta Google. Seus dados ficam salvos sozinhos numa pasta escondida do seu Google Drive e voltam automaticamente se você reinstalar o app. Nenhum dado passa por servidor nosso.")
                 PrimaryButton(if (gBusy) "Aguarde…" else "Entrar com Google", enabled = !gBusy) { gStart() }
             } else {
-                Muted("✅ Conectado: $mail")
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                    GoogleAvatar(52.dp)
+                    Column {
+                        Txt(GoogleDrive.name(ctx) ?: "Conta Google", bold = true)
+                        Muted(mail)
+                    }
+                }
                 Muted("Backup automático ligado · último envio: ${GoogleDrive.lastUpload(ctx)?.take(16)?.replace('T', ' ') ?: "ainda não enviado"}")
                 GhostButton("Sair da conta", Modifier.fillMaxWidth(), danger = true) { GoogleDrive.signOut(ctx); gTick++ }
             }
         }
     }
+}
+
+/** Foto da conta Google (ou a inicial do nome, se ainda não baixou). */
+@Composable
+fun GoogleAvatar(size: Dp) {
+    val ctx = LocalContext.current
+    val bmp = remember(GoogleDrive.email(ctx)) {
+        try { android.graphics.BitmapFactory.decodeFile(GoogleDrive.photoFile(ctx).path)?.asImageBitmap() } catch (_: Exception) { null }
+    }
+    if (bmp != null) Image(bmp, null, Modifier.size(size).clip(CircleShape), contentScale = ContentScale.Crop)
 }

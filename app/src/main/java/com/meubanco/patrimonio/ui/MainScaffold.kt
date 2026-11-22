@@ -59,7 +59,10 @@ fun MainScaffold() {
         ModalDrawerSheet(drawerContainerColor = P.card) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 Column(Modifier.fillMaxWidth().background(P.card2).padding(18.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    Txt(if (s.settings.displayName.isBlank()) "Admoney" else "Olá, ${s.settings.displayName}", style = T.title, bold = true)
+                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                        GoogleAvatar(40.dp)
+                        Txt(if (s.settings.displayName.isBlank()) "Admoney" else "Olá, ${s.settings.displayName}", style = T.title, bold = true)
+                    }
                     Muted("Conta corrente")
                     Txt(money(s.cash), style = T.h2, bold = true)
                     Muted("Patrimônio ${if (s.settings.hideBalance) "R$ •••••" else formatBRL(totalNetWorth(s))}")
