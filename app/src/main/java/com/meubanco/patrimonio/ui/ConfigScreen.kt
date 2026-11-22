@@ -166,6 +166,12 @@ fun ConfigScreen() {
                 scope.launch { val ok = MarketApi.fetchCdi(Store.state); Store.commit(); cdiLoading = false; Ui.show(if (ok) "CDI atualizado" else "Sem resposta agora") }
             }
         }
+        Section("🔗 Modo dono (Meu Pluggy)") {
+            val octx = androidx.compose.ui.platform.LocalContext.current
+            var owner by remember { mutableStateOf(com.meubanco.patrimonio.data.BankNotif.ownerMode(octx)) }
+            SwitchRow("Mostrar \"Contas conectadas\" em Mais", owner) { owner = it; com.meubanco.patrimonio.data.BankNotif.setOwnerMode(octx, it) }
+            Muted("Uso pessoal: lê suas contas pelo Meu Pluggy com suas próprias chaves e IDs. Fica desligado para as outras pessoas.")
+        }
         Section("🔔 Avisos") {
             SwitchRow("Fatura do cartão", s.settings.notifyCard) { Store.mutate { st -> st.settings.notifyCard = it } }
             SwitchRow("Orçamento por categoria", s.settings.notifyBudget) { Store.mutate { st -> st.settings.notifyBudget = it } }

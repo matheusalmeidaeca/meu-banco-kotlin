@@ -144,6 +144,7 @@ val MAIN_TABS = listOf(
     "ajuda" to "Aprender & ajuda",
     "config" to "Configurações",
     "reais" to "Contas conectadas",
+    "capturas" to "Capturas dos bancos",
     "ir" to "Resumo para o IR",
     "mais" to "Mais",
 )

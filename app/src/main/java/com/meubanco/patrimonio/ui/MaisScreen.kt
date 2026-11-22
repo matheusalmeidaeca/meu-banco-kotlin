@@ -7,17 +7,19 @@ import com.meubanco.patrimonio.domain.*
 
 @Composable
 fun MaisScreen(goTab: (String) -> Unit, visible: List<String>) {
-    val s = state()
+    val s = state(); val ctx = androidx.compose.ui.platform.LocalContext.current
+    val owner = com.meubanco.patrimonio.data.BankNotif.ownerMode(ctx)
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         H2("Mais")
         listOf(
             Triple("historico", "🧾 Extrato & histórico", "Busca, filtros por mês, PDF e CSV"),
+            Triple("capturas", "🔔 Capturas dos bancos", "Notificações do banco viram sugestões de lançamento"),
             Triple("reais", "🔗 Contas conectadas", "Bancos reais via Meu Pluggy (somente leitura)"),
             Triple("ir", "🧾 Resumo para o IR", "Entradas, dividendos e saldos do ano"),
             Triple("ponto", "⏱ Ponto", "Registro de horas e extras (módulo opcional)"),
             Triple("ajuda", "💡 Aprender & ajuda", "Glossário e proteção contra golpes"),
             Triple("config", "⚙️ Configurações", "Perfil, segurança, notificações, backup"),
-        ).filter { it.first in visible }.forEach { (k, title, desc) ->
+        ).filter { it.first in visible && (it.first != "reais" || owner) }.forEach { (k, title, desc) ->
             Card(onClick = { goTab(k) }) { Txt(title, bold = true); Muted(desc) }
         }
         if ("ponto" !in visible) Muted("O módulo Ponto está desligado. Ative em Configurações → Objetivo e abas.")

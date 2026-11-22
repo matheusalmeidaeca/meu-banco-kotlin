@@ -10,7 +10,8 @@ import kotlinx.serialization.json.*
 /** Conexão com os bancos pelo servidor do app (Pluggy Connect). O usuário só entra com Google e escolhe o banco. */
 object Backend {
     fun url(): String = BuildConfig.BACKEND_URL.trim().trimEnd('/')
-    fun enabled(): Boolean = url().isNotEmpty()
+    /** Open Finance pelo servidor está desligado: as outras pessoas usam captura por notificação e importação de extrato. */
+    fun enabled(): Boolean = false
     fun sandbox(): Boolean = BuildConfig.PLUGGY_SANDBOX
 
     private suspend fun googleToken(ctx: Context): String? = try { GoogleDrive.authorize(ctx).token } catch (e: Exception) { null }
