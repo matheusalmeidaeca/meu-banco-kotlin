@@ -76,7 +76,7 @@ export async function handle(request, env, f = fetch) {
   if (url.pathname === "/connect-token" && request.method === "POST") {
     let itemId; try { itemId = (await request.json()).itemId; } catch { /* sem corpo */ }
     if (itemId && !(await ownsItem(env, f, uid, itemId))) return err(403, "Conexão não é sua.");
-    const body = { options: { clientUserId: uid, oauthRedirectUri: OAUTH_REDIRECT, avoidDuplicates: true } };
+    const body = { options: { clientUserId: uid, oauthRedirectUri: OAUTH_REDIRECT } };
     if (itemId) body.itemId = itemId;
     const r = await pluggy(env, f, "POST", "/connect_token", body);
     if (r.status !== 200 || !r.data?.accessToken) return err(502, "A Pluggy não liberou a conexão agora.");
