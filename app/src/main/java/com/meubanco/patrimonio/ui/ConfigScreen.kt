@@ -183,24 +183,8 @@ fun ConfigScreen() {
             SwitchRow("Assistente (dicas)", s.settings.assistantEnabled) { Store.mutate { st -> st.settings.assistantEnabled = it } }
             SwitchRow("Comemorações", s.settings.celebrationsEnabled) { Store.mutate { st -> st.settings.celebrationsEnabled = it } }
         }
-        Section("💾 Dados") {
-            Muted(s.lastBackupAt?.let { "Último backup: ${it.take(10)}" } ?: "Nenhum backup exportado ainda.")
-            SwitchRow("Cópia automática diária (no aparelho)", s.settings.autoBackupEnabled) { Store.mutate { st -> st.settings.autoBackupEnabled = it } }
-            PrimaryButton("Exportar backup") { export.launch(Backup.suggestedName()) }
-            GhostButton("Importar backup (.json)", Modifier.fillMaxWidth()) { import.launch(arrayOf("application/json", "text/plain", "*/*")) }
-            Muted("Aceita também backups exportados pelo app em HTML.")
+        Section("🧾 Extrato e ferramentas") {
             GhostButton("Exportar extrato em CSV (planilha)", Modifier.fillMaxWidth()) { csv.launch("extrato-" + AppClock.todayISO() + ".csv") }
-            GhostButton("Restaurar de uma cópia automática", Modifier.fillMaxWidth()) { restore = true }
-            H2("☁️ Backup em nuvem")
-            key(cloudTick) {
-                val folder = Backup.cloudFolderName(ctx)
-                Muted(if (folder == null) "Escolha uma pasta do Google Drive, Dropbox, OneDrive… (elas aparecem na lista de pastas do Android). O backup é regravado todo dia sozinho."
-                      else "Pasta: $folder · último envio: ${Backup.cloudLast(ctx)?.take(16)?.replace('T', ' ') ?: "—"}")
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    GhostButton(if (folder == null) "Escolher pasta" else "Trocar pasta", Modifier.weight(1f)) { cloudPick.launch(null) }
-                    if (folder != null) GhostButton("Salvar agora", Modifier.weight(1f)) { Ui.show(if (Backup.writeCloud(ctx)) "Backup enviado" else "Falhou — escolha a pasta de novo"); cloudTick++ }
-                }
-            }
             H2("🏦 Importar extrato do banco")
             Muted("Arquivo CSV ou OFX baixado do app/site do seu banco. Entradas e saídas ajustam o saldo e entram no histórico; lançamentos repetidos são ignorados.")
             GhostButton("Escolher arquivo (.csv / .ofx)", Modifier.fillMaxWidth()) { stmtPick.launch(arrayOf("*/*")) }
@@ -215,7 +199,7 @@ fun ConfigScreen() {
             GhostButton("Zerar histórico e movimentos", danger = true) { confirm = "Apagar histórico, extrato e estatísticas? Saldos não mudam." to { Store.mutate { resetPartial(it, "history") } } }
             GhostButton("Apagar tudo e recomeçar", danger = true) { confirm = "Apagar TODOS os dados e recomeçar o cadastro? Isso não pode ser desfeito." to { Store.resetAll() } }
         }
-        Muted("Meu Banco & Patrimônio · versão 51.0-kotlin")
+        Muted("Meu Banco & Patrimônio · versão 59.0-kotlin")
     }
     }
     pinDialog.let { if (it) PinSetDialog { pinDialog = false } }

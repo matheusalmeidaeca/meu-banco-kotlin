@@ -64,8 +64,8 @@ fun OnboardingScreen() {
                     Txt("Em poucos passos você monta o seu banco pessoal: contas, cartão, reservas, dívidas e investimentos.")
                     Muted("Tudo fica só no seu celular. Você pode mudar qualquer resposta depois em Configurações.")
                     Card {
-                        H2("🔐 Já usa o app ou quer backup?")
-                        Muted("Entre com sua conta Google: se já existir um backup no seu Drive, toque em Restaurar e pule o cadastro. Se não, é só continuar.")
+                        H2("🔐 Entre com Google")
+                        Muted("Se você já usava o app, seus dados voltam sozinhos. Se é a primeira vez, é só continuar o cadastro.")
                         GoogleAccountBox()
                     }
                 }

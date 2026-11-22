@@ -47,7 +47,7 @@ fun ReaisScreen() {
             Card {
                 Txt("Conectar banco", bold = true)
                 if (!GoogleDrive.isSignedIn(ctx)) {
-                    Muted("Primeiro entre com sua conta Google em Configurações → Dados → Conta Google. Depois volte aqui.")
+                    Muted("Primeiro entre com sua conta Google em Configurações → Conta Google. Depois volte aqui.")
                 } else {
                     Muted("Escolha seu banco e autorize o compartilhamento de dados pelo Open Finance. Você pode revogar quando quiser.")
                     PrimaryButton(if (busy) "Aguarde…" else "Conectar um banco", enabled = !busy) {

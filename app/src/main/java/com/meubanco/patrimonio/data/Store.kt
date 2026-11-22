@@ -45,8 +45,23 @@ object Store {
         return r
     }
 
+    private var cloudJob: Job? = null
+    /** Backup automático no Drive da pessoa: junta as alterações e envia pouco depois. */
+    private fun scheduleCloud(delayMs: Long = 15_000) {
+        val c = appCtx ?: return
+        if (!GoogleDrive.isSignedIn(c) || state.onboardingCompleted == false) return
+        cloudJob?.cancel()
+        cloudJob = scope.launch {
+            delay(delayMs)
+            try { val a = GoogleDrive.authorize(c); if (a.token != null) GoogleDrive.backupNow(c, a.token) } catch (_: Exception) {}
+        }
+    }
+    /** Chamado quando o app vai para o segundo plano. */
+    fun flushCloud() { if (cloudJob?.isActive == true) scheduleCloud(0) }
+
     fun commit() {
         rev++
+        scheduleCloud()
         val snapshot = file ?: return
         saveJob?.cancel()
         saveJob = scope.launch {

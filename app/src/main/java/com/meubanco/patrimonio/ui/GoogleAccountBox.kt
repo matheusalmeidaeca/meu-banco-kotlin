@@ -17,56 +17,39 @@ fun GoogleAccountBox() {
     val scope = rememberCoroutineScope()
     var gTick by remember { mutableIntStateOf(0) }
     var gBusy by remember { mutableStateOf(false) }
-    var gRestore by remember { mutableStateOf(false) }
-    var gAction by remember { mutableStateOf("login") } // o que fazer depois do consentimento
-    fun gRun(token: String, action: String) {
+    fun gRun(token: String) {
         scope.launch {
             gBusy = true
-            when (action) {
-                "login" -> {
-                    val mail = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { GoogleDrive.whoAmI(token) }
-                    if (mail != null) { GoogleDrive.saveEmail(ctx, mail); Ui.show("Conectado: $mail") } else Ui.show("Não consegui confirmar a conta")
-                }
-                "backup" -> Ui.show(GoogleDrive.backupNow(ctx, token))
-                "restore" -> Ui.show(GoogleDrive.restoreNow(token))
-            }
+            Ui.show(GoogleDrive.loginSync(ctx, token))
             gBusy = false; gTick++
         }
     }
     val gLauncher = remember { mutableStateOf<androidx.activity.result.ActivityResultLauncher<androidx.activity.result.IntentSenderRequest>?>(null) }
     gLauncher.value = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { r ->
         val tk = GoogleDrive.tokenFromIntent(ctx, r.data)
-        if (tk != null) gRun(tk, gAction) else Ui.show("Login cancelado")
+        if (tk != null) gRun(tk) else Ui.show("Login cancelado")
     }
-    fun gStart(action: String) {
+    fun gStart() {
         scope.launch {
-            gAction = action; gBusy = true
+            gBusy = true
             try {
                 val a = GoogleDrive.authorize(ctx)
-                if (a.token != null) { gBusy = false; gRun(a.token, action) }
+                if (a.token != null) { gBusy = false; gRun(a.token) }
                 else { gBusy = false; gLauncher.value?.launch(androidx.activity.result.IntentSenderRequest.Builder(a.pending!!.intentSender).build()) }
             } catch (e: Exception) { gBusy = false; Ui.show("Login Google indisponível (${e.message ?: "erro"})") }
         }
     }
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            key(gTick) {
-                val mail = GoogleDrive.email(ctx)
-                if (mail == null) {
-                    Muted("Entre com sua conta Google para guardar o backup numa pasta escondida do seu próprio Google Drive. Só este app enxerga essa pasta. Nenhum dado passa por servidor nosso.")
-                    PrimaryButton(if (gBusy) "Aguarde…" else "Entrar com Google", enabled = !gBusy) { gStart("login") }
-                } else {
-                    Muted("Conectado: $mail · último envio: ${GoogleDrive.lastUpload(ctx)?.take(16)?.replace('T', ' ') ?: "—"}")
-                    Muted("O backup é enviado sozinho todo dia (se a cópia automática estiver ligada).")
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        GhostButton("Salvar agora", Modifier.weight(1f), enabled = !gBusy) { gStart("backup") }
-                        GhostButton("Restaurar", Modifier.weight(1f), enabled = !gBusy) { gRestore = true }
-                    }
-                    GhostButton("Sair da conta", Modifier.fillMaxWidth(), danger = true) { GoogleDrive.signOut(ctx); gTick++ }
-                }
-                if (gRestore) { Muted("Restaurar substitui os dados atuais pelos do backup no Drive."); Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    GhostButton("Cancelar", Modifier.weight(1f)) { gRestore = false }
-                    PrimaryButton("Restaurar", Modifier.weight(1f)) { gRestore = false; gStart("restore") }
-                } }
+        key(gTick) {
+            val mail = GoogleDrive.email(ctx)
+            if (mail == null) {
+                Muted("Entre com sua conta Google. Seus dados ficam salvos sozinhos numa pasta escondida do seu Google Drive e voltam automaticamente se você reinstalar o app. Nenhum dado passa por servidor nosso.")
+                PrimaryButton(if (gBusy) "Aguarde…" else "Entrar com Google", enabled = !gBusy) { gStart() }
+            } else {
+                Muted("✅ Conectado: $mail")
+                Muted("Backup automático ligado · último envio: ${GoogleDrive.lastUpload(ctx)?.take(16)?.replace('T', ' ') ?: "ainda não enviado"}")
+                GhostButton("Sair da conta", Modifier.fillMaxWidth(), danger = true) { GoogleDrive.signOut(ctx); gTick++ }
             }
+        }
     }
 }

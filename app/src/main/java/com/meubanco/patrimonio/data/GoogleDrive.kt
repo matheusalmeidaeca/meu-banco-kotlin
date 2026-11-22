@@ -91,6 +91,22 @@ object GoogleDrive {
         } catch (e: Exception) { "Não consegui restaurar (${e.message ?: "sem rede"})" }
     }
 
+    /**
+     * Depois do login: se o app está "zerado" (instalação nova) e já existe backup no Drive, restaura sozinho.
+     * Se o app já tem dados, só liga o backup automático e envia uma cópia.
+     */
+    suspend fun loginSync(ctx: Context, token: String): String = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+        try {
+            val mail = whoAmI(token) ?: return@withContext "Não consegui confirmar a conta"
+            saveEmail(ctx, mail)
+            if (Store.state.onboardingCompleted == false) {
+                val txt = download(token)
+                if (txt != null) { Store.replace(decodeState(txt)); return@withContext "Bem-vindo de volta! Seus dados foram restaurados." }
+                "Conectado: $mail. Seus dados serão salvos sozinhos no seu Drive."
+            } else { backupNow(ctx, token); "Conectado: $mail. Backup automático ligado." }
+        } catch (e: Exception) { "Não consegui acessar o Drive (${e.message ?: "sem rede"})" }
+    }
+
     /** Para o worker diário: sem tela. Se a autorização exigir tela, simplesmente não faz nada. */
     suspend fun dailyBackup(ctx: Context) {
         if (!isSignedIn(ctx)) return

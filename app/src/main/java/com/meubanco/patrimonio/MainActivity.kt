@@ -27,7 +27,7 @@ class MainActivity : FragmentActivity() {
             var unlocked by rememberSaveable { mutableStateOf(false) }
             // volta do segundo plano: exige PIN de novo e acompanha a data real
             var stoppedAt by rememberSaveable { mutableStateOf(0L) }
-            LifecycleEventEffect(Lifecycle.Event.ON_STOP) { stoppedAt = System.currentTimeMillis(); Store.writeNow() }
+            LifecycleEventEffect(Lifecycle.Event.ON_STOP) { stoppedAt = System.currentTimeMillis(); Store.writeNow(); Store.flushCloud() }
             LaunchedEffect(s.settings.secureScreen) {
                 if (s.settings.secureScreen) window.setFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE, android.view.WindowManager.LayoutParams.FLAG_SECURE)
                 else window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE)
