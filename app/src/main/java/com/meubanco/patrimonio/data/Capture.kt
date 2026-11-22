@@ -7,7 +7,7 @@ import java.io.File
 /** Uma movimentação lida de uma notificação de banco, esperando o usuário confirmar. */
 class Cap(val id: Long, val kind: String, val amount: Double, val desc: String, val bank: String)
 
-/** Lê notificações de apps de banco (no próprio aparelho) e transforma em sugestões de lançamento. Nada sai do celular. */
+/** Transforma o texto de avisos de banco em sugestões de lançamento. Tudo no aparelho, sem permissão sensível. */
 object BankNotif {
     private val BANKS = linkedMapOf(
         "nu.production" to "Nubank", "caixa" to "Caixa", "mercadopago" to "Mercado Pago", "picpay" to "PicPay",
@@ -26,8 +26,12 @@ object BankNotif {
     fun parseMoney(s: String): Double? = MONEY.find(s)?.groupValues?.get(1)?.replace(".", "")?.replace(",", ".")?.toDoubleOrNull()
 
     /** Devolve a sugestão, ou null se a notificação não for uma movimentação clara. */
-    fun parse(pkg: String, title: String, text: String, now: Long): Cap? {
-        val bank = bankOf(pkg) ?: return null
+    fun parse(pkg: String, title: String, text: String, now: Long): Cap? { val b = bankOf(pkg) ?: return null; return parseCore(b, title, text, now) }
+
+    /** Texto colado ou compartilhado pelo usuário (aviso do banco, comprovante de Pix). */
+    fun parseText(text: String, now: Long): Cap? = parseCore("Compartilhado", "", text, now)
+
+    private fun parseCore(bank: String, title: String, text: String, now: Long): Cap? {
         val all = "$title. $text".replace('\n', ' ')
         if (IGNORE.containsMatchIn(all)) return null
         val amount = parseMoney(all) ?: return null
@@ -64,9 +68,6 @@ object BankNotif {
         save(ctx, (listOf(c) + l).take(100)); true
     }
     fun remove(ctx: Context, id: Long) = synchronized(lock) { save(ctx, load(ctx).filter { it.id != id }) }
-
-    fun listenerEnabled(ctx: Context): Boolean =
-        androidx.core.app.NotificationManagerCompat.getEnabledListenerPackages(ctx).contains(ctx.packageName)
 
     private fun prefs(ctx: Context) = ctx.getSharedPreferences("admoney_flags", Context.MODE_PRIVATE)
     /** Modo do dono: libera a tela "Contas conectadas" (Meu Pluggy com chaves e IDs). Desligado para as outras pessoas. */

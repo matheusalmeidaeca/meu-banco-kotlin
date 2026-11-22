@@ -53,6 +53,12 @@ class MainActivity : FragmentActivity() {
     override fun onNewIntent(intent: android.content.Intent) { super.onNewIntent(intent); handleIntent(intent) }
     private fun handleIntent(i: android.content.Intent?) {
         if (i?.action == com.meubanco.patrimonio.widget.BalanceWidget.ACTION_QUICK_SPEND) Ui.quickSpend = true
+        if (i?.action == android.content.Intent.ACTION_SEND && i.type == "text/plain") {
+            val txt = i.getStringExtra(android.content.Intent.EXTRA_TEXT) ?: ""
+            val cap = com.meubanco.patrimonio.data.BankNotif.parseText(txt, System.currentTimeMillis())
+            if (cap != null) { com.meubanco.patrimonio.data.BankNotif.add(applicationContext, cap); Ui.show("Sugestão criada: Mais → Capturas dos bancos") }
+            else Ui.show("Não achei um valor em R$ nesse texto.")
+        }
         val d = i?.data
         if (d != null && d.scheme == "admoney" && d.host == "pluggy") Ui.pluggyResult = d.query ?: "closed=1"
     }
