@@ -1,4 +1,4 @@
-# Meu Banco & Patrimônio (Kotlin)
+# Admoney (Kotlin)
 
 App Android nativo (Kotlin + Jetpack Compose) reescrito a partir do app em HTML v48.
 

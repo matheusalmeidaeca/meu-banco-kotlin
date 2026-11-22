@@ -3,7 +3,7 @@
 // Não grava nada: não há banco de dados aqui.
 
 const PLUGGY = "https://api.pluggy.ai";
-const OAUTH_REDIRECT = "meubanco://pluggy";
+const OAUTH_REDIRECT = "admoney://pluggy";
 let apiKeyCache = { key: null, exp: 0 };
 const authCache = new Map();   // token Google -> { uid, exp }
 const hits = new Map();        // uid -> { n, reset }

@@ -199,7 +199,7 @@ fun ConfigScreen() {
             GhostButton("Zerar histórico e movimentos", danger = true) { confirm = "Apagar histórico, extrato e estatísticas? Saldos não mudam." to { Store.mutate { resetPartial(it, "history") } } }
             GhostButton("Apagar tudo e recomeçar", danger = true) { confirm = "Apagar TODOS os dados e recomeçar o cadastro? Isso não pode ser desfeito." to { Store.resetAll() } }
         }
-        Muted("Meu Banco & Patrimônio · versão 59.0-kotlin")
+        Muted("Admoney · versão 59.0-kotlin")
     }
     }
     pinDialog.let { if (it) PinSetDialog { pinDialog = false } }

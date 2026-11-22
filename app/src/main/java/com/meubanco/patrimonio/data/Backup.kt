@@ -69,7 +69,7 @@ object Backup {
         var page = doc.startPage(PdfDocument.PageInfo.Builder(pw, ph, pageNo).create())
         var c = page.canvas
         var y = m + 16
-        c.drawText("Extrato — Meu Banco & Patrimônio", m, y, title); y += 18
+        c.drawText("Extrato — Admoney", m, y, title); y += 18
         c.drawText((s.settings.displayName.ifBlank { "Titular" }) + " · gerado em " + formatSimDate(s.simDateISO), m, y, body); y += 22
         for (e in entries) {
             if (y > ph - m) {

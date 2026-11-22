@@ -52,7 +52,7 @@ object RealHttp : PluggyHttp {
     private fun once(method: String, url: String, headers: Map<String, String>, body: String?, ip: String?): Pair<Int, String?> {
         val c = open(url, URL(url).host, ip)
         c.requestMethod = method; c.connectTimeout = 25000; c.readTimeout = 40000
-        c.setRequestProperty("User-Agent", "MeuBancoPatrimonio/56")
+        c.setRequestProperty("User-Agent", "Admoney/59")
         headers.forEach { (k, v) -> c.setRequestProperty(k, v) }
         if (body != null) { c.doOutput = true; c.outputStream.use { it.write(body.toByteArray()) } }
         val code = c.responseCode

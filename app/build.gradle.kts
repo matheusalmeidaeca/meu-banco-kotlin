@@ -10,7 +10,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.meubanco.patrimonio"
+        applicationId = "com.admoney.app"
         minSdk = 26
         targetSdk = 34
         buildConfigField("String", "BACKEND_URL", "\"" + (System.getenv("BACKEND_URL") ?: "") + "\"")

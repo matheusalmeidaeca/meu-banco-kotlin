@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Meu Banco &amp; Patrimônio</string>
+    <string name="app_name">Admoney</string>
     <string name="atalho_gasto">Registrar gasto</string>
     <string name="atalho_gasto_longo">Registrar gasto livre</string>
 </resources>

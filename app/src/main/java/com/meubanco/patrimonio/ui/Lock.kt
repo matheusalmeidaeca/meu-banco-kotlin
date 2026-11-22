@@ -27,7 +27,7 @@ fun promptBiometric(a: FragmentActivity, onOk: () -> Unit, onFail: () -> Unit = 
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) = onFail()
     })
     val info = BiometricPrompt.PromptInfo.Builder()
-        .setTitle("Meu Banco & Patrimônio").setSubtitle("Confirme que é você")
+        .setTitle("Admoney").setSubtitle("Confirme que é você")
         .setNegativeButtonText("Usar PIN")
         .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK).build()
     prompt.authenticate(info)
@@ -45,7 +45,7 @@ fun LockScreen(onUnlock: () -> Unit) {
     Column(Modifier.fillMaxSize().padding(28.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
         Txt("🔒", style = T.big)
         Spacer(Modifier.height(8.dp))
-        Txt("Meu Banco & Patrimônio", style = T.title, bold = true)
+        Txt("Admoney", style = T.title, bold = true)
         Muted(if (s.settings.displayName.isBlank()) "Digite seu PIN" else "Olá, ${s.settings.displayName}. Digite seu PIN")
         Spacer(Modifier.height(16.dp))
         OutlinedTextField(pin, { v -> pin = v.filter { it.isDigit() }.take(8); err = false },

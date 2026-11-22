@@ -22,7 +22,7 @@ fun AprenderScreen(goTab: (String) -> Unit) {
                 Muted("Se cair em golpe: ligue já para o seu banco, registre um boletim de ocorrência e peça o bloqueio/MED do Pix.")
             }
             else -> Card {
-                H2("Meu Banco & Patrimônio")
+                H2("Admoney")
                 KV("Versão", "59.0-kotlin")
                 Txt("Controle financeiro pessoal e simulador de investimentos. Não é banco nem corretora e não move dinheiro real.", color = P.muted)
                 Txt("Privacidade: os dados ficam somente no seu aparelho. O app acessa a internet só para cotações, CDI e consulta de código de barras.", color = P.muted)
