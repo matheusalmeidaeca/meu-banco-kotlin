@@ -15,8 +15,8 @@ android {
         targetSdk = 34
         buildConfigField("String", "BACKEND_URL", "\"" + (System.getenv("BACKEND_URL") ?: "") + "\"")
         buildConfigField("boolean", "PLUGGY_SANDBOX", (System.getenv("PLUGGY_SANDBOX") == "1").toString())
-        versionCode = 58
-        versionName = "58.0-kotlin"
+        versionCode = 59
+        versionName = "59.0-kotlin"
     }
 
     // Chave fixa (vem dos Secrets do GitHub). Sem ela, cai na chave de debug e o app continua compilando.

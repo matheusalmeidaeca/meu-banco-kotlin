@@ -63,6 +63,11 @@ fun OnboardingScreen() {
                     Txt("Bem-vindo! 👋", style = T.big, bold = true)
                     Txt("Em poucos passos você monta o seu banco pessoal: contas, cartão, reservas, dívidas e investimentos.")
                     Muted("Tudo fica só no seu celular. Você pode mudar qualquer resposta depois em Configurações.")
+                    Card {
+                        H2("🔐 Já usa o app ou quer backup?")
+                        Muted("Entre com sua conta Google: se já existir um backup no seu Drive, toque em Restaurar e pule o cadastro. Se não, é só continuar.")
+                        GoogleAccountBox()
+                    }
                 }
                 "name" -> { H2("Como podemos te chamar?"); Field(d.name, { d.name = it; tick++ }, "Nome") }
                 "goal" -> {
