@@ -35,6 +35,8 @@ fun OnboardingScreen() {
     val step = steps.getOrElse(idx) { "done" }
     var err by remember { mutableStateOf("") }
     var pin by remember { mutableStateOf("") }
+    var pin2 by remember { mutableStateOf("") }
+    var newExp by remember { mutableStateOf("") }
     val notif = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
 
     BackHandler(enabled = idx > 0) { idx-- }
@@ -50,6 +52,7 @@ fun OnboardingScreen() {
             "cardLimit" -> if (d.cardLimit <= 0) { err = "Informe o limite do cartão."; return }
             "debts" -> if (d.debts.none { it.balance > 0 }) { err = "Informe ao menos uma dívida (ou volte e escolha \"Não\")."; return }
             "security" -> if (pin.isNotEmpty() && pin.length < 4) { err = "O PIN precisa ter ao menos 4 dígitos."; return }
+                else if (pin.isNotEmpty() && pin != pin2) { err = "Os dois PINs precisam ser iguais."; return }
         }
         if (idx < steps.size - 1) idx++
     }
@@ -62,7 +65,7 @@ fun OnboardingScreen() {
                 "welcome" -> {
                     Txt("Bem-vindo! 👋", style = T.big, bold = true)
                     Txt("Em poucos passos você monta o seu banco pessoal: contas, cartão, reservas, dívidas e investimentos.")
-                    Muted("Tudo fica só no seu celular. Você pode mudar qualquer resposta depois em Configurações.")
+                    Muted("Leva cerca de 3 minutos. Tudo fica só no seu celular e você pode mudar qualquer resposta depois em Configurações.")
                     Card {
                         H2("🔐 Entre com Google")
                         Muted("Se você já usava o app, seus dados voltam sozinhos. Se é a primeira vez, é só continuar o cadastro.")
@@ -112,13 +115,29 @@ fun OnboardingScreen() {
                 "wantExpenses" -> { H2("Quer cadastrar seus gastos fixos agora?"); Muted("Aluguel, luz, internet… Dá para fazer depois."); ChipRow(listOf("n" to "Depois", "s" to "Sim"), if (d.wantExpenses) "s" else "n") { d.wantExpenses = it == "s"; tick++ } }
                 "expenses" -> {
                     H2("Gastos fixos do mês")
-                    d.expenses.forEach { e -> Card { Txt(e.name, bold = true); NumField(e.amount, { e.amount = it ?: 0.0 }, "Valor", suffix = "R$") } }
+                    Muted("Toque para adicionar os mais comuns e preencha o valor. Pode deixar o resto para depois.")
+                    ChipRow(COMMON_EXPENSES.map { it to it }, "") { n -> if (d.expenses.none { e -> e.name.equals(n, true) }) { d.expenses.add(ObExpense(n, 0.0, "Outros")); tick++ } }
+                    d.expenses.forEachIndexed { i, e ->
+                        Card { Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Txt(e.name, bold = true); androidx.compose.material3.TextButton({ d.expenses.removeAt(i); tick++ }) { androidx.compose.material3.Text("Remover") } }
+                            NumField(e.amount, { e.amount = it ?: 0.0; tick++ }, "Valor", suffix = "R$") }
+                    }
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Field(newExp, { newExp = it }, "Outro gasto fixo", Modifier.weight(1f))
+                        GhostButton("＋", enabled = newExp.isNotBlank()) { d.expenses.add(ObExpense(newExp.trim(), 0.0, "Outros")); newExp = ""; tick++ }
+                    }
+                    val ins = onboardingInsights(d)
+                    if (ins.fixedTotal > 0) Muted("Total: ${formatBRL(ins.fixedTotal)}" + (ins.fixedPct?.let { " · ${fmtPlain(Math.round(it * 10) / 10.0)}% da renda informada" } ?: ""))
                 }
-                "balance" -> { H2("Saldo atual na conta"); NumField(d.cash, { d.cash = it ?: 0.0 }, "Saldo", suffix = "R$") }
+                "balance" -> { H2("Saldo atual na conta"); Muted("Pode ser aproximado. Você ajusta quando quiser."); NumField(d.cash, { d.cash = it ?: 0.0 }, "Saldo", suffix = "R$") }
                 "reserve" -> {
                     H2("Você já tem dinheiro guardado?")
                     Muted("Reserva de emergência, poupança, CDB… Vai para a caixinha \"Reserva de emergência\". Pode ser zero.")
-                    NumField(d.reserveStart, { d.reserveStart = it ?: 0.0 }, "Valor guardado", suffix = "R$")
+                    NumField(d.reserveStart, { d.reserveStart = it ?: 0.0; tick++ }, "Valor guardado", suffix = "R$")
+                    val ins = onboardingInsights(d)
+                    if (ins.fixedTotal > 0) {
+                        Muted("Uma meta comum é guardar 6 meses de gastos fixos: ${formatBRL(ins.reserveTarget)}.")
+                        ins.reserveMonths?.let { Progress(it / 6.0); Muted("Hoje você cobre ${fmtPlain(Math.round(it * 10) / 10.0)} mes(es) de gastos fixos.") }
+                    }
                 }
                 "hasDebts" -> {
                     H2("Você tem dívidas?")
@@ -145,6 +164,7 @@ fun OnboardingScreen() {
                     H2("Proteja o seu app")
                     Muted("Opcional. Um PIN impede que outra pessoa abra o app se pegar o seu celular.")
                     Field(pin, { pin = it.filter { c -> c.isDigit() }.take(8) }, "PIN (4 a 8 dígitos)", keyboard = KeyboardType.NumberPassword)
+                    if (pin.isNotEmpty()) Field(pin2, { pin2 = it.filter { c -> c.isDigit() }.take(8) }, "Repita o PIN", keyboard = KeyboardType.NumberPassword)
                     if (Build.VERSION.SDK_INT >= 33) {
                         Spacer8()
                         Muted("Avisos de fatura, orçamento e backup precisam da permissão de notificações.")
@@ -163,6 +183,14 @@ fun OnboardingScreen() {
                         KV("Reserva guardada", formatBRL(d.reserveStart))
                         KV("Dívidas", if (d.hasDebts) formatBRL(d.debts.sumOf { it.balance }) else "nenhuma")
                         KV("PIN", if (pin.length >= 4) "ativado" else "não")
+                    }
+                    val ins = onboardingInsights(d)
+                    Card {
+                        H2("📊 Seu ponto de partida")
+                        if (ins.fixedTotal > 0) KV("Gastos fixos", formatBRL(ins.fixedTotal) + (ins.fixedPct?.let { " (${fmtPlain(Math.round(it * 10) / 10.0)}% da renda)" } ?: ""))
+                        ins.reserveMonths?.let { KV("Reserva cobre", fmtPlain(Math.round(it * 10) / 10.0) + " mes(es)") }
+                        if (ins.debtTotal > 0) KV("Dívidas", formatBRL(ins.debtTotal))
+                        ins.tips.forEach { Muted("• $it") }
                     }
                     Muted("Você pode voltar e corrigir qualquer passo.")
                 }

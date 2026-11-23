@@ -13,6 +13,7 @@ fun MaisScreen(goTab: (String) -> Unit, visible: List<String>) {
         H2("Mais")
         listOf(
             Triple("historico", "🧾 Extrato & histórico", "Busca, filtros por mês, PDF e CSV"),
+            Triple("smart", "⚡ Lançamento inteligente", "Fale, escreva ou leia um QR Pix"),
             Triple("capturas", "🔔 Capturas dos bancos", "Notificações do banco viram sugestões de lançamento"),
             Triple("reais", "🔗 Contas conectadas", "Bancos reais via Meu Pluggy (somente leitura)"),
             Triple("ir", "🧾 Resumo para o IR", "Entradas, dividendos e saldos do ano"),

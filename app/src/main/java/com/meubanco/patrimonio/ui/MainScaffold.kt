@@ -14,9 +14,9 @@ import com.meubanco.patrimonio.data.Store
 import com.meubanco.patrimonio.domain.*
 import kotlinx.coroutines.launch
 
-val TAB_ICON = mapOf("conta" to "🏦", "historico" to "🧾", "carteira" to "📈", "gastos" to "🛒", "plano" to "🧭", "ponto" to "⏱", "ajuda" to "💡", "config" to "⚙️", "mais" to "☰", "ir" to "🧾", "reais" to "🔗", "capturas" to "🔔")
+val TAB_ICON = mapOf("conta" to "🏦", "historico" to "🧾", "carteira" to "📈", "gastos" to "🛒", "plano" to "🧭", "ponto" to "⏱", "ajuda" to "💡", "config" to "⚙️", "mais" to "☰", "ir" to "🧾", "reais" to "🔗", "capturas" to "🔔", "smart" to "⚡")
 val BOTTOM_TABS = listOf("conta" to "Início", "gastos" to "Gastos", "plano" to "Planejar", "carteira" to "Investir", "mais" to "Mais")
-val MAIS_TABS = setOf("mais", "historico", "ajuda", "ponto", "config", "ir", "reais", "capturas")
+val MAIS_TABS = setOf("mais", "historico", "ajuda", "ponto", "config", "ir", "reais", "capturas", "smart")
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,7 +26,7 @@ fun MainScaffold() {
     val scope = rememberCoroutineScope()
     val snack = remember { SnackbarHostState() }
     val hidden = s.settings.hiddenTabs
-    val tabs = MAIN_TABS.filter { it.first == "config" || it.first == "ajuda" || it.first == "mais" || it.first == "ir" || it.first == "reais" || it.first == "capturas" || (it.first !in hidden && !(it.first == "ponto" && s.income.incomeType != "empregado")) }
+    val tabs = MAIN_TABS.filter { it.first == "config" || it.first == "ajuda" || it.first == "mais" || it.first == "ir" || it.first == "reais" || it.first == "capturas" || it.first == "smart" || (it.first !in hidden && !(it.first == "ponto" && s.income.incomeType != "empregado")) }
     val tab = s.activeMainTab.let { t -> if (tabs.any { it.first == t }) t else "conta" }
     var assistant by remember { mutableStateOf(false) }
     val scroll = rememberScrollState()
@@ -127,6 +127,7 @@ fun MainScaffold() {
                     "ir" -> IrScreen()
                     "reais" -> ReaisScreen()
                     "capturas" -> CapturasScreen()
+                    "smart" -> SmartScreen()
                     "mais" -> MaisScreen(::go, tabs.map { it.first })
                     else -> ConfigScreen()
                 }
