@@ -363,6 +363,8 @@ class AppState(
     var pixSentTodayTotal: Double = 0.0,
 
     var celebrated: MutableMap<String, Boolean> = mutableMapOf(),
+    var importedIds: MutableList<String> = mutableListOf(),
+    var catRules: MutableMap<String, String> = mutableMapOf(),
     var sundaysWorked: MutableList<String> = mutableListOf(),
     var shoppingList: MutableList<ShopItem> = mutableListOf(),
     var nextShoppingId: Int = 1,
