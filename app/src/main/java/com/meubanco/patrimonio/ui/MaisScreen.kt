@@ -11,6 +11,13 @@ fun MaisScreen(goTab: (String) -> Unit, visible: List<String>) {
     val owner = com.meubanco.patrimonio.data.BankNotif.ownerMode(ctx)
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         H2("Mais")
+        val undoN = com.meubanco.patrimonio.data.Store.undoCount
+        if (undoN > 0) {
+            var askUndo by remember { mutableStateOf(false) }
+            Card { Txt("↩ Errou alguma coisa?", bold = true); Muted("Desfaça a última alteração feita no app ($undoN disponíveis nesta sessão).")
+                GhostButton("Desfazer última alteração") { askUndo = true } }
+            if (askUndo) Confirm("Voltar o app ao estado de antes da última alteração?", { askUndo = false; Ui.show(if (com.meubanco.patrimonio.data.Store.undoLast()) "Alteração desfeita." else "Nada para desfazer.") }, { askUndo = false }, "Desfazer")
+        }
         listOf(
             Triple("historico", "🧾 Extrato & histórico", "Busca, filtros por mês, PDF e CSV"),
             Triple("smart", "⚡ Lançamento inteligente", "Fale, escreva ou leia um QR Pix"),

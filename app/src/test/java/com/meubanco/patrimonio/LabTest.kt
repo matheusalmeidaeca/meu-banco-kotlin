@@ -59,3 +59,19 @@ class LabTest {
         assertNull(concentration(base()))
     }
 }
+
+class UndoTest {
+    @org.junit.Test fun desfaz() {
+        val u = UndoStack(max = 3, minGapMs = 1000)
+        org.junit.Assert.assertTrue(u.push({ "a" }, 0)); org.junit.Assert.assertFalse(u.push({ "b" }, 500))   // muito perto: ignora
+        org.junit.Assert.assertTrue(u.push({ "c" }, 2000)); org.junit.Assert.assertEquals("c", u.pop()); org.junit.Assert.assertEquals("a", u.pop()); org.junit.Assert.assertNull(u.pop())
+    }
+    @org.junit.Test fun limite() {
+        val u = UndoStack(max = 2, minGapMs = 0); (1..5).forEach { i -> u.push({ "s$i" }, i.toLong()) }
+        org.junit.Assert.assertEquals(2, u.size); org.junit.Assert.assertEquals("s5", u.pop()); org.junit.Assert.assertEquals("s4", u.pop())
+    }
+    @org.junit.Test fun estadoVoltaPeloTexto() {
+        val s = AppState(); s.cash = 100.0; val snap = encodeState(s); s.cash = 5.0
+        org.junit.Assert.assertEquals(100.0, decodeState(snap).cash, 0.001)
+    }
+}

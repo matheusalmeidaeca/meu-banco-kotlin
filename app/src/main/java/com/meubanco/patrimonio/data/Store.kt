@@ -39,7 +39,12 @@ object Store {
     }
 
     /** Aplica uma alteração e salva. Use sempre para mexer no estado. */
+    private val undo = UndoStack()
+    var undoCount by mutableIntStateOf(0)
+        private set
+
     fun <T> mutate(block: (AppState) -> T): T {
+        try { if (undo.push({ encodeState(state) }, System.currentTimeMillis())) undoCount = undo.size } catch (_: Exception) {}
         val r = block(state)
         commit()
         return r
@@ -80,7 +85,14 @@ object Store {
         appCtx?.let { com.meubanco.patrimonio.widget.BalanceWidget.updateAll(it) }
     }
 
+    /** Volta ao estado de antes da última alteração. Devolve false se não há o que desfazer. */
+    fun undoLast(): Boolean {
+        val snap = undo.pop() ?: return false
+        return try { state = decodeState(snap); undoCount = undo.size; commit(); true } catch (_: Exception) { false }
+    }
+
     fun replace(newState: AppState) {
+        undo.clear(); undoCount = 0
         state = newState
         commit()
     }
