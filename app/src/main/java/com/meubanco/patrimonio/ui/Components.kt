@@ -9,9 +9,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -57,8 +65,13 @@ fun handle(r: Res): Boolean {
 
 @Composable
 fun Card(modifier: Modifier = Modifier, onClick: (() -> Unit)? = null, content: @Composable ColumnScope.() -> Unit) {
-    val m = modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(P.card)
-        .border(1.dp, P.line, RoundedCornerShape(16.dp))
+    val motion = motionEnabled()
+    val a = remember { Animatable(if (motion) 0f else 1f) }
+    LaunchedEffect(Unit) { if (motion) a.animateTo(1f, tween(320, easing = FastOutSlowInEasing)) }
+    val shape = CutShape(14.dp)
+    val m = modifier.fillMaxWidth().graphicsLayer { alpha = a.value; translationY = (1f - a.value) * 28f }
+        .clip(shape).background(P.card)
+        .neonBorder(shape)
         .let { if (onClick != null) it.clickable(onClick = onClick) else it }
         .padding(14.dp)
     Column(m, verticalArrangement = Arrangement.spacedBy(8.dp), content = content)
@@ -83,20 +96,23 @@ fun KV(k: String, v: String, vColor: Color = P.text) {
 
 @Composable
 fun PrimaryButton(text: String, modifier: Modifier = Modifier, enabled: Boolean = true, onClick: () -> Unit) {
-    Button(onClick, modifier.fillMaxWidth(), enabled = enabled, shape = RoundedCornerShape(12.dp),
+    val shape = CutShape(10.dp)
+    Button(onClick, modifier.fillMaxWidth().let { if (enabled) it.shadow(8.dp, shape, ambientColor = P.brand, spotColor = NeonCyan) else it }, enabled = enabled, shape = shape,
         colors = ButtonDefaults.buttonColors(containerColor = P.brand, contentColor = Color.White)) { Text(text, fontWeight = FontWeight.SemiBold) }
 }
 
 @Composable
 fun GhostButton(text: String, modifier: Modifier = Modifier, danger: Boolean = false, enabled: Boolean = true, onClick: () -> Unit) {
-    OutlinedButton(onClick, modifier, enabled = enabled, shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(1.dp, if (danger) P.red else P.line),
+    OutlinedButton(onClick, modifier, enabled = enabled, shape = CutShape(10.dp),
+        border = if (danger) BorderStroke(1.dp, P.red) else BorderStroke(1.dp, neonBrush()),
         colors = ButtonDefaults.outlinedButtonColors(contentColor = if (danger) P.red else P.text)) { Text(text) }
 }
 
 @Composable
 fun Chip(text: String, selected: Boolean, onClick: () -> Unit) {
-    Box(Modifier.clip(RoundedCornerShape(20.dp)).background(if (selected) P.brand else P.card2)
+    val shape = CutShape(8.dp)
+    Box(Modifier.clip(shape).background(if (selected) Brush.horizontalGradient(listOf(P.brand, P.brand.copy(alpha = 0.75f).compositeOver(NeonCyan))) else Brush.horizontalGradient(listOf(P.card2, P.card2)))
+        .let { if (selected) it else it.neonBorder(shape) }
         .clickable(onClick = onClick).padding(horizontal = 12.dp, vertical = 7.dp)) {
         Txt(text, color = if (selected) Color.White else P.text, style = T.small)
     }
@@ -162,14 +178,15 @@ fun fmtPlain(v: Double): String = if (v == Math.floor(v) && Math.abs(v) < 1e12) 
 
 @Composable
 fun Progress(frac: Double, color: Color = P.brand, modifier: Modifier = Modifier) {
-    Box(modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(4.dp)).background(P.card2)) {
-        Box(Modifier.fillMaxWidth(clamp(frac, 0.0, 1.0).toFloat()).fillMaxHeight().background(color))
+    val f by animateFloatAsState(clamp(frac, 0.0, 1.0).toFloat(), tween(if (motionEnabled()) 600 else 0, easing = FastOutSlowInEasing), label = "progresso")
+    Box(modifier.fillMaxWidth().height(8.dp).clip(CutShape(4.dp)).background(P.card2)) {
+        Box(Modifier.fillMaxWidth(f).fillMaxHeight().background(Brush.horizontalGradient(listOf(color, if (color == P.brand) NeonCyan else color.copy(alpha = 0.7f)))))
     }
 }
 
 @Composable
 fun Sheet(title: String, onDismiss: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
-    AlertDialog(onDismissRequest = onDismiss, containerColor = P.card, titleContentColor = P.text, textContentColor = P.text,
+    AlertDialog(onDismissRequest = onDismiss, containerColor = P.card, titleContentColor = P.text, textContentColor = P.text, shape = CutShape(18.dp),
         title = { Txt(title, style = T.title, bold = true) },
         text = { Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp), content = content) },
         confirmButton = { TextButton(onDismiss) { Text("Fechar") } })
@@ -177,7 +194,7 @@ fun Sheet(title: String, onDismiss: () -> Unit, content: @Composable ColumnScope
 
 @Composable
 fun Confirm(text: String, onYes: () -> Unit, onNo: () -> Unit, yes: String = "Confirmar") {
-    AlertDialog(onDismissRequest = onNo, containerColor = P.card, textContentColor = P.text,
+    AlertDialog(onDismissRequest = onNo, containerColor = P.card, textContentColor = P.text, shape = CutShape(18.dp),
         text = { Txt(text) },
         confirmButton = { TextButton(onYes) { Text(yes) } },
         dismissButton = { TextButton(onNo) { Text("Cancelar") } })

@@ -61,7 +61,7 @@ fun OnboardingScreen() {
         Muted("Passo ${idx + 1} de ${steps.size}")
         Progress((idx + 1).toDouble() / steps.size)
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            when (step) {
+            ScreenTransition(step, steps) { stp -> when (stp) {
                 "welcome" -> {
                     Txt("Bem-vindo! 👋", style = T.big, bold = true)
                     Txt("Em poucos passos você monta o seu banco pessoal: contas, cartão, reservas, dívidas e investimentos.")
@@ -195,7 +195,7 @@ fun OnboardingScreen() {
                     Muted("Você pode voltar e corrigir qualquer passo.")
                 }
                 "done" -> { Txt("Tudo pronto! 🎉", style = T.big, bold = true); Txt("Seu banco será criado agora.") }
-            }
+            } }
             if (err.isNotEmpty()) Txt(err, color = P.red)
         }
         if (step == "done") PrimaryButton("Começar") {

@@ -184,6 +184,9 @@ fun ConfigScreen() {
         Section("🎨 Aparência") {
             ChipRow(listOf("dark" to "Escuro", "light" to "Claro", "auto" to "Automático"), s.settings.theme) { Store.mutate { st -> st.settings.theme = it } }
             ChipRow(listOf("normal" to "Normal", "grande" to "Grande", "xgrande" to "Maior"), s.settings.fontSize) { Store.mutate { st -> st.settings.fontSize = it } }
+            val fxCtx = androidx.compose.ui.platform.LocalContext.current
+            var fx by remember { mutableStateOf(Fx.userOn(fxCtx)) }
+            SwitchRow("Animações e transições entre telas (reabra o app para aplicar)", fx) { fx = it; Fx.setUserOn(fxCtx, it) }
             SwitchRow("Alto contraste", s.settings.highContrast) { Store.mutate { st -> st.settings.highContrast = it } }
             SwitchRow("Vibração", s.settings.hapticEnabled) { Store.mutate { st -> st.settings.hapticEnabled = it } }
             SwitchRow("Assistente (dicas)", s.settings.assistantEnabled) { Store.mutate { st -> st.settings.assistantEnabled = it } }

@@ -116,7 +116,7 @@ fun MainScaffold() {
             },
         ) { pad ->
             Column(Modifier.padding(pad).fillMaxSize().verticalScroll(scroll).padding(horizontal = 14.dp, vertical = 8.dp)) {
-                when (tab) {
+                ScreenTransition(tab, tabs.map { it.first }) { t -> when (t) {
                     "conta" -> ContaScreen(::go)
                     "historico" -> HistoricoScreen()
                     "carteira" -> CarteiraScreen()
@@ -130,7 +130,7 @@ fun MainScaffold() {
                     "smart" -> SmartScreen()
                     "mais" -> MaisScreen(::go, tabs.map { it.first })
                     else -> ConfigScreen()
-                }
+                } }
                 Spacer(Modifier.height(90.dp))
             }
         }
