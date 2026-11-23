@@ -26,6 +26,7 @@ fun executeSendPix(s: AppState, name: String, amount: Double): Res {
     if (s.pixSentTodayISO != todayISO) { s.pixSentTodayISO = todayISO; s.pixSentTodayTotal = 0.0 }
     s.pixSentTodayTotal = round2(s.pixSentTodayTotal + amount)
     addHistory(s, "pix", "Pix enviado para $name", -amount)
+    autoRoundUp(s, amount)
     return Res.ok("Pix enviado", "${formatBRL(amount)} para $name")
 }
 
@@ -33,6 +34,7 @@ fun receivePix(s: AppState, name: String, amount: Double): Res {
     if (name.isBlank() || amount <= 0) return Res.err("")
     s.cash = round2(s.cash + amount)
     addHistory(s, "pix", "Pix recebido de $name", amount)
+    autoSaveOnIncome(s, amount)
     return Res.ok("Pix recebido", "${formatBRL(amount)} de $name")
 }
 
@@ -202,6 +204,7 @@ fun spendFree(s: AppState, amount: Double, category: String): Res {
     if (actual < amount - 0.01) {
         addHistory(s, "aviso", "Caixa livre insuficiente: gasto reduzido de ${formatBRL(amount)} para ${formatBRL(actual)}", 0.0)
     }
+    autoRoundUp(s, actual)
     return Res.ok("Gasto registrado", "${formatBRL(actual)} · $cat")
 }
 

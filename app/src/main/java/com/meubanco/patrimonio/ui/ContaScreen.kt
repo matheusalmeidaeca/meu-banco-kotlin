@@ -198,7 +198,7 @@ private fun ReserveCard(r: Reserve) {
     Card {
         H2("📦 ${r.name}")
         Txt(money(r.balance), style = T.title, bold = true)
-        if (r.targetValue > 0) { Progress(r.balance / r.targetValue, P.green); Muted("Alvo ${formatBRL(r.targetValue)}") }
+        if (r.targetValue > 0) { LiquidPot(r.balance / r.targetValue, P.green); Muted("Alvo ${formatBRL(r.targetValue)}") }
         Muted("Aporte mensal ${formatBRL(r.monthlyContribution)} · rendimento acumulado ${formatBRL(r.totalInterest)}")
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             GhostButton("Guardar", Modifier.weight(1f)) { extra = true }
@@ -237,7 +237,7 @@ private fun GoalCard(g: Goal) {
     Card {
         H2("${GOAL_TYPE_ICON[g.type] ?: "🎯"} ${g.name}" + if (g.completed) " ✅" else "")
         Txt("${money(g.saved)} de ${money(g.target)}", bold = true)
-        Progress(if (g.target > 0) g.saved / g.target else 0.0, P.gold)
+        LiquidPot(if (g.target > 0) g.saved / g.target else 0.0, P.gold)
         val need = goalMonthlyNeeded(g, AppClock.todayISO())
         if (need != null && need > 0) {
             Muted("Para chegar em ${formatMonthLabel(g.deadlineYM!!)} guarde ${formatBRL(need)}/mês")

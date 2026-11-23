@@ -4,7 +4,11 @@ import android.content.Context
 import android.provider.Settings
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.ui.draw.clip
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
@@ -65,4 +69,24 @@ fun <T> ScreenTransition(target: T, order: List<T>, modifier: Modifier = Modifie
                 SizeTransform(clip = false) { _, _ -> snap() }
         },
     ) { content(it) }
+}
+
+/** Caixinha líquida: o nível sobe com o saldo e a superfície ondula (respeita o modo sem animações). */
+@Composable
+fun LiquidPot(frac: Double, color: Color, modifier: Modifier = Modifier) {
+    val f by animateFloatAsState(frac.coerceIn(0.0, 1.0).toFloat(), tween(900), label = "pot")
+    val phase = if (motionEnabled()) {
+        val t = rememberInfiniteTransition(label = "wave")
+        t.animateFloat(0f, (2 * Math.PI).toFloat(), infiniteRepeatable(tween(3200, easing = LinearEasing)), label = "ph").value
+    } else 0f
+    androidx.compose.foundation.Canvas(modifier.fillMaxWidth().height(46.dp).clip(CutShape(10.dp)).background(P.line.copy(alpha = 0.35f))) {
+        val level = size.height * (1f - f); val amp = if (f in 0.02f..0.98f) 4.dp.toPx() else 0f
+        val p = Path().apply {
+            moveTo(0f, size.height); lineTo(0f, level)
+            var x = 0f
+            while (x <= size.width) { lineTo(x, level + amp * Math.sin((x / size.width * 4 * Math.PI) + phase).toFloat()); x += 6f }
+            lineTo(size.width, size.height); close()
+        }
+        drawPath(p, Brush.verticalGradient(listOf(color.copy(alpha = 0.85f), color.copy(alpha = 0.35f))))
+    }
 }
