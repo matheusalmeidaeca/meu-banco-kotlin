@@ -20,7 +20,7 @@ fun HistoricoScreen() {
     var q by remember { mutableStateOf("") }
     var monthSel by remember { mutableStateOf("") } // "" = todos
     val all = remember(com.meubanco.patrimonio.data.Store.rev, filter, q, monthSel) {
-        s.history.asReversed().filter { (filter == "todos" || it.type == filter) &&
+        s.history.sortedByDescending { it.ts.take(10) }.filter { (filter == "todos" || it.type == filter) &&
             (q.isBlank() || it.label.contains(q.trim(), ignoreCase = true)) &&
             (monthSel.isEmpty() || it.ts.startsWith(monthSel)) }
     }
@@ -61,7 +61,17 @@ fun HistoricoScreen() {
             GhostButton("CSV (planilha)", Modifier.weight(1f)) { csv.launch("extrato-" + AppClock.todayISO() + ".csv") }
         }
         if (all.isEmpty()) Muted("Nada por aqui ainda.")
+        var lastYm = ""
         all.take(limit).forEach { h ->
+            val hy = h.ts.take(7)
+            if (hy != lastYm) {
+                lastYm = hy
+                val mi = all.filter { it.ts.startsWith(hy) }
+                Column(Modifier.padding(top = 6.dp)) {
+                    H2(formatMonthLabel(hy))
+                    Muted("Entradas ${money(mi.filter { it.amount > 0 }.sumOf { it.amount })} · Saídas ${money(-mi.filter { it.amount < 0 }.sumOf { it.amount })} · ${mi.size} lançamento(s)")
+                }
+            }
             Card {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     Txt("${HIST_TYPE_ICON[h.type] ?: "•"} ${h.label}", Modifier.weight(1f), style = T.small)

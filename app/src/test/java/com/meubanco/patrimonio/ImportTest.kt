@@ -111,3 +111,10 @@ class BrainTest {
     }
     @Test fun eSeCortar() { assertEquals(1200.0, whatIfCut(100.0, 1, 0.0), 0.001); assertTrue(whatIfCut(100.0, 10, 8.0) > 12000.0); assertEquals(0.0, whatIfCut(0.0, 5, 8.0), 0.001) }
 }
+
+class OrdemExtratoTest {
+    @Test fun maisRecentePrimeiro() {
+        val h = listOf(HistoryEntry("2026-09-08", "pix", "a", 1.0), HistoryEntry("2026-11-02", "pix", "b", 1.0), HistoryEntry("2026-11-02", "pix", "c", 1.0), HistoryEntry("2026-10-15", "pix", "d", 1.0))
+        assertEquals(listOf("b", "c", "d", "a"), h.sortedByDescending { it.ts.take(10) }.map { it.label })   // empate no mesmo dia mantém a ordem original
+    }
+}
