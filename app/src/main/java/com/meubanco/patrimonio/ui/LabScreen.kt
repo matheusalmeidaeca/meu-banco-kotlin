@@ -14,7 +14,45 @@ fun LabScreen() {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         H2("🧪 Laboratório")
         Muted("Simulações para você se organizar. Não é recomendação de investimento.")
-        WeekCard(s); RunwayCard(s); GoalsCard(s); AutoCard(s); AporteCard(s); StressCard(s); ConcCard(s)
+        ScoreCard(s); WeekCard(s); RadarCard(s); WhatIfCard(); RunwayCard(s); GoalsCard(s); AutoCard(s); AporteCard(s); StressCard(s); ConcCard(s)
+    }
+}
+
+@Composable
+private fun ScoreCard(s: AppState) {
+    val h = healthScore(s)
+    Card {
+        H2("❤️ Saúde financeira")
+        Txt("${h.total}/100", bold = true, style = T.title)
+        LiquidPot(h.total / 100.0, if (h.total >= 70) P.green else if (h.total >= 40) P.gold else P.red)
+        h.parts.forEach { Muted("${it.label}: ${Math.round(it.pts)}/${Math.round(it.max)}") }
+        Txt("👉 " + h.nextStep, bold = true)
+    }
+}
+
+@Composable
+private fun RadarCard(s: AppState) {
+    val dups = duplicateCharges(s); val rec = recurringCharges(s)
+    Card {
+        H2("📡 Radar")
+        if (dups.isEmpty() && rec.isEmpty()) { Muted("Nenhuma cobrança em dobro nem assinatura escondida encontrada. Quanto mais extratos você importa, melhor ele enxerga."); return@Card }
+        dups.forEach { Txt("⚠️ Possível cobrança em dobro: ${it.label} (${formatBRL(it.amount)}) em ${it.dateA} e ${it.dateB}") }
+        rec.take(5).forEach { r ->
+            Txt("🔁 ${r.name}: ${formatBRL(r.avg)} todo mês (${r.months} meses seguidos)", bold = true)
+            GhostButton("Cadastrar como assinatura") { Store.mutate { st -> addSubscription(st, r.name, r.avg, r.day, "Outro") } }
+        }
+    }
+}
+
+@Composable
+private fun WhatIfCard() {
+    var v by remember { mutableStateOf<Double?>(null) }
+    Card {
+        H2("💡 E se eu cortar?")
+        NumField(v, { v = it }, "Quanto cortaria por mês", suffix = "R$")
+        val m = v ?: 0.0
+        if (m > 0) listOf(1, 5, 10).forEach { y -> Muted("Em $y ano(s): ${formatBRL(whatIfCut(m, y, 0.0))} guardados, ou ${formatBRL(whatIfCut(m, y, 8.0))} investindo a 8% ao ano.") }
+        else Muted("Veja quanto um pequeno corte mensal vira com o tempo.")
     }
 }
 

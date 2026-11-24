@@ -85,3 +85,29 @@ class CardWeekTest {
         assertTrue(w.text().contains("Gastou"))
     }
 }
+
+class BrainTest {
+    @Before fun clock() { AppClock.today = { LocalDate.of(2026, 11, 22) }; AppClock.nowMs = { 1_795_000_000_000L } }
+    private fun blank(): AppState { val s = AppState(); s.reserves.forEach { it.balance = 0.0 }; s.expenses = mutableListOf(); s.debts = mutableListOf(); s.subscriptions = mutableListOf(); s.assets = mutableListOf(); s.history = mutableListOf(); return s }
+
+    @Test fun notaSobe() {
+        val a = blank(); val b = blank(); a.expenses.add(Expense(1, "Aluguel", 1000.0, "Moradia")); b.expenses.add(Expense(1, "Aluguel", 1000.0, "Moradia")); b.reserves.first().balance = 20000.0
+        assertTrue(healthScore(b).total > healthScore(a).total)
+        assertTrue(healthScore(a).nextStep.isNotBlank()); assertTrue(healthScore(a).total in 0..100)
+    }
+    @Test fun cobrancaEmDobro() {
+        val s = blank()
+        s.history.add(HistoryEntry("2026-11-20", "gastolivre", "Extrato — Padaria Central", -18.5, null, "Mercado"))
+        s.history.add(HistoryEntry("2026-11-21", "gastolivre", "Extrato — PADARIA CENTRAL 123", -18.5, null, "Mercado"))
+        s.history.add(HistoryEntry("2026-11-10", "gastolivre", "Extrato — Outro lugar", -50.0, null, "Outro"))
+        assertEquals(1, duplicateCharges(s).size)
+    }
+    @Test fun assinaturaEscondida() {
+        val s = blank()
+        listOf("2026-09-12", "2026-10-12", "2026-11-12").forEach { s.history.add(HistoryEntry(it, "gastolivre", "Extrato — Streamflix Brasil", -39.9, null, "Lazer")) }
+        s.history.add(HistoryEntry("2026-11-03", "gastolivre", "Extrato — Mercado Unico", -80.0, null, "Mercado"))
+        val r = recurringCharges(s); assertEquals(1, r.size); assertEquals(39.9, r[0].avg, 0.01); assertEquals(3, r[0].months)
+        addSubscription(s, r[0].name, r[0].avg, r[0].day, "Outro"); assertTrue(recurringCharges(s).isEmpty())
+    }
+    @Test fun eSeCortar() { assertEquals(1200.0, whatIfCut(100.0, 1, 0.0), 0.001); assertTrue(whatIfCut(100.0, 10, 8.0) > 12000.0); assertEquals(0.0, whatIfCut(0.0, 5, 8.0), 0.001) }
+}
