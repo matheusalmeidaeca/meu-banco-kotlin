@@ -153,6 +153,61 @@ fun applyImport(s: AppState, items: List<BankItem>, updateCash: Boolean): BankRe
     return BankResult(e, i, sk, round2(spent), round2(rec))
 }
 
+/* ---------- Fatura do cartão ---------- */
+
+/** Em fatura, compra costuma vir positiva. Se a maioria dos lançamentos é positiva, vira compra; pagamentos da fatura são ignorados. */
+fun cardPurchases(rows: List<BankRow>): List<BankRow> {
+    val pos = rows.count { it.amount > 0 }; val neg = rows.count { it.amount < 0 }
+    val flip = pos > neg
+    return rows.map { if (flip) BankRow(it.date, -it.amount, it.desc, it.fitId) else it }
+        .filter { it.amount < 0 && !plainText(it.desc).contains("pagamento") && !plainText(it.desc).contains("estorno") }
+}
+
+class CardImportResult(val added: Int, val skipped: Int, val total: Double, val available: Double)
+
+fun applyCardImport(s: AppState, c: Card, items: List<BankItem>): CardImportResult {
+    var added = 0; var sk = 0; var total = 0.0
+    items.forEach {
+        if (!it.include || it.duplicate || it.id in s.importedIds || !it.isExpense) { sk++; return@forEach }
+        val amt = round2(-it.row.amount)
+        if (!addCardPurchase(s, c, it.row.desc.take(60), amt, 1).ok) { sk++; return@forEach }
+        c.purchases.lastOrNull()?.dateISO = it.row.date
+        s.importedIds.add(it.id); added++; total += amt
+    }
+    while (s.importedIds.size > 6000) s.importedIds.removeAt(0)
+    return CardImportResult(added, sk, round2(total), round2(cardAvailable(c)))
+}
+
+/* ============================================================
+   Resumo semanal
+   ============================================================ */
+
+class WeekSummary(val spent: Double, val received: Double, val saved: Double, val topCategory: String?, val goalLine: String?, val cardLine: String?) {
+    fun text(): String = buildString {
+        append("Gastou ${formatBRL(spent)}, recebeu ${formatBRL(received)} e guardou ${formatBRL(saved)}.")
+        topCategory?.let { append(" Maior gasto: $it.") }
+        goalLine?.let { append(" $it") }
+        cardLine?.let { append(" $it") }
+    }
+}
+
+fun weekSummary(s: AppState, todayISO: String = AppClock.todayISO()): WeekSummary {
+    val from = addDaysISO(todayISO, -6)
+    val week = s.history.filter { it.ts.length >= 10 && it.ts.substring(0, 10) >= from && it.ts.substring(0, 10) <= todayISO }
+    val spendTypes = setOf("gastolivre", "despesa", "pix", "fatura", "cartao", "imposto")
+    val spent = week.filter { it.amount < 0 && it.type in spendTypes }.sumOf { -it.amount }
+    val received = week.filter { it.amount > 0 && (it.type == "renda" || it.type == "pix") }.sumOf { it.amount }
+    val saved = week.filter { it.amount < 0 && it.type in setOf("meta", "transferencia", "cdb") }.sumOf { -it.amount }
+    val cats = HashMap<String, Double>()
+    week.filter { it.amount < 0 && it.type == "gastolivre" }.forEach { cats[it.category ?: "Outro"] = (cats[it.category ?: "Outro"] ?: 0.0) - it.amount }
+    val top = cats.maxByOrNull { it.value }?.key
+    val goal = s.goals.filter { !it.completed && it.target > 0 }.maxByOrNull { it.saved / it.target }
+    val goalLine = goal?.let { "Meta ${it.name}: ${Math.round(it.saved / it.target * 100)}%." }
+    val c = activeCard(s)
+    val cardLine = if (c.enabled && c.limit > 0) "Limite livre do cartão: ${formatBRL(cardAvailable(c))}." else null
+    return WeekSummary(round2(spent), round2(received), round2(saved), top, goalLine, cardLine)
+}
+
 /* ============================================================
    Confiabilidade: o app confere os próprios dados
    ============================================================ */

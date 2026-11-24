@@ -36,6 +36,8 @@ object Ui {
     var toast by mutableStateOf<String?>(null)
     var celebration by mutableStateOf<Celebration?>(null)
     var quickSpend by mutableStateOf(false)
+    /** Extrato (OFX/CSV) recebido pelo compartilhar de outro app; a tela Importar consome. */
+    var sharedStatement by mutableStateOf<String?>(null)
     /** Retorno do navegador após conectar o banco: item=..., error=... ou closed=1 */
     var pluggyResult by mutableStateOf<String?>(null)
     /** Conexão criada pelo caminho direto, esperando o usuário autorizar no site/app do banco. */

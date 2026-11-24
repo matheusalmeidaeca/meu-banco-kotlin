@@ -57,3 +57,31 @@ OFXHEADER:100
         val h = dataHealth(s); assertTrue(h.any { it.severe }); assertTrue(h.any { !it.severe })
     }
 }
+
+class CardWeekTest {
+    @Before fun clock() { AppClock.today = { LocalDate.of(2026, 11, 22) }; AppClock.nowMs = { 1_795_000_000_000L } }
+    private val fatura = "Data,Descrição,Valor\n10/11/2026,Padaria Central,18.50\n12/11/2026,Uber *Trip,32.00\n15/11/2026,Pagamento recebido,-500.00\n"
+
+    @Test fun faturaPositivaViraCompra() {
+        val p = cardPurchases(parseBankFile(fatura)); assertEquals(2, p.size); assertTrue(p.all { it.amount < 0 })
+    }
+    @Test fun importaFaturaSemTocarNoSaldo() {
+        val s = AppState(); s.cash = 100.0; val c = s.card; c.limit = 1000.0; val inv0 = c.invoiceCurrent
+        val r = applyCardImport(s, c, prepareImport(s, cardPurchases(parseBankFile(fatura))))
+        assertEquals(2, r.added); assertEquals(50.5, r.total, 0.001); assertEquals(100.0, s.cash, 0.001); assertEquals(inv0 + 50.5, c.invoiceCurrent, 0.001)
+        assertEquals("2026-11-10", c.purchases.first { it.desc.startsWith("Padaria") }.dateISO)
+        val again = applyCardImport(s, c, prepareImport(s, cardPurchases(parseBankFile(fatura)))); assertEquals(0, again.added)
+    }
+    @Test fun respeitaLimite() {
+        val s = AppState(); val c = s.card; c.limit = 20.0
+        val r = applyCardImport(s, c, prepareImport(s, cardPurchases(parseBankFile(fatura)))); assertEquals(1, r.added); assertEquals(1, r.skipped)
+    }
+    @Test fun resumoSemanal() {
+        val s = AppState(); s.cash = 1000.0
+        spendFree(s, 30.0, "Lazer"); receivePix(s, "Ana", 200.0)
+        s.history.add(0, HistoryEntry("2026-10-01", "gastolivre", "antigo", -999.0, null, "Lazer"))   // fora da janela
+        val w = weekSummary(s, s.simDateISO)
+        assertEquals(30.0, w.spent, 0.001); assertEquals(200.0, w.received, 0.001); assertEquals("Lazer", w.topCategory)
+        assertTrue(w.text().contains("Gastou"))
+    }
+}

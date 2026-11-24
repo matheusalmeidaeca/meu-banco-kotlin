@@ -67,6 +67,14 @@ class DailyWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx,
                         Notifier.show(ctx, 10 + c.last4.toIntOrNull().orEmpty(), "Fatura do cartão", "Fatura de " + formatBRL(c.pendingAmount) + " vence em " + left + " dia(s).")
                 }
             }
+            if (s.settings.notifyWeekly && isoToDate(AppClock.todayISO()).dayOfWeek == java.time.DayOfWeek.SUNDAY) {
+                val key = "week|" + AppClock.todayISO()
+                if (s.budgetAlerted[key] != true) {
+                    s.budgetAlerted[key] = true
+                    s.budgetAlerted.keys.filter { it.startsWith("week|") && it < "week|" + addDaysISO(AppClock.todayISO(), -60) }.forEach { s.budgetAlerted.remove(it) }
+                    Notifier.show(ctx, 50, "Seu resumo da semana", weekSummary(s).text())
+                }
+            }
             if (s.settings.notifyDebt && s.debts.any { it.balance > 0 }) {
                 val key = "debt|" + ymKey(s.simDateISO)
                 if (isoToDate(s.simDateISO).dayOfMonth <= 5 && s.budgetAlerted[key] != true) {

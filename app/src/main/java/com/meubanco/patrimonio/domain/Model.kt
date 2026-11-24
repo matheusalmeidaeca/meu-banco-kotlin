@@ -310,6 +310,7 @@ class Settings(
     var notifyBudget: Boolean = true,
     var notifyDebt: Boolean = true,
     var notifyCard: Boolean = true,
+    var notifyWeekly: Boolean = true,
 )
 
 /**

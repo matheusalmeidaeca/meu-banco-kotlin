@@ -59,6 +59,17 @@ class MainActivity : FragmentActivity() {
             if (cap != null) { com.meubanco.patrimonio.data.BankNotif.add(applicationContext, cap); Ui.show("Sugestão criada: Mais → Capturas dos bancos") }
             else Ui.show("Não achei um valor em R$ nesse texto.")
         }
+        if (i?.action == android.content.Intent.ACTION_SEND && i.type != "text/plain") {
+            @Suppress("DEPRECATION") val uri = i.getParcelableExtra<android.net.Uri>(android.content.Intent.EXTRA_STREAM)
+            if (uri != null) {
+                val txt = try {
+                    val bytes = contentResolver.openInputStream(uri)?.use { it.readBytes() } ?: ByteArray(0)
+                    val u = String(bytes, Charsets.UTF_8); if (u.contains('\uFFFD')) String(bytes, Charsets.ISO_8859_1) else u
+                } catch (e: Exception) { "" }
+                if (txt.isNotBlank()) { Ui.sharedStatement = txt; Store.mutate { it.activeMainTab = "importar" } }
+                else Ui.show("Não consegui abrir esse arquivo.")
+            }
+        }
         val d = i?.data
         if (d != null && d.scheme == "admoney" && d.host == "pluggy") Ui.pluggyResult = d.query ?: "closed=1"
     }

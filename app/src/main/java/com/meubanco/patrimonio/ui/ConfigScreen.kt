@@ -174,6 +174,7 @@ fun ConfigScreen() {
         }
         Section("🔔 Avisos") {
             SwitchRow("Fatura do cartão", s.settings.notifyCard) { Store.mutate { st -> st.settings.notifyCard = it } }
+            SwitchRow("Resumo semanal (domingo)", s.settings.notifyWeekly) { Store.mutate { st -> st.settings.notifyWeekly = it } }
             SwitchRow("Orçamento por categoria", s.settings.notifyBudget) { Store.mutate { st -> st.settings.notifyBudget = it } }
             SwitchRow("Parcelas de dívidas", s.settings.notifyDebt) { Store.mutate { st -> st.settings.notifyDebt = it } }
             NumField(s.settings.notifyCardDays.toDouble(), { Store.mutate { st -> st.settings.notifyCardDays = (it ?: 3.0).toInt() } }, "Avisar fatura X dias antes", decimals = false)

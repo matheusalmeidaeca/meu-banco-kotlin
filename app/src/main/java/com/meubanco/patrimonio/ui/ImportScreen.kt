@@ -27,12 +27,18 @@ fun ImportScreen() {
     var tick by remember { mutableIntStateOf(0) }
     var open by remember { mutableStateOf<Int?>(null) }
     var ask by remember { mutableStateOf(false) }
+    var cardMode by remember { mutableStateOf(false) }
+    fun rebuild() { items = prepareImport(Store.state, if (cardMode) cardPurchases(rows) else rows, invert && !cardMode) }
+    fun load(text: String) {
+        val parsed = try { parseBankFile(text) } catch (e: Exception) { emptyList() }
+        if (parsed.isEmpty()) Ui.show("Não consegui ler lançamentos nesse arquivo. Use o extrato em OFX ou CSV.")
+        else { rows = parsed; rebuild(); open = null }
+    }
+    LaunchedEffect(Ui.sharedStatement) { Ui.sharedStatement?.let { Ui.sharedStatement = null; load(it) } }
 
     val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         if (uri != null) {
-            val parsed = try { parseBankFile(readText(ctx, uri)) } catch (e: Exception) { emptyList() }
-            if (parsed.isEmpty()) Ui.show("Não consegui ler lançamentos nesse arquivo. Use o extrato em OFX ou CSV.")
-            else { rows = parsed; items = prepareImport(Store.state, parsed, invert); open = null }
+            load(try { readText(ctx, uri) } catch (e: Exception) { "" })
         }
     }
     @Suppress("UNUSED_EXPRESSION") tick
@@ -40,7 +46,7 @@ fun ImportScreen() {
         H2("📥 Importar extrato")
         Card {
             Txt("Sem Open Finance e sem permissões especiais", bold = true)
-            Muted("No app do seu banco, exporte o extrato em OFX ou CSV e escolha o arquivo aqui. O Admoney categoriza sozinho, aprende com suas correções e nunca importa o mesmo lançamento duas vezes.")
+            Muted("No app do seu banco, exporte o extrato em OFX ou CSV e escolha o arquivo aqui, ou use Compartilhar → Admoney direto no app do banco. O Admoney categoriza sozinho, aprende com suas correções e nunca importa o mesmo lançamento duas vezes.")
             PrimaryButton(if (items.isEmpty()) "Escolher arquivo do extrato" else "Escolher outro arquivo") { pick.launch(arrayOf("*/*")) }
         }
         if (items.isNotEmpty()) {
@@ -51,9 +57,11 @@ fun ImportScreen() {
                 Muted("${items.size} lançamentos lidos · ${items.count { it.duplicate }} já importados antes (ignorados)")
                 Txt("${exp.size} gastos: ${formatBRL(exp.sumOf { -it.row.amount })}", bold = true)
                 Txt("${inc.size} entradas: ${formatBRL(inc.sumOf { it.row.amount })}", bold = true)
+                ChipRow(listOf("0" to "Conta corrente", "1" to "Fatura do cartão"), if (cardMode) "1" else "0") { v -> cardMode = v == "1"; rebuild() }
+                if (cardMode) Muted("As compras entram na fatura aberta do cartão ativo (${activeCard(s).name}). Pagamentos e estornos são ignorados. Importe só a fatura atual.")
                 Muted("Os sinais estão trocados (gastos aparecendo como entradas)?")
-                ChipRow(listOf("0" to "Está certo", "1" to "Inverter sinais"), if (invert) "1" else "0") { v -> invert = v == "1"; items = prepareImport(Store.state, rows, invert) }
-                ChipRow(listOf("1" to "Atualizar o saldo da conta", "0" to "Só registrar no histórico"), if (updateCash) "1" else "0") { updateCash = it == "1" }
+                ChipRow(listOf("0" to "Está certo", "1" to "Inverter sinais"), if (invert) "1" else "0") { v -> invert = v == "1"; rebuild() }
+                if (!cardMode) ChipRow(listOf("1" to "Atualizar o saldo da conta", "0" to "Só registrar no histórico"), if (updateCash) "1" else "0") { updateCash = it == "1" }
                 PrimaryButton("Importar ${use.size} lançamentos", enabled = use.isNotEmpty()) { ask = true }
             }
             items.take(40).forEachIndexed { i, it ->
@@ -72,9 +80,14 @@ fun ImportScreen() {
     }
     if (ask) Confirm("Importar ${items.count { it.include && !it.duplicate }} lançamentos?" + if (updateCash) " O saldo da conta será ajustado." else "", {
         ask = false
-        val r = Store.mutate { st -> applyImport(st, items, updateCash) }
+        if (cardMode) {
+            val r = Store.mutate { st -> applyCardImport(st, activeCard(st), items) }
+            Ui.show("Fatura: ${r.added} compras (${formatBRL(r.total)}). Limite livre ${formatBRL(r.available)}. ${r.skipped} ignoradas.")
+        } else {
+            val r = Store.mutate { st -> applyImport(st, items, updateCash) }
+            Ui.show("Importado: ${r.expenses} gastos e ${r.incomes} entradas. ${r.skipped} ignorados.")
+        }
         items = emptyList(); rows = emptyList()
-        Ui.show("Importado: ${r.expenses} gastos e ${r.incomes} entradas. ${r.skipped} ignorados.")
     }, { ask = false }, "Importar")
 }
 

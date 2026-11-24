@@ -14,7 +14,19 @@ fun LabScreen() {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         H2("🧪 Laboratório")
         Muted("Simulações para você se organizar. Não é recomendação de investimento.")
-        RunwayCard(s); GoalsCard(s); AutoCard(s); AporteCard(s); StressCard(s); ConcCard(s)
+        WeekCard(s); RunwayCard(s); GoalsCard(s); AutoCard(s); AporteCard(s); StressCard(s); ConcCard(s)
+    }
+}
+
+@Composable
+private fun WeekCard(s: AppState) {
+    val w = weekSummary(s)
+    Card {
+        H2("📅 Resumo da semana")
+        Txt("Gastou ${formatBRL(w.spent)} · recebeu ${formatBRL(w.received)}", bold = true)
+        Muted("Guardou ${formatBRL(w.saved)}" + (w.topCategory?.let { " · maior gasto: $it" } ?: ""))
+        w.goalLine?.let { Muted(it) }; w.cardLine?.let { Muted(it) }
+        Muted("Domingo você recebe esse resumo em uma notificação (desligue em Configurações → Avisos).")
     }
 }
 
