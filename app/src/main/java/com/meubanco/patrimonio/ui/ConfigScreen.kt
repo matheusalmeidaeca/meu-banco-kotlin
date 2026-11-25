@@ -166,12 +166,15 @@ fun ConfigScreen() {
                 scope.launch { val ok = MarketApi.fetchCdi(Store.state); Store.commit(); cdiLoading = false; Ui.show(if (ok) "CDI atualizado" else "Sem resposta agora") }
             }
         }
+        val octx = androidx.compose.ui.platform.LocalContext.current
+        var owner by remember { mutableStateOf(com.meubanco.patrimonio.data.BankNotif.ownerMode(octx)) }
         Section("🔗 Modo dono (Meu Pluggy)") {
-            val octx = androidx.compose.ui.platform.LocalContext.current
-            var owner by remember { mutableStateOf(com.meubanco.patrimonio.data.BankNotif.ownerMode(octx)) }
-            SwitchRow("Mostrar \"Contas conectadas\" em Mais", owner) { owner = it; com.meubanco.patrimonio.data.BankNotif.setOwnerMode(octx, it) }
-            Muted("Uso pessoal: lê suas contas pelo Meu Pluggy com suas próprias chaves e IDs. Fica desligado para as outras pessoas.")
+            SwitchRow("Ativar \"Contas conectadas\" (uso pessoal)", owner) { owner = it; com.meubanco.patrimonio.data.BankNotif.setOwnerMode(octx, it) }
+            Muted("Lê suas contas pelo Meu Pluggy com suas próprias chaves e IDs. Fica desligado para as outras pessoas.")
         }
+        if (owner) ExpandCard("🔗 Contas conectadas", open = Ui.pluggyResult != null || Ui.pendingItem != null, openKey = Ui.pluggyResult) { ReaisScreen() }
+        ExpandCard("🧾 Resumo para o IR") { IrScreen() }
+        ExpandCard("💡 Aprender & ajuda") { AprenderScreen { t -> Store.mutate { it.activeMainTab = t } } }
         Section("🔔 Avisos") {
             SwitchRow("Fatura do cartão", s.settings.notifyCard) { Store.mutate { st -> st.settings.notifyCard = it } }
             SwitchRow("Resumo semanal (domingo)", s.settings.notifyWeekly) { Store.mutate { st -> st.settings.notifyWeekly = it } }

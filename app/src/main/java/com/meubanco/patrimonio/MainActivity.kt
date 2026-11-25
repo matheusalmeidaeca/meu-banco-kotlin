@@ -55,9 +55,7 @@ class MainActivity : FragmentActivity() {
         if (i?.action == com.meubanco.patrimonio.widget.BalanceWidget.ACTION_QUICK_SPEND) Ui.quickSpend = true
         if (i?.action == android.content.Intent.ACTION_SEND && i.type == "text/plain") {
             val txt = i.getStringExtra(android.content.Intent.EXTRA_TEXT) ?: ""
-            val cap = com.meubanco.patrimonio.data.BankNotif.parseText(txt, System.currentTimeMillis())
-            if (cap != null) { com.meubanco.patrimonio.data.BankNotif.add(applicationContext, cap); Ui.show("Sugestão criada: Mais → Capturas dos bancos") }
-            else Ui.show("Não achei um valor em R$ nesse texto.")
+            if (txt.isNotBlank()) { Ui.sharedText = txt; Ui.smartOpenTick++; Store.mutate { it.activeMainTab = "conta" } }
         }
         if (i?.action == android.content.Intent.ACTION_SEND && i.type != "text/plain") {
             @Suppress("DEPRECATION") val uri = i.getParcelableExtra<android.net.Uri>(android.content.Intent.EXTRA_STREAM)
@@ -66,12 +64,12 @@ class MainActivity : FragmentActivity() {
                     val bytes = contentResolver.openInputStream(uri)?.use { it.readBytes() } ?: ByteArray(0)
                     val u = String(bytes, Charsets.UTF_8); if (u.contains('\uFFFD')) String(bytes, Charsets.ISO_8859_1) else u
                 } catch (e: Exception) { "" }
-                if (txt.isNotBlank()) { Ui.sharedStatement = txt; Store.mutate { it.activeMainTab = "importar" } }
+                if (txt.isNotBlank()) { Ui.sharedStatement = txt; Ui.importOpenTick++; Store.mutate { it.activeMainTab = "conta" } }
                 else Ui.show("Não consegui abrir esse arquivo.")
             }
         }
         val d = i?.data
-        if (d != null && d.scheme == "admoney" && d.host == "pluggy") Ui.pluggyResult = d.query ?: "closed=1"
+        if (d != null && d.scheme == "admoney" && d.host == "pluggy") { Ui.pluggyResult = d.query ?: "closed=1"; Store.mutate { it.activeMainTab = "config" } }
     }
 
     override fun onPause() { super.onPause(); Store.writeNow() }

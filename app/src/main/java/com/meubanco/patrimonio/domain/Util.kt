@@ -141,13 +141,7 @@ val MAIN_TABS = listOf(
     "gastos" to "Gastos",
     "plano" to "Planejamento",
     "ponto" to "Ponto",
-    "ajuda" to "Aprender & ajuda",
     "config" to "Configurações",
-    "reais" to "Contas conectadas",
-    "capturas" to "Capturas dos bancos",
-    "smart" to "Lançamento inteligente",
     "lab" to "Laboratório",
-    "importar" to "Importar extrato",
-    "ir" to "Resumo para o IR",
     "mais" to "Mais",
 )

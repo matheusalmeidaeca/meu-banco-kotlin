@@ -43,7 +43,6 @@ fun ImportScreen() {
     }
     @Suppress("UNUSED_EXPRESSION") tick
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        H2("📥 Importar extrato")
         Card {
             Txt("Sem Open Finance e sem permissões especiais", bold = true)
             Muted("No app do seu banco, exporte o extrato em OFX ou CSV e escolha o arquivo aqui, ou use Compartilhar → Admoney direto no app do banco. O Admoney categoriza sozinho, aprende com suas correções e nunca importa o mesmo lançamento duas vezes.")

@@ -53,8 +53,12 @@ fun HistoricoScreen() {
         val months = remember(com.meubanco.patrimonio.data.Store.rev) { s.history.map { it.ts.take(7) }.distinct().sortedDescending().take(12) }
         ChipRow(listOf("" to "Todos os meses") + months.map { it to formatMonthLabel(it) }, monthSel) { monthSel = it; limit = 40 }
         if (all.isNotEmpty()) {
-            val inn = all.filter { it.amount > 0 }.sumOf { it.amount }; val out = all.filter { it.amount < 0 }.sumOf { it.amount }
-            Card { KV("Entradas no filtro", money(inn), P.green); KV("Saídas no filtro", money(-out), P.red); Muted("${all.size} lançamento(s)") }
+            val tot = statementTotals(all)
+            Card {
+                KV("Entradas no filtro", money(tot.inflow), P.green); KV("Saídas no filtro", money(tot.outflow), P.red)
+                if (tot.saved != 0.0) KV("Guardado e investido", money(tot.saved), P.brand)
+                Muted("${all.size} lançamento(s). Transferências, caixinhas e compras de cotas são movimentos entre as suas contas: não entram em entradas e saídas, para o mesmo dinheiro não contar duas vezes.")
+            }
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             GhostButton("PDF", Modifier.weight(1f)) { pdf.launch("extrato-" + AppClock.todayISO() + ".pdf") }
@@ -66,19 +70,19 @@ fun HistoricoScreen() {
             val hy = h.ts.take(7)
             if (hy != lastYm) {
                 lastYm = hy
-                val mi = all.filter { it.ts.startsWith(hy) }
+                val mi = all.filter { it.ts.startsWith(hy) }; val mt = statementTotals(mi)
                 Column(Modifier.padding(top = 6.dp)) {
                     H2(formatMonthLabel(hy))
-                    Muted("Entradas ${money(mi.filter { it.amount > 0 }.sumOf { it.amount })} · Saídas ${money(-mi.filter { it.amount < 0 }.sumOf { it.amount })} · ${mi.size} lançamento(s)")
+                    Muted("Entradas ${money(mt.inflow)} · Saídas ${money(mt.outflow)} · Guardado ${money(mt.saved)} · ${mi.size} lançamento(s)")
                 }
             }
             Card {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     Txt("${HIST_TYPE_ICON[h.type] ?: "•"} ${h.label}", Modifier.weight(1f), style = T.small)
                     Spacer(Modifier.width(8.dp))
-                    if (h.amount != 0.0) Txt(money(h.amount), color = if (h.amount > 0) P.green else P.red, bold = true, style = T.small)
+                    if (h.amount != 0.0) Txt(money(h.amount), color = if (isInternalMove(h)) P.muted else if (h.amount > 0) P.green else P.red, bold = true, style = T.small)
                 }
-                Muted(h.ts.take(10).let { formatSimDate(it) })
+                Muted(h.ts.take(10).let { formatSimDate(it) } + if (isInternalMove(h)) " · movimento entre suas contas" else "")
             }
         }
         if (all.size > limit) GhostButton("Mostrar mais") { limit += 40 }

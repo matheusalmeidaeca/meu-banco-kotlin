@@ -88,7 +88,7 @@ class CardWeekTest {
 
 class BrainTest {
     @Before fun clock() { AppClock.today = { LocalDate.of(2026, 11, 22) }; AppClock.nowMs = { 1_795_000_000_000L } }
-    private fun blank(): AppState { val s = AppState(); s.reserves.forEach { it.balance = 0.0 }; s.expenses = mutableListOf(); s.debts = mutableListOf(); s.subscriptions = mutableListOf(); s.assets = mutableListOf(); s.history = mutableListOf(); return s }
+    private fun blank(): AppState { val s = AppState(); s.income.incomeType = "renda"; s.reserves.forEach { it.balance = 0.0 }; s.expenses = mutableListOf(); s.debts = mutableListOf(); s.subscriptions = mutableListOf(); s.assets = mutableListOf(); s.history = mutableListOf(); return s }
 
     @Test fun notaSobe() {
         val a = blank(); val b = blank(); a.expenses.add(Expense(1, "Aluguel", 1000.0, "Moradia")); b.expenses.add(Expense(1, "Aluguel", 1000.0, "Moradia")); b.reserves.first().balance = 20000.0
@@ -116,5 +116,37 @@ class OrdemExtratoTest {
     @Test fun maisRecentePrimeiro() {
         val h = listOf(HistoryEntry("2026-09-08", "pix", "a", 1.0), HistoryEntry("2026-11-02", "pix", "b", 1.0), HistoryEntry("2026-11-02", "pix", "c", 1.0), HistoryEntry("2026-10-15", "pix", "d", 1.0))
         assertEquals(listOf("b", "c", "d", "a"), h.sortedByDescending { it.ts.take(10) }.map { it.label })   // empate no mesmo dia mantém a ordem original
+    }
+}
+
+
+class ExtratoSemDuplicarTest {
+    private fun h(ts: String, type: String, label: String, a: Double) = HistoryEntry(ts, type, label, a)
+    @Test fun naoContaDuasVezes() {
+        // o caso real: Pix +412, transferência -412 para a carteira, depois cotas compradas com esse caixa
+        val l = listOf(
+            h("2026-11-24", "pix", "Pix recebido de sobra", 412.0),
+            h("2026-11-24", "transferencia", "Transferência para a conta de investimentos", -412.0),
+            h("2026-11-24", "compra", "Compra de 18 cota(s) de VGIR11", -144.0),
+            h("2026-11-24", "compra", "Compra de 1 cota(s) de HGCR11", -82.74),
+        )
+        val t = statementTotals(l)
+        assertEquals(412.0, t.inflow, 0.001); assertEquals(0.0, t.outflow, 0.001); assertEquals(412.0, t.saved, 0.001)
+    }
+    @Test fun gastoRealContaUmaVez() {
+        val t = statementTotals(listOf(h("2026-11-02", "gastolivre", "Mercado", -50.0), h("2026-11-03", "imposto", "DARF 6015", -10.0), h("2026-11-04", "dividendo", "Dividendos", 5.0)))
+        assertEquals(60.0, t.outflow, 0.001); assertEquals(5.0, t.inflow, 0.001)
+    }
+    @Test fun extratoDaCarteira() {
+        val s = AppState(); s.history = mutableListOf(
+            h("2026-11-24", "compra", "Compra de 1 cota(s) de X", -80.0),
+            h("2026-11-24", "transferencia", "Transferência para a conta de investimentos", -100.0),
+            h("2026-11-20", "dividendo", "Dividendos recebidos", 3.0),
+            h("2026-11-19", "gastolivre", "Mercado", -9.0),
+        )
+        val r = investmentStatement(s)
+        assertEquals(3, r.size)                                   // gasto de mercado não é da carteira
+        assertEquals(100.0, r.first { it.type == "transferencia" }.amount, 0.001)   // entra no caixa da carteira
+        assertEquals(-80.0, r.first { it.type == "compra" }.amount, 0.001)
     }
 }

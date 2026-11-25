@@ -41,8 +41,8 @@ fun SmartScreen() {
         }
     }
 
+    LaunchedEffect(Ui.sharedText) { Ui.sharedText?.let { Ui.sharedText = null; text = it; analyze(it) } }
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        H2("Lançamento inteligente")
         Muted("Fale, escreva ou leia um QR Pix. O app entende, mostra o que vai registrar e você confirma. Ele não move dinheiro real.")
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             GhostButton("🎤 Falar", Modifier.weight(1f)) {

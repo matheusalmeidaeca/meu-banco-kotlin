@@ -36,7 +36,7 @@ fun ContaScreen(goTab: (String) -> Unit) {
             if (s.fgts.balance > 0) KV("FGTS", money(s.fgts.balance))
         }
 
-        if (s.realAccounts.isNotEmpty()) Card(onClick = { goTab("reais") }) {
+        if (s.realAccounts.isNotEmpty()) Card(onClick = { goTab("config") }) {
             val b = realBalances(s); val m = realMonthSummary(s, AppClock.todayISO().take(7))
             Muted("🔗 Bancos reais (somente leitura)")
             Txt(money(b.cash), style = T.big, bold = true)
@@ -88,6 +88,10 @@ fun ContaScreen(goTab: (String) -> Unit) {
         H2("Metas")
         s.goals.forEach { g -> GoalCard(g) }
         GhostButton("＋ Nova meta", Modifier.fillMaxWidth()) { newGoal = true }
+
+        // ferramentas de lançamento
+        ExpandCard("⚡ Lançamento inteligente", open = Ui.smartOpenTick > 0, openKey = Ui.smartOpenTick) { SmartScreen() }
+        ExpandCard("📥 Importar extrato", open = Ui.importOpenTick > 0, openKey = Ui.importOpenTick) { ImportScreen() }
     }
 
     if (pix != null) PixDialog(pix == "send") { pix = null }

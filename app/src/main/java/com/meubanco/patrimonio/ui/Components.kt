@@ -38,6 +38,11 @@ object Ui {
     var quickSpend by mutableStateOf(false)
     /** Extrato (OFX/CSV) recebido pelo compartilhar de outro app; a tela Importar consome. */
     var sharedStatement by mutableStateOf<String?>(null)
+    /** Texto recebido pelo compartilhar (aviso ou comprovante do banco); o Lançamento inteligente consome. */
+    var sharedText by mutableStateOf<String?>(null)
+    /** Sobem a cada compartilhamento para a Conta abrir a seção certa. */
+    var smartOpenTick by mutableIntStateOf(0)
+    var importOpenTick by mutableIntStateOf(0)
     /** Retorno do navegador após conectar o banco: item=..., error=... ou closed=1 */
     var pluggyResult by mutableStateOf<String?>(null)
     /** Conexão criada pelo caminho direto, esperando o usuário autorizar no site/app do banco. */
@@ -183,6 +188,16 @@ fun Progress(frac: Double, color: Color = P.brand, modifier: Modifier = Modifier
     val f by animateFloatAsState(clamp(frac, 0.0, 1.0).toFloat(), tween(if (motionEnabled()) 600 else 0, easing = FastOutSlowInEasing), label = "progresso")
     Box(modifier.fillMaxWidth().height(8.dp).clip(CutShape(4.dp)).background(P.card2)) {
         Box(Modifier.fillMaxWidth(f).fillMaxHeight().background(Brush.horizontalGradient(listOf(color, if (color == P.brand) NeonCyan else color.copy(alpha = 0.7f)))))
+    }
+}
+
+/** Cartão recolhível: só o título é clicável, o conteúdo fica livre para toques. */
+@Composable
+fun ExpandCard(title: String, open: Boolean = false, openKey: Any? = null, content: @Composable ColumnScope.() -> Unit) {
+    var o by remember(openKey) { mutableStateOf(open) }
+    Card {
+        Row(Modifier.fillMaxWidth().clickable { o = !o }.padding(vertical = 4.dp), horizontalArrangement = Arrangement.SpaceBetween) { H2(title); Txt(if (o) "▲" else "▼", color = P.muted) }
+        if (o) content()
     }
 }
 

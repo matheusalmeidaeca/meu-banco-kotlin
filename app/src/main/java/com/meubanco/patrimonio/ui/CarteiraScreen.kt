@@ -28,6 +28,7 @@ fun CarteiraScreen() {
     var editAsset by remember { mutableStateOf<Asset?>(null) }
     var msg by remember { mutableStateOf("") }
     var sub by remember { mutableStateOf("resumo") }
+    var window by remember { mutableStateOf(false) }
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Card {
@@ -40,6 +41,7 @@ fun CarteiraScreen() {
                 GhostButton("Conta → Carteira", Modifier.weight(1f)) { transfer = true }
                 GhostButton("Carteira → Conta", Modifier.weight(1f)) { transfer = false }
             }
+            PrimaryButton("📄 Extrato e resgate", Modifier.fillMaxWidth()) { window = true }
         }
 
         ChipRow(listOf("resumo" to "Resumo", "ativos" to "Ativos", "metas" to "Metas", "dividendos" to "Dividendos", "impostos" to "Impostos", "ajustes" to "Perfil e auto"), sub) { sub = it }
@@ -65,7 +67,7 @@ fun CarteiraScreen() {
                 }
             }
         }
-
+        EvolutionCards(s)
         }
 
         if (sub == "ajustes") {
@@ -153,6 +155,7 @@ fun CarteiraScreen() {
         if (sub == "dividendos") DividendosBlock()
     }
 
+    if (window) InvestWindow({ window = false }, onTransferOut = { transfer = false }, onSell = { a -> trade = a to true })
     transfer?.let { to -> TransferDialog(to) { transfer = null } }
     trade?.let { (a, sell) -> TradeDialog(a, sell) { trade = null } }
     if (quiz) QuizDialog { quiz = false }
@@ -282,5 +285,91 @@ private fun SimuladorJuros() {
         val put = (start ?: 0.0) + (monthly ?: 0.0) * 12 * y
         KV("Você investe", money(put)); KV("Total em $y ano(s)", money(fv), P.green); KV("Rendimento", money(fv - put), P.gold)
         Muted("Estimativa sem impostos, inflação ou garantias. Rentabilidade passada não garante retorno futuro.")
+    }
+}
+
+
+/** Evolução do patrimônio e das metas, logo abaixo do gráfico de alocação. */
+@Composable
+private fun EvolutionCards(s: AppState) {
+    val nw = s.netWorthHistory.takeLast(36)
+    Card {
+        H2("📈 Evolução do patrimônio")
+        if (nw.size >= 2) {
+            LineChart(nw.map { it.value }, color = P.green)
+            val d = nw.last().value - nw.first().value
+            Muted("${formatMonthLabel(nw.first().ym)} → ${formatMonthLabel(nw.last().ym)} · ${if (d >= 0) "+" else ""}${formatBRL(d)}")
+        } else {
+            Txt("Hoje: ${money(totalNetWorth(s))}", bold = true)
+            Muted("O gráfico aparece a partir do segundo mês de uso, quando o app tem dois pontos para ligar.")
+        }
+    }
+    Card {
+        H2("🎯 Evolução das metas")
+        var any = false
+        if (s.investGoalPatrimony > 0) {
+            any = true
+            val sim = remember(Store.rev) { patrimonyGoal(investParams(s, withInflation = false), s.investGoalPatrimony, false) }
+            val pct = (totalNetWorth(s) / s.investGoalPatrimony).coerceIn(0.0, 1.0)
+            Txt("Patrimônio de ${money(s.investGoalPatrimony)}: ${Math.round(pct * 100)}% hoje", bold = true)
+            Progress(pct, P.green)
+            if (sim.yearly.size >= 2) { LineChart(sim.yearly, color = P.green); Muted("Projeção ano a ano até a meta (cenário base).") }
+        }
+        if (s.investGoalIncome > 0) {
+            any = true
+            val pct = (monthlyDividendIncome(s) / s.investGoalIncome).coerceIn(0.0, 1.0)
+            Txt("Renda de ${money(s.investGoalIncome)}/mês: ${Math.round(pct * 100)}% hoje", bold = true)
+            Progress(pct, P.gold)
+        }
+        s.goals.filter { it.target > 0 }.forEach { g ->
+            any = true
+            val pct = (g.saved / g.target).coerceIn(0.0, 1.0)
+            Txt("${g.name}: ${money(g.saved)} de ${money(g.target)} (${Math.round(pct * 100)}%)", bold = true)
+            Progress(pct, if (g.completed) P.green else P.brand)
+        }
+        if (!any) Muted("Defina metas na aba Metas ou na Conta para acompanhar o progresso aqui.")
+    }
+}
+
+/** Janela única: extrato do caixa da carteira e resgate (vender cotas e levar o caixa para a conta). */
+@Composable
+private fun InvestWindow(onDismiss: () -> Unit, onTransferOut: () -> Unit, onSell: (Asset) -> Unit) {
+    val s = state()
+    var tab by remember { mutableStateOf("extrato") }
+    Sheet("📄 Carteira: extrato e resgate", onDismiss) {
+        ChipRow(listOf("extrato" to "Extrato", "resgate" to "Resgatar"), tab) { tab = it }
+        if (tab == "extrato") {
+            val rows = remember(Store.rev) { investmentStatement(s) }
+            KV("Valor das cotas", money(portfolioValue(s)))
+            KV("Caixa da carteira", money(s.leftover))
+            KV("Entrou no caixa", money(rows.filter { it.amount > 0 }.sumOf { it.amount }), P.green)
+            KV("Saiu do caixa", money(-rows.filter { it.amount < 0 }.sumOf { it.amount }), P.red)
+            Muted("Visto de dentro da carteira: o que sai da conta principal entra no caixa; comprar cotas gasta o caixa.")
+            if (rows.isEmpty()) Muted("Ainda não há movimentos da carteira.")
+            var last = ""
+            rows.take(60).forEach { r ->
+                val ym = r.ts.take(7)
+                if (ym != last) { last = ym; Txt(formatMonthLabel(ym), bold = true, color = P.gold) }
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Txt(r.label, Modifier.weight(1f), style = T.small)
+                    Spacer(Modifier.width(8.dp))
+                    Txt(money(r.amount), color = if (r.amount > 0) P.green else P.red, bold = true, style = T.small)
+                }
+                Muted(formatSimDate(r.ts.take(10)))
+            }
+        } else {
+            Muted("Para resgatar: venda as cotas (o valor cai no caixa da carteira) e depois leve o caixa para a conta principal.")
+            KV("Caixa da carteira", money(s.leftover), P.green)
+            PrimaryButton("Carteira → Conta (levar o caixa)", Modifier.fillMaxWidth(), enabled = s.leftover > 0.005) { onTransferOut() }
+            val held = s.assets.filter { it.quantity > 0 }
+            if (held.isEmpty()) Muted("Você não tem cotas para vender.")
+            held.forEach { a ->
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                    Column(Modifier.weight(1f)) { Txt(a.ticker, bold = true); Muted("${a.quantity} cota(s) · ${money(a.quantity * a.price)}") }
+                    GhostButton("Vender") { onSell(a) }
+                }
+            }
+            Muted("Vendas podem gerar imposto (veja a aba Impostos). Caixinhas de renda fixa são resgatadas na Conta.")
+        }
     }
 }

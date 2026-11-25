@@ -14,7 +14,7 @@ fun LabScreen() {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         H2("🧪 Laboratório")
         Muted("Simulações para você se organizar. Não é recomendação de investimento.")
-        ScoreCard(s); WeekCard(s); RadarCard(s); WhatIfCard(); RunwayCard(s); GoalsCard(s); AutoCard(s); AporteCard(s); StressCard(s); ConcCard(s)
+        ScoreCard(s); ConcCard(s); WeekCard(s); RadarCard(s); WhatIfCard(); RunwayCard(s); GoalsCard(s); AutoCard(s); AporteCard(s); StressCard(s)
     }
 }
 
@@ -23,7 +23,7 @@ private fun ScoreCard(s: AppState) {
     val h = healthScore(s)
     Card {
         H2("❤️ Saúde financeira")
-        Txt("${h.total}/100", bold = true, style = T.title)
+        Txt("${h.total}/100 · " + financialHealth(s).label, bold = true, style = T.title)
         LiquidPot(h.total / 100.0, if (h.total >= 70) P.green else if (h.total >= 40) P.gold else P.red)
         h.parts.forEach { Muted("${it.label}: ${Math.round(it.pts)}/${Math.round(it.max)}") }
         Txt("👉 " + h.nextStep, bold = true)

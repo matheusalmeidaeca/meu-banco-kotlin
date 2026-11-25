@@ -14,9 +14,9 @@ import com.meubanco.patrimonio.data.Store
 import com.meubanco.patrimonio.domain.*
 import kotlinx.coroutines.launch
 
-val TAB_ICON = mapOf("conta" to "🏦", "historico" to "🧾", "carteira" to "📈", "gastos" to "🛒", "plano" to "🧭", "ponto" to "⏱", "ajuda" to "💡", "config" to "⚙️", "mais" to "☰", "ir" to "🧾", "reais" to "🔗", "capturas" to "🔔", "smart" to "⚡", "lab" to "🧪", "importar" to "📥")
+val TAB_ICON = mapOf("conta" to "🏦", "historico" to "🧾", "carteira" to "📈", "gastos" to "🛒", "plano" to "🧭", "ponto" to "⏱", "config" to "⚙️", "mais" to "☰", "lab" to "🧪")
 val BOTTOM_TABS = listOf("conta" to "Início", "gastos" to "Gastos", "plano" to "Planejar", "carteira" to "Investir", "mais" to "Mais")
-val MAIS_TABS = setOf("mais", "historico", "ajuda", "ponto", "config", "ir", "reais", "capturas", "smart", "lab", "importar")
+val MAIS_TABS = setOf("mais", "historico", "ponto", "config", "lab")
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,12 +26,15 @@ fun MainScaffold() {
     val scope = rememberCoroutineScope()
     val snack = remember { SnackbarHostState() }
     val hidden = s.settings.hiddenTabs
-    val tabs = MAIN_TABS.filter { it.first == "config" || it.first == "ajuda" || it.first == "mais" || it.first == "ir" || it.first == "reais" || it.first == "capturas" || it.first == "smart" || it.first == "lab" || it.first == "importar" || (it.first !in hidden && !(it.first == "ponto" && s.income.incomeType != "empregado")) }
+    val tabs = MAIN_TABS.filter { it.first == "config" || it.first == "mais" || it.first == "lab" || (it.first !in hidden && !(it.first == "ponto" && s.income.incomeType != "empregado")) }
     val tab = s.activeMainTab.let { t -> if (tabs.any { it.first == t }) t else "conta" }
     var assistant by remember { mutableStateOf(false) }
     val scroll = rememberScrollState()
 
-    fun go(t: String) { Store.mutate { it.activeMainTab = t }; scope.launch { drawer.close(); scroll.scrollTo(0) } }
+    fun go(t0: String) {
+        // telas que viraram seções de outras: aprender, IR e contas conectadas ficam em Configurações; lançamento inteligente e importar, na Conta
+        val t = when (t0) { "reais", "ir", "ajuda" -> "config"; "smart", "importar", "capturas" -> "conta"; else -> t0 }
+        Store.mutate { it.activeMainTab = t }; scope.launch { drawer.close(); scroll.scrollTo(0) } }
     androidx.activity.compose.BackHandler(enabled = drawer.isOpen || tab != "conta") { if (drawer.isOpen) scope.launch { drawer.close() } else go(if (tab in MAIS_TABS && tab != "mais") "mais" else "conta") }
 
     // avisos
@@ -76,13 +79,6 @@ fun MainScaffold() {
                         colors = NavigationDrawerItemDefaults.colors(selectedContainerColor = P.card2, unselectedContainerColor = P.card,
                             selectedTextColor = P.text, unselectedTextColor = P.text))
                 }
-                HorizontalDivider(Modifier.padding(vertical = 8.dp), color = P.line)
-                NavigationDrawerItem(label = { Text("Registrar gasto rápido") }, icon = { Text("➕") }, selected = false,
-                    onClick = { Ui.quickSpend = true; scope.launch { drawer.close() } }, modifier = Modifier.padding(horizontal = 8.dp),
-                    colors = NavigationDrawerItemDefaults.colors(unselectedContainerColor = P.card, unselectedTextColor = P.text))
-                NavigationDrawerItem(label = { Text(if (s.settings.hideBalance) "Mostrar saldos" else "Esconder saldos") }, icon = { Text("👁") }, selected = false,
-                    onClick = { Store.mutate { it.settings.hideBalance = !it.settings.hideBalance } }, modifier = Modifier.padding(horizontal = 8.dp),
-                    colors = NavigationDrawerItemDefaults.colors(unselectedContainerColor = P.card, unselectedTextColor = P.text))
                 Spacer(Modifier.height(16.dp))
             }
         }
@@ -123,13 +119,7 @@ fun MainScaffold() {
                     "gastos" -> GastosScreen()
                     "plano" -> PlanoScreen()
                     "ponto" -> PontoScreen()
-                    "ajuda" -> AprenderScreen(::go)
-                    "ir" -> IrScreen()
-                    "reais" -> ReaisScreen()
-                    "capturas" -> CapturasScreen()
-                    "smart" -> SmartScreen()
                     "lab" -> LabScreen()
-                    "importar" -> ImportScreen()
                     "mais" -> MaisScreen(::go, tabs.map { it.first })
                     else -> ConfigScreen()
                 } }
