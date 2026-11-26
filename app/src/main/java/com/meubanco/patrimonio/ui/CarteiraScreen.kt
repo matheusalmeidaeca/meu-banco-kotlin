@@ -44,8 +44,10 @@ fun CarteiraScreen() {
             PrimaryButton("📄 Extrato e resgate", Modifier.fillMaxWidth()) { window = true }
         }
 
-        ChipRow(listOf("resumo" to "Resumo", "ativos" to "Ativos", "metas" to "Metas", "dividendos" to "Dividendos", "impostos" to "Impostos", "ajustes" to "Perfil e auto"), sub) { sub = it }
+        ChipRow(listOf("resumo" to "Resumo", "evolucao" to "📈 Evolução", "caminhos" to "🧭 Caminhos", "ativos" to "Ativos", "metas" to "Metas", "dividendos" to "Dividendos", "impostos" to "Impostos", "ajustes" to "Perfil e auto"), sub) { sub = it }
 
+        if (sub == "evolucao") EvolucaoTab(s)
+        if (sub == "caminhos") CaminhosTab(s)
         // alocação
         if (sub == "metas") MetasInvestBlock()
         if (sub == "resumo") {
@@ -292,6 +294,24 @@ private fun SimuladorJuros() {
 /** Evolução do patrimônio e das metas, logo abaixo do gráfico de alocação. */
 @Composable
 private fun EvolutionCards(s: AppState) {
+    val ser = remember(Store.rev) { investedSeries(s) }
+    var asPct by remember { mutableStateOf(false) }
+    Card {
+        H2("💹 Patrimônio investido")
+        val cur = ser.last().value
+        KV("Investido hoje", money(cur), P.green)
+        val nw = totalNetWorth(s)
+        if (nw > 0) KV("Parcela do patrimônio total", fmtPlain(Math.round(cur / nw * 1000) / 10.0) + "%")
+        if (ser.size >= 2) {
+            val pct = investedPercent(ser)
+            ChipRow(listOf("0" to "Valor (R$)", "1" to "Variação (%)"), if (asPct) "1" else "0") { asPct = it == "1" }
+            LineChart(if (asPct) pct else ser.map { it.value }, color = P.green)
+            val d = cur - ser.first().value
+            Muted("${formatMonthLabel(ser.first().ym)} → ${formatMonthLabel(ser.last().ym)}")
+            Txt("${if (pct.last() >= 0) "+" else ""}${fmtPlain(pct.last())}% (${if (d >= 0) "+" else ""}${formatBRL(d)}) no período", bold = true, color = if (d >= 0) P.green else P.red)
+            Muted("A variação inclui os seus aportes, não só o rendimento dos investimentos.")
+        } else Muted("A linha aparece a partir do segundo mês de uso, quando o app tem dois pontos para ligar.")
+    }
     val nw = s.netWorthHistory.takeLast(36)
     Card {
         H2("📈 Evolução do patrimônio")

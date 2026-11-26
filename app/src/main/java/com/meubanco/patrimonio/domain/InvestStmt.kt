@@ -38,3 +38,21 @@ fun investmentStatement(s: AppState): List<InvRow> {
             InvRow(h.ts, h.label, round2(a), h.type)
         }
 }
+
+/* ---------- Patrimônio investido no tempo ---------- */
+
+class InvPoint(val ym: String, val value: Double)
+
+/** Valor investido (cotas, caixa da carteira, caixinhas e metas) mês a mês, com o ponto de hoje no fim. */
+fun investedSeries(s: AppState): List<InvPoint> {
+    val ym = ymKey(s.simDateISO)
+    val now = round2(portfolioValue(s) + s.leftover + reservesTotalBalance(s) + goalsTotalSaved(s))
+    val past = s.netWorthHistory.filter { it.invested != null && it.ym != ym }.map { InvPoint(it.ym, it.invested!!) }
+    return (past + InvPoint(ym, now)).sortedBy { it.ym }.takeLast(36)
+}
+
+/** Variação em % em relação ao primeiro ponto com valor positivo. */
+fun investedPercent(series: List<InvPoint>): List<Double> {
+    val base = series.firstOrNull { it.value > 0.0 }?.value ?: return series.map { 0.0 }
+    return series.map { round2((it.value / base - 1) * 100) }
+}

@@ -150,3 +150,15 @@ class ExtratoSemDuplicarTest {
         assertEquals(-80.0, r.first { it.type == "compra" }.amount, 0.001)
     }
 }
+
+class InvestidoTempoTest {
+    @Test fun serieEPorcentagem() {
+        val s = AppState(); s.history = mutableListOf(); s.assets = mutableListOf(); s.reserves.forEach { it.balance = 0.0 }; s.goals = mutableListOf(); s.leftover = 150.0
+        val ym = ymKey(s.simDateISO)
+        s.netWorthHistory = mutableListOf(NwPoint(shiftYm(ym, -2), 900.0, 100.0), NwPoint(shiftYm(ym, -1), 1100.0, 120.0), NwPoint(ym, 999.0, 5.0))   // o ponto do mês atual é substituído pelo valor ao vivo
+        val ser = investedSeries(s)
+        assertEquals(3, ser.size); assertEquals(150.0, ser.last().value, 0.001)
+        assertEquals(listOf(0.0, 20.0, 50.0), investedPercent(ser))
+    }
+    @Test fun semBaseNaoQuebra() { assertEquals(listOf(0.0), investedPercent(listOf(InvPoint("2026-11", 0.0)))) }
+}

@@ -55,7 +55,10 @@ fun MainScaffold() {
     // comemorações
     LaunchedEffect(Store.rev) {
         val c = checkCelebrations(Store.state)
-        if (c.isNotEmpty()) { Store.commit(); Ui.enqueue(c) }
+        val cat = ensureCatalog(Store.state)
+        val snap = recordSnapshot(Store.state)
+        if (c.isNotEmpty() || cat || snap) Store.commit()
+        if (c.isNotEmpty()) Ui.enqueue(c)
     }
 
     ModalNavigationDrawer(drawerState = drawer, drawerContent = {
